@@ -3,6 +3,7 @@
     package="com.designdrivendevelopment.kotelok">
 
     <application
+        android:name=".KotelokApplication"
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
