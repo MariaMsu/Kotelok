@@ -1,6 +1,6 @@
 package com.designdrivendevelopment.kotelok.trainer.entities
 
-//Вариант перевода
+// Вариант перевода
 data class Translation(
     val id: Long,
     val language: Language = Language.ENG,

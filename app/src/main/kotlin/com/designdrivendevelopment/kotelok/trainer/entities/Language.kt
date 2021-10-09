@@ -1,6 +1,6 @@
 package com.designdrivendevelopment.kotelok.trainer.entities
 
-//Языки
+// Языки
 enum class Language {
     ENG()
 }

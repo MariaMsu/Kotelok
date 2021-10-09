@@ -1,25 +1,32 @@
 package com.designdrivendevelopment.kotelok.trainer
 
 import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
-import java.lang.RuntimeException
 
-class Cards(private val learnableWords: List<LearnableWord>) {
-    private var currentIdx = -1;  // TODO тут какой-то нулевой тип должен быть. Что будет означать, что слово не выдано
+class Cards(learnableWords: List<LearnableWord>, onlyNotLearned: Boolean = true) {
+    private var currentIdx = 0
+    private val shuffledWords = if (onlyNotLearned) {
+        learnableWords.toMutableList().shuffled().filter { it.translation.learntIndex < 1f }
+    } else {
+        learnableWords.toMutableList().shuffled()
+    }
+    val isDone: Boolean
+        get() = currentIdx >= shuffledWords.size
 
     public fun getNextWord(): LearnableWord {
-        if (this.currentIdx == -1) {
-            throw RuntimeException("Try to get learnable word before the result of the previous one is returned")
-        }
-        var index = 0; // TODO сделать выбиралку инрлексов
-        this.currentIdx = index
-        return learnableWords[index]
+        return shuffledWords[this.currentIdx]
     }
 
     public fun setCurrentResult(isRight: Boolean) {
-        if (this.currentIdx == -1) {
-            throw RuntimeException("Try to set result to an unspecified learnable word")
+        if (!isRight) {
+            return // don't do anything if the result was not correct
         }
-        learnableWords[this.currentIdx].translation.learntIndex += 0.1f
-        this.currentIdx = -1
+        // the summand depends on the trainer type
+        shuffledWords[this.currentIdx].translation.learntIndex += RENAME_ME
+        this.currentIdx += 1
+        print(this.currentIdx)
+    }
+
+    companion object {
+        private const val  RENAME_ME = 0.1f // TODO
     }
 }
