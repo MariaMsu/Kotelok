@@ -5,7 +5,7 @@ import com.designdrivendevelopment.kotelok.trainer.entities.Translation
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class CardsTest {
+class CardsTrainerTest {
 
     @Test
     fun cards() {
@@ -44,17 +44,17 @@ class CardsTest {
                 )
             ),
         )
-        val c = Cards(lWords)
+        val c = CardsTrainer(lWords)
         val firstWord = c.getNextWord()
         for (i in 0..3) {
             // if the word was incorrect then the method should return the same word again
-            c.setCurrentResult(isRight = false)
+            c.setUserInput(isRight = false)
             assertEquals(c.getNextWord(), firstWord)
         }
         var i = 0
         while (!c.isDone) {
             c.getNextWord()
-            c.setCurrentResult(isRight = true)
+            c.setUserInput(isRight = true)
             i += 1
         }
         assertEquals(lWords.size, i)
