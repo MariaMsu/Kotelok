@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class CardsTrainerTest {
+class TrainerTest {
 
     private fun getDictionaryData(): List<LearnableWord> {
         return listOf(
@@ -65,14 +65,18 @@ class CardsTrainerTest {
             val prevIdx = previousWord.translation.learntIndex
             val nextIdx = nextWord.translation.learntIndex
             assertTrue("Previous (${prevIdx}) should be greater than current (${nextIdx})",
-                prevIdx > nextIdx)
+                (prevIdx > nextIdx)  || (prevIdx == 0f))
             previousWord = nextWord
         }
         trainer.setUserInput(isRight = true)
         var i = 0  // one word was guessed incorrectly => iterator become one step longer
         while (!trainer.isDone) {
-            trainer.getNextWord()
+            val word = trainer.getNextWord()
+            val learntIdx = word.translation.learntIndex
             trainer.setUserInput(isRight = true)
+            val updLearntIdx = word.translation.learntIndex
+            assertTrue("Previous (${learntIdx}) should be lesser than current (${updLearntIdx})",
+                (learntIdx < updLearntIdx) || (learntIdx == 1f))
             i += 1
         }
         assertEquals(dictionaryData.size, i)
@@ -87,7 +91,7 @@ class CardsTrainerTest {
         previousWord = previousWord.copy(translation = previousWord.translation.copy())
         for (i in 0..3) {
             // if the word was incorrect then the method should return the same word again
-            trainer.setUserInput(userString = previousWord.writing + 'A')
+            trainer.setUserInput(userString = "v@ry_strange_string")
 
             var nextWord = trainer.getNextWord()
             nextWord = nextWord.copy(translation = nextWord.translation.copy())
@@ -97,16 +101,22 @@ class CardsTrainerTest {
             val prevIdx = previousWord.translation.learntIndex
             val nextIdx = nextWord.translation.learntIndex
             assertTrue("Previous (${prevIdx}) should be greater than current (${nextIdx})",
-                prevIdx > nextIdx)
+                (prevIdx > nextIdx)  || (prevIdx == 0f))
             previousWord = nextWord
         }
         trainer.setUserInput(userString = previousWord.writing)
         var i = 0  // one word was guessed incorrectly => iterator become one step longer
         while (!trainer.isDone) {
-            val newWord = trainer.getNextWord()
-            trainer.setUserInput(userString = newWord.writing)
+            val word = trainer.getNextWord()
+            val learntIdx = word.translation.learntIndex
+            trainer.setUserInput(userString = word.writing)
+            val updLearntIdx = word.translation.learntIndex
+            assertTrue("Previous (${learntIdx}) should be lesser than current (${updLearntIdx})",
+                (learntIdx < updLearntIdx) || (learntIdx == 1f))
             i += 1
         }
         assertEquals(dictionaryData.size, i)
     }
+
+
 }
