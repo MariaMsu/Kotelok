@@ -41,4 +41,19 @@ open class TrainerBase(
             word.translation.learntIndex - DECREASE_INDEX_COEF * learnProgress, 0f)
         repeatWordsSet.add(word)
     }
+
+    private var previousWordIsChecked = true
+    fun handleGetWordFlag() {
+        if (!previousWordIsChecked) {
+            throw RuntimeException("Check the previous word before to get the nex one")
+        }
+        previousWordIsChecked = false
+    }
+
+    fun handleSetWordFlag() {
+        if (previousWordIsChecked) {
+            throw RuntimeException("Try to check the same word two times")
+        }
+        previousWordIsChecked = true
+    }
 }
