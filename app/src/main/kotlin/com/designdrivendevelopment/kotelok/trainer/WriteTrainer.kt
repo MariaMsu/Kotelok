@@ -9,22 +9,14 @@ class WriteTrainer(
     onlyNotLearned: Boolean = true,
 ) :
     TrainerBase(learnableWords, onlyNotLearned, WRITE_PROGRESS) {
-    var previousWordIsChecked = true
 
     public fun getNextWord(): LearnableWord {
-        if (!previousWordIsChecked) {
-            throw RuntimeException("Check the previous word before to get the nex one")
-        }
-        previousWordIsChecked = false
+        handleGetWordFlag()
         return shuffledWords[this.currentIdx]
     }
 
     public fun setUserInput(userString: String): String {
-        if (previousWordIsChecked) {
-            throw RuntimeException("Try to check the same word two times")
-        }
-        previousWordIsChecked = true
-
+        handleSetWordFlag()
         val learnableWorld = shuffledWords[this.currentIdx]
 
         // incorrect answer
