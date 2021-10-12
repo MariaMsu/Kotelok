@@ -25,7 +25,9 @@ open class TrainerBase(
 
     fun handleTrueAnswer(word: LearnableWord) {
         word.translation.learntIndex = minOf(
-            word.translation.learntIndex + learnProgress, 1f)
+            word.translation.learntIndex + learnProgress,
+            1f
+        )
 
         currentIdx += 1
         if (currentIdx >= shuffledWords.size) {
@@ -38,21 +40,23 @@ open class TrainerBase(
 
     fun handleFalseAnswer(word: LearnableWord) {
         word.translation.learntIndex = maxOf(
-            word.translation.learntIndex - DECREASE_INDEX_COEF * learnProgress, 0f)
+            word.translation.learntIndex - DECREASE_INDEX_COEF * learnProgress,
+            0f
+        )
         repeatWordsSet.add(word)
     }
 
     private var previousWordIsChecked = true
     fun handleGetWordFlag() {
         if (!previousWordIsChecked) {
-            throw RuntimeException("Check the previous word before to get the nex one")
+            throw TrainerIterationException("Check the previous word before to get the nex one")
         }
         previousWordIsChecked = false
     }
 
     fun handleSetWordFlag() {
         if (previousWordIsChecked) {
-            throw RuntimeException("Try to check the same word two times")
+            throw TrainerIterationException("Try to check the same word two times")
         }
         previousWordIsChecked = true
     }

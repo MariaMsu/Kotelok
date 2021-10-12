@@ -11,10 +11,10 @@ data class Translation(
 ) {
     // learntIndex and other minor fields don't affect the essence of class instance
     override fun equals(other: Any?) =
-        (other is Translation)
-            && id == other.id
-            && language == other.language
-            && transcription == other.transcription
+        (other is Translation) &&
+            id == other.id &&
+            language == other.language &&
+            transcription == other.transcription
 
     override fun hashCode(): Int {
         var result = id.hashCode()

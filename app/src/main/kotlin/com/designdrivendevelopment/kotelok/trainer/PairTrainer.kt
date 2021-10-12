@@ -5,20 +5,21 @@ import com.designdrivendevelopment.kotelok.trainer.entities.Translation
 
 const val PAIR_PROGRESS = 0.1f
 
-// TODO: может, на этапе компиляции фиксировать setSize
-// => не с листами, а с массивами
 class PairTrainer(
     learnableWords: List<LearnableWord>,
     onlyNotLearned: Boolean = true,
     private val setSize: Int = 5,
 ) :
     TrainerBase(learnableWords, onlyNotLearned, PAIR_PROGRESS) {
+    // todo может, на этапе компиляции фиксировать setSize => не с листами, а с массивами
     private var currentWordSet = emptySet<LearnableWord>()
 
     public fun getNextWordList(): Pair<List<String>, List<Translation>> {
         if (currentWordSet.isNotEmpty()) {
-            throw RuntimeException("The world ${currentWordSet.map { it.writing }.toString()} " +
-                "are remained from previous words list")
+            throw TrainerIterationException(
+                "The world ${currentWordSet.map { it.writing }} " +
+                    "are remained from previous words list"
+            )
         }
         val lastSubsetIdx = minOf(shuffledWords.size, this.currentIdx + setSize)
         val currentWordSubList = shuffledWords.subList(this.currentIdx, lastSubsetIdx)
@@ -35,10 +36,11 @@ class PairTrainer(
         // because the list has a small length
         val learnableWorldIdx = currentWordSet.indexOfFirst { it.writing == writing }
         if (learnableWorldIdx == -1) {
-            throw RuntimeException(
+            throw TrainerIterationException(
                 "Try to set user input to a not existing word or to an already handled word." +
-                    "Tried key: ${writing}. " +
-                    "Existed keys: ${currentWordSet.map { it.writing }.toString()}")
+                    "Tried key: $writing. " +
+                    "Existed keys: ${currentWordSet.map { it.writing }}"
+            )
         }
         val learnableWorld = currentWordSet.elementAt(learnableWorldIdx)
 
