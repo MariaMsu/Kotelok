@@ -13,23 +13,37 @@ class PairTrainer(
     private val setSize: Int = 5,
 ) :
     TrainerBase(learnableWords, onlyNotLearned, PAIR_PROGRESS) {
-    private var currentWordSubList: List<LearnableWord>? = null
+    private var currentWordSet = emptySet<LearnableWord>()
 
-    public fun getNextWord(): Pair<List<String>, List<Translation>> {
+    public fun getNextWordList(): Pair<List<String>, List<Translation>> {
+        if (currentWordSet.isNotEmpty()) {
+            throw RuntimeException("The world ${currentWordSet.map { it.writing }.toString()} " +
+                "are remained from previous words list")
+        }
         val lastSubsetIdx = minOf(shuffledWords.size, this.currentIdx + setSize)
-        currentWordSubList = shuffledWords.subList(this.currentIdx, lastSubsetIdx)
+        val currentWordSubList = shuffledWords.subList(this.currentIdx, lastSubsetIdx)
 
-        val words = currentWordSubList!!.map { it.writing }.shuffled()
-        val translations = currentWordSubList!!.map { it.translation }.shuffled()
+        val words = currentWordSubList.map { it.writing }.shuffled()
+        val translations = currentWordSubList.map { it.translation }.shuffled()
 
+        currentWordSet = currentWordSubList.toMutableSet()
         return Pair(words, translations)
     }
 
-    public fun setUserInput(word: String, translation: Translation): Boolean {
-        // we don't really need to use a map instead of list to search a word
+    public fun setUserInput(writing: String, translation: Translation): Boolean {
+        // we don't really need to use a map instead of a set to search a word
         // because the list has a small length
-        val learnableWorld = currentWordSubList!!.find { it.writing == word }
-        if (learnableWorld!!.translation != translation) {
+        val learnableWorldIdx = currentWordSet.indexOfFirst { it.writing == writing }
+        if (learnableWorldIdx == -1) {
+            throw RuntimeException(
+                "Try to set user input to a not existing word or to an already handled word." +
+                    "Tried key: ${writing}. " +
+                    "Existed keys: ${currentWordSet.map { it.writing }.toString()}")
+        }
+        val learnableWorld = currentWordSet.elementAt(learnableWorldIdx)
+        currentWordSet.drop(learnableWorldIdx)
+
+        if (learnableWorld.translation != translation) {
             return false// don't do anything if the result was not correct
         } else {
             learnableWorld.translation.learntIndex += learnProgress
