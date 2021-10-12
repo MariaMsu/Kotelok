@@ -2,9 +2,12 @@ package com.designdrivendevelopment.kotelok.trainer
 
 import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
 
-const val CARDS_PROGRESS = 0.1f
+const val CARDS_PROGRESS = 0.01f
 
-class CardsTrainer(learnableWords: List<LearnableWord>, onlyNotLearned: Boolean = true) :
+class CardsTrainer(
+    learnableWords: List<LearnableWord>,
+    onlyNotLearned: Boolean = true,
+) :
     TrainerBase(learnableWords, onlyNotLearned, CARDS_PROGRESS) {
 
     public fun getNextWord(): LearnableWord {

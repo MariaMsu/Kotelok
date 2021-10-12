@@ -4,7 +4,10 @@ import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
 
 const val WRITE_PROGRESS = 0.15f
 
-class WriteTrainer(learnableWords: List<LearnableWord>, onlyNotLearned: Boolean = true) :
+class WriteTrainer(
+    learnableWords: List<LearnableWord>,
+    onlyNotLearned: Boolean = true,
+) :
     TrainerBase(learnableWords, onlyNotLearned, WRITE_PROGRESS) {
 
     public fun getNextWord(): LearnableWord {

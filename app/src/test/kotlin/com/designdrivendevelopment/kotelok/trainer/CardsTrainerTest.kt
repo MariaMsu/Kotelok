@@ -7,9 +7,8 @@ import org.junit.Test
 
 class CardsTrainerTest {
 
-    @Test
-    fun cards() {
-        val lWords = listOf(
+    private fun getDictionaryData(): List<LearnableWord> {
+        return listOf(
             LearnableWord(
                 0,
                 "dog",
@@ -44,19 +43,24 @@ class CardsTrainerTest {
                 )
             ),
         )
-        val c = CardsTrainer(lWords)
-        val firstWord = c.getNextWord()
+    }
+
+    @Test
+    fun cards() {
+        val dictionaryData = getDictionaryData()
+        val trainer = CardsTrainer(dictionaryData)
+        val firstWord = trainer.getNextWord()
         for (i in 0..3) {
             // if the word was incorrect then the method should return the same word again
-            c.setUserInput(isRight = false)
-            assertEquals(c.getNextWord(), firstWord)
+            trainer.setUserInput(isRight = false)
+            assertEquals(trainer.getNextWord(), firstWord)
         }
         var i = 0
-        while (!c.isDone) {
-            c.getNextWord()
-            c.setUserInput(isRight = true)
+        while (!trainer.isDone) {
+            trainer.getNextWord()
+            trainer.setUserInput(isRight = true)
             i += 1
         }
-        assertEquals(lWords.size, i)
+        assertEquals(dictionaryData.size, i)
     }
 }
