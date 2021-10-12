@@ -41,14 +41,16 @@ class PairTrainer(
                     "Existed keys: ${currentWordSet.map { it.writing }.toString()}")
         }
         val learnableWorld = currentWordSet.elementAt(learnableWorldIdx)
-        currentWordSet.drop(learnableWorldIdx)
 
+        // incorrect answer
         if (learnableWorld.translation != translation) {
-            return false// don't do anything if the result was not correct
-        } else {
-            learnableWorld.translation.learntIndex += learnProgress
-            this.currentIdx += 1
-            return true
+            handleFalseAnswer(learnableWorld)
+            return false
         }
+
+        // correct answer
+        currentWordSet.drop(learnableWorldIdx)
+        handleTrueAnswer(learnableWorld)
+        return true
     }
 }
