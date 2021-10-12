@@ -7,7 +7,7 @@ const val DECREASE_INDEX_COEF = 0.5f
 open class TrainerBase(
     learnableWords: List<LearnableWord>,
     onlyNotLearned: Boolean,
-    val learnProgress: Float,
+    private val learnProgress: Float,
 ) {
     var currentIdx = 0
     var shuffledWords = if (onlyNotLearned) {
