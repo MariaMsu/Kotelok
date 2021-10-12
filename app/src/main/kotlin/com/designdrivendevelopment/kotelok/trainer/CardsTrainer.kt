@@ -14,12 +14,16 @@ class CardsTrainer(
         return shuffledWords[this.currentIdx]
     }
 
-    public fun setUserInput(isRight: Boolean) {
+    public fun setUserInput(isRight: Boolean) : Boolean {
+        val learnableWorld = shuffledWords[this.currentIdx]
+
+        // incorrect answer
         if (!isRight) {
-            return // don't do anything if the result was not correct
+            handleFalseAnswer(learnableWorld)
+            return false
         }
-        // the summand depends on the trainer type
-        shuffledWords[this.currentIdx].translation.learntIndex += learnProgress
-        this.currentIdx += 1
+        // correct answer
+        handleTrueAnswer(learnableWorld)
+        return true
     }
 }
