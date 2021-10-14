@@ -4,7 +4,7 @@ import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
 
 const val DECREASE_INDEX_COEF = 0.5f
 
-open class TrainerBase(
+abstract class CoreTrainer<NextOutType, CheckInputType>(
     learnableWords: List<LearnableWord>,
     onlyNotLearned: Boolean,
     private val learnProgress: Float,
@@ -15,6 +15,7 @@ open class TrainerBase(
     } else {
         learnableWords.toList().shuffled()
     }
+
     // number of words which will the trainer give away
     var size = shuffledWords.size
 
@@ -46,18 +47,10 @@ open class TrainerBase(
         repeatWordsSet.add(word)
     }
 
-    private var previousWordIsChecked = true
-    fun handleGetWordFlag() {
-        if (!previousWordIsChecked) {
-            throw TrainerIterationException("Check the previous word before to get the nex one")
-        }
-        previousWordIsChecked = false
-    }
+    /* returns the data for training */
+    public abstract fun getNext(): NextOutType
 
-    fun handleSetWordFlag() {
-        if (previousWordIsChecked) {
-            throw TrainerIterationException("Try to check the same word two times")
-        }
-        previousWordIsChecked = true
-    }
+    /* checks user userInput and calls the methods
+    'handleTrueAnswer()' and 'handleFalseAnswer()' inside itself */
+    public abstract fun checkUserInput(userInput: CheckInputType): Boolean
 }

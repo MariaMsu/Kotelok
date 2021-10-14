@@ -49,15 +49,15 @@ class TrainerTest {
     @Test
     fun cardsTest() {
         val dictionaryData = getDictionaryData()
-        val trainer = CardsTrainer(dictionaryData)
+        val trainer = TrainerCards(dictionaryData)
         assertEquals(dictionaryData.size, trainer.size)
-        var previousWord = trainer.getNextWord()
+        var previousWord = trainer.getNext()
         previousWord = previousWord.copy(translation = previousWord.translation.copy())
         for (i in 0..3) {
             // if the word was incorrect then the method should return the same word again
-            trainer.setUserInput(isRight = false)
+            trainer.checkUserInput(userInput = false)
 
-            var nextWord = trainer.getNextWord()
+            var nextWord = trainer.getNext()
             nextWord = nextWord.copy(translation = nextWord.translation.copy())
 
             assertEquals(previousWord, nextWord)
@@ -70,12 +70,12 @@ class TrainerTest {
             )
             previousWord = nextWord
         }
-        trainer.setUserInput(isRight = true)
+        trainer.checkUserInput(userInput = true)
         var i = 0 // one word was guessed incorrectly => iterator become one step longer
         while (!trainer.isDone) {
-            val word = trainer.getNextWord()
+            val word = trainer.getNext()
             val learntIdx = word.translation.learntIndex
-            trainer.setUserInput(isRight = true)
+            trainer.checkUserInput(userInput = true)
             val updLearntIdx = word.translation.learntIndex
             assertTrue(
                 "Previous ($learntIdx) should be lesser than current ($updLearntIdx)",
@@ -89,15 +89,15 @@ class TrainerTest {
     @Test
     fun writeTest() {
         val dictionaryData = getDictionaryData()
-        val trainer = WriteTrainer(dictionaryData)
+        val trainer = WriteCoreTrainer(dictionaryData)
         assertEquals(dictionaryData.size, trainer.size)
-        var previousWord = trainer.getNextWord()
+        var previousWord = trainer.getNext()
         previousWord = previousWord.copy(translation = previousWord.translation.copy())
         for (i in 0..3) {
             // if the word was incorrect then the method should return the same word again
-            trainer.setUserInput(userString = "v@ry_strange_string")
+            trainer.checkUserInput(userInput = "v@ry_strange_string")
 
-            var nextWord = trainer.getNextWord()
+            var nextWord = trainer.getNext()
             nextWord = nextWord.copy(translation = nextWord.translation.copy())
 
             assertEquals(previousWord, nextWord)
@@ -110,12 +110,12 @@ class TrainerTest {
             )
             previousWord = nextWord
         }
-        trainer.setUserInput(userString = previousWord.writing)
+        trainer.checkUserInput(userInput = previousWord.writing)
         var i = 0 // one word was guessed incorrectly => iterator become one step longer
         while (!trainer.isDone) {
-            val word = trainer.getNextWord()
+            val word = trainer.getNext()
             val learntIdx = word.translation.learntIndex
-            trainer.setUserInput(userString = word.writing)
+            trainer.checkUserInput(userInput = word.writing)
             val updLearntIdx = word.translation.learntIndex
             assertTrue(
                 "Previous ($learntIdx) should be lesser than current ($updLearntIdx)",
