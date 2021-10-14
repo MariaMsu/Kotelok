@@ -19,14 +19,12 @@ abstract class IteratorTrainerSingle<CheckInputType>(
     public override fun checkUserInput(userInput: CheckInputType): Boolean {
         val currWord = shuffledWords[this.currentIdx]
         val isRight = isUserRight(currWord, userInput)
-        // incorrect answer
-        if (!isRight) {
-            handleFalseAnswer(currWord)
-            return false
+        if (isRight) {
+            handleTrueAnswer(currWord)
+            return true
         }
-        // correct answer
-        handleTrueAnswer(currWord)
-        return true
+        handleFalseAnswer(currWord)
+        return false
     }
 
     abstract fun isUserRight(expectedWord: LearnableWord, userInput: CheckInputType): Boolean
