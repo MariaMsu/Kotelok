@@ -3,6 +3,7 @@ package com.designdrivendevelopment.kotelok.trainer
 import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
 import com.designdrivendevelopment.kotelok.trainer.entities.Translation
 import junit.framework.TestCase.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -55,7 +56,7 @@ class TrainerTest {
         previousWord = previousWord.copy(translation = previousWord.translation.copy())
         for (i in 0..3) {
             // if the word was incorrect then the method should return the same word again
-            trainer.checkUserInput(userInput = false)
+            assertFalse(trainer.checkUserInput(userInput = false))
 
             var nextWord = trainer.getNext()
             nextWord = nextWord.copy(translation = nextWord.translation.copy())
@@ -75,7 +76,7 @@ class TrainerTest {
         while (!trainer.isDone) {
             val word = trainer.getNext()
             val learntIdx = word.translation.learntIndex
-            trainer.checkUserInput(userInput = true)
+            assertTrue(trainer.checkUserInput(userInput = true))
             val updLearntIdx = word.translation.learntIndex
             assertTrue(
                 "Previous ($learntIdx) should be lesser than current ($updLearntIdx)",
@@ -95,7 +96,7 @@ class TrainerTest {
         previousWord = previousWord.copy(translation = previousWord.translation.copy())
         for (i in 0..3) {
             // if the word was incorrect then the method should return the same word again
-            trainer.checkUserInput(userInput = "v@ry_strange_string")
+            assertFalse(trainer.checkUserInput(userInput = "v@ry_strange_string"))
 
             var nextWord = trainer.getNext()
             nextWord = nextWord.copy(translation = nextWord.translation.copy())
@@ -115,7 +116,7 @@ class TrainerTest {
         while (!trainer.isDone) {
             val word = trainer.getNext()
             val learntIdx = word.translation.learntIndex
-            trainer.checkUserInput(userInput = word.writing)
+            assertTrue(trainer.checkUserInput(userInput = word.writing))
             val updLearntIdx = word.translation.learntIndex
             assertTrue(
                 "Previous ($learntIdx) should be lesser than current ($updLearntIdx)",

@@ -26,7 +26,7 @@ class PairCoreTrainer(
     public override fun checkUserInput(userInput: PairCheckInput): Boolean {
         val originWriting = userInput.originWriting
         val translationId = userInput.translationId
-        // we don't really need to use a map instead of a set to search a word
+        // we don't really need to use a map instead of a list to search a word
         // because the list has a small length
         val learnableWorld = currentWordSubList.first { it.writing == originWriting }
 
