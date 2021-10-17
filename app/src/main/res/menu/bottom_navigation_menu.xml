@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dictionary_tab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_book"
+        android:title="@string/dictionaries_ru" />
+    <item
+        android:id="@+id/recognition_tab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_camera"
+        android:title="@string/recognize_ru" />
+    <item
+        android:id="@+id/profile_tab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_profile"
+        android:title="@string/profile_ru" />
+</menu>
