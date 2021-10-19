@@ -1,5 +1,7 @@
 package com.designdrivendevelopment.kotelok.entities
 
+import java.util.Date
+
 data class WordDefinition(
     val id: Long,
     val wordId: Long,
@@ -10,5 +12,5 @@ data class WordDefinition(
     val mainTranslation: String,
     val otherTranslations: List<String>,
     val examples: List<ExampleOfDefinitionUse>,
-    val learntIndex: Float,
+    val nextRepeatDate: Date,
 )
