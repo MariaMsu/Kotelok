@@ -29,7 +29,7 @@ class LearnableDefinition(
 
         // Данная формула реализует алгоритм SuperMemo2, константы являются частью алгоритма
         @Suppress("MagicNumber")
-        easinessFactor = (0.1F - (5F - quality) * (0.08F + (5F - quality) * 0.02F))
+        easinessFactor += (0.1F - (5F - quality) * (0.08F + (5F - quality) * 0.02F))
         if (easinessFactor < EF_MIN_VALUE) easinessFactor = EF_MIN_VALUE
 
         val calendar = Calendar.getInstance()
@@ -63,6 +63,7 @@ class LearnableDefinition(
     }
 
     companion object {
+        private const val DEFAULT_COEFFICIENT = 1F
         private const val EF_MIN_VALUE = 1.3F
         private const val MIN_QUALITY = 0
         private const val MAX_QUALITY = 5
