@@ -14,6 +14,18 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def yandex_dict_api_key
+        if (rootProject.file("local.properties").exists()) {
+            def localProperties = new Properties()
+            rootProject.file("local.properties").withInputStream {
+                localProperties.load(it)
+            }
+            yandex_dict_api_key = localProperties.getProperty("yandex_api_key")
+        } else {
+            yandex_dict_api_key = System.getenv('YANDEX_DICTIONARY_API_KEY')
+        }
+        buildConfigField("String", "YANDEX_DICT_API_KEY", yandex_dict_api_key)
     }
 
     buildTypes {
