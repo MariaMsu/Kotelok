@@ -5,6 +5,9 @@ on:
     paths-ignore:
     - 'README.md'
 
+env:
+  YANDEX_DICTIONARY_API_KEY: ${{ secrets.YANDEX_DICTIONARY_API_KEY }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
