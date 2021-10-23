@@ -16,10 +16,10 @@ jobs:
           java-version: 11
       - name: 🔐 Set up permission
         run: chmod +x gradlew
-        env:
-          YANDEX_DICTIONARY_API_KEY: ${{ secrets.YANDEX_DICTIONARY_API_KEY}}
       - name: 🔨 Build debug
         run: ./gradlew assembleDebug
+        env:
+          YANDEX_DICTIONARY_API_KEY: ${{ secrets.YANDEX_DICTIONARY_API_KEY}}
       - name: 🛠️ Unit-test
         run: ./gradlew test
   static_analysis:
