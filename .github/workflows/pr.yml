@@ -20,6 +20,7 @@ jobs:
         run: ./gradlew assembleDebug
         env:
           YANDEX_DICTIONARY_API_KEY: ${{ secrets.YANDEX_DICTIONARY_API_KEY}}
+          MESSAGE: Hello
       - name: 🛠️ Unit-test
         run: ./gradlew test
   static_analysis:
