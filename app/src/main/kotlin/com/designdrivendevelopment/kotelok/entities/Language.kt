@@ -1,5 +1,5 @@
 package com.designdrivendevelopment.kotelok.entities
 
-enum class Language {
-    ENG()
+enum class Language(val title: String) {
+    ENG("English")
 }
