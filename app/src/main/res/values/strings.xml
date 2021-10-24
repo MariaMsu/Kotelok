@@ -1,5 +1,20 @@
 <resources>
     <string name="app_name">Kotelok</string>
+    <string name="slovari">Словари</string>
+    <string name="photo">Фото</string>
+    <string name="profile">Профиль</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="choose_training">Выберите тренажер</string>
+    <string name="cards">Карточки</string>
+    <string name="accordance">Выбор соответствия</string>
+    <string name="orthography">Написание слов</string>
+    <string name="ok">OK</string>
+    <string name="favorite">Добавить в избранное</string>
+    <string name="add_dictionary">Добавить словарь</string>
+    <string name="voice_acting">Озвучка слова</string>
+    <string name="search">Поиск</string>
+    <string name="add_word">Добавить слово</string>
+    <string name="word_count">%1$s %2$s</string>
     <string name="dictionaries_ru">Словари</string>
     <string name="recognize_ru">Распознать</string>
     <string name="profile_ru">Профиль</string>

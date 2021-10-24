@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_book"
+        android:icon="@drawable/menu_book"
+        android:title="@string/slovari"/>
+    <item
+        android:id="@+id/menu_camera"
+        android:icon="@drawable/menu_camera"
+        android:title="@string/photo"/>
+    <item
+        android:id="@+id/menu_account"
+        android:icon="@drawable/menu_account"
+        android:title="@string/profile"/>
+</menu>

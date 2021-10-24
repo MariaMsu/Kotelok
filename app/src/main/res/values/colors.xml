@@ -11,4 +11,6 @@
     <color name="light_purple_main">#796AED</color>
     <color name="turquoise_main">#7BD5F5</color>
     <color name="light_gray_background_main">#F3F2F4</color>
+    <color name="red">#e60202</color>
+    <color name="gray">#d4d0f2</color>
 </resources>
