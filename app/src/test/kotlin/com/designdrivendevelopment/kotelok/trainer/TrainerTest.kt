@@ -1,10 +1,5 @@
 package com.designdrivendevelopment.kotelok.trainer
 
-import junit.framework.TestCase.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
-
 class TrainerTest {
 
 //    private fun getDictionaryData(): List<LearnableWord> {
