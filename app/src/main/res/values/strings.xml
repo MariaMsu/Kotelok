@@ -3,5 +3,10 @@
     <string name="dictionaries_ru">Словари</string>
     <string name="recognize_ru">Распознать</string>
     <string name="profile_ru">Профиль</string>
+    <string name="profile_stat_button_ru">Моя статистика</string>
+    <string name="profile_achievements_button_ru">Мои достижения</string>
+    <string name="profile_export_button_ru">Экспортировать</string>
+    <string name="profile_settings_button_ru">Настройки</string>
+    <string name="profile_about_button_ru">О приложении</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

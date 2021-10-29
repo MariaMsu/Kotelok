@@ -1,20 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_gray_background_main"
     tools:context=".ProfileFragment">
 
-    <TextView
-        android:id="@+id/profile_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Button
+        android:text="@string/profile_stat_button_ru"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:id="@+id/statistics_button"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/dark_gray"
+        android:textSize="11sp"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:layout_marginTop="32dp"
+        app:layout_constraintHorizontal_bias="0.724" />
+
+    <Button
+        android:text="@string/profile_achievements_button_ru"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:id="@+id/achievements_button"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/dark_gray"
+        android:textSize="11sp"
+        android:textAlignment="textStart"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/profile_ru" />
+        app:layout_constraintHorizontal_bias="0.724"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:text="@string/profile_settings_button_ru"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:id="@+id/settings_button"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/dark_gray"
+        android:textSize="11sp"
+        android:textAlignment="textStart"
+        app:layout_constraintTop_toBottomOf="@+id/export_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.724"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:text="@string/profile_about_button_ru"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:id="@+id/about_button"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/dark_gray"
+        android:textSize="11sp"
+        android:textAlignment="textStart"
+        app:layout_constraintTop_toBottomOf="@+id/settings_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.724"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:text="@string/profile_export_button_ru"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:id="@+id/export_button"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/dark_gray"
+        android:textSize="11sp"
+        android:textAlignment="textStart"
+        app:layout_constraintTop_toBottomOf="@+id/achievements_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.724"
+        android:layout_marginTop="16dp" />
+
+    <ImageView
+        android:src="@drawable/profile_background_circle"
+        android:layout_width="609dp"
+        android:layout_height="434dp"
+        android:id="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="423dp" />
+
+    <ImageView
+        android:src="@drawable/ic_profile_stat_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/profile_stat_icon"
+        app:layout_constraintEnd_toStartOf="@+id/statistics_button"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintTop_toTopOf="@+id/statistics_button"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:src="@drawable/ic_profile_achievement_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/profile_achievement_icon"
+        app:layout_constraintEnd_toStartOf="@+id/achievements_button"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintTop_toTopOf="@+id/achievements_button"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:src="@drawable/ic_profile_export_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/profile_export_icon"
+        app:layout_constraintEnd_toStartOf="@+id/export_button"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintTop_toTopOf="@+id/export_button"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:src="@drawable/ic_profile_settings_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:id="@+id/profile_settings_icon"
+        app:layout_constraintEnd_toStartOf="@+id/settings_button"
+        android:layout_marginEnd="26dp"
+        app:layout_constraintTop_toTopOf="@+id/settings_button"
+        android:layout_marginTop="6dp" />
+
+    <ImageView
+        android:src="@drawable/ic_profile_about_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/profile_about_icon"
+        app:layout_constraintEnd_toStartOf="@+id/about_button"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintTop_toTopOf="@+id/about_button"
+        android:layout_marginTop="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
