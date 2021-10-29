@@ -4,15 +4,11 @@ import com.designdrivendevelopment.kotelok.LearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 
 abstract class IteratorTrainerSingle<CheckInputType>(
-    dictionaryId: Long,
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
-    onlyNotLearned: Boolean,
     trainerWeight: Float,
 ) :
     CoreTrainer<LearnableDefinition, CheckInputType>(
-        dictionaryId,
         learnableDefinitionsRepository,
-        onlyNotLearned,
         trainerWeight
     ) {
     public override fun getNext(): LearnableDefinition {

@@ -7,13 +7,11 @@ import com.designdrivendevelopment.kotelok.trainer.utils.PairCheckInput
 const val PAIR_WEIGHT = 0.1f
 
 class PairCoreTrainer(
-    dictionaryId: Long,
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
-    onlyNotLearned: Boolean = true,
     private val setSize: Int = 5,
 ) :
     CoreTrainer<Pair<List<String>, List<LearnableDefinition>>,
-        PairCheckInput>(dictionaryId, learnableDefinitionsRepository, onlyNotLearned, PAIR_WEIGHT) {
+        PairCheckInput>(learnableDefinitionsRepository, PAIR_WEIGHT) {
 
     private var currentWordSubList = listOf<LearnableDefinition>()
 
@@ -34,9 +32,9 @@ class PairCoreTrainer(
     }
 
     private fun rateEF(expectedWord: LearnableDefinition, definitionId: Long): Int {
-        if (expectedWord.definitionId == definitionId){
+        if (expectedWord.definitionId == definitionId) {
             return 5
-        }else{
+        } else {
             return 0
         }
     }

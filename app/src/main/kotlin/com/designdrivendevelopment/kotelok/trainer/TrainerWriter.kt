@@ -6,14 +6,9 @@ import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 const val WRITE_WEIGHT = 0.15f
 
 class WriteCoreTrainer(
-    dictionaryId: Long,
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
-    onlyNotLearned: Boolean = true,
 ) :
-    IteratorTrainerSingle<String>(dictionaryId,
-        learnableDefinitionsRepository,
-        onlyNotLearned,
-        WRITE_WEIGHT) {
+    IteratorTrainerSingle<String>(learnableDefinitionsRepository, WRITE_WEIGHT) {
 
     override fun rateEF(expectedWord: LearnableDefinition, userInput: String): Int {
         // TODO return colored string with a highlighted error

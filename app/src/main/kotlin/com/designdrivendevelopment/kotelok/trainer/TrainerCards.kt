@@ -6,16 +6,14 @@ import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 const val CARDS_WEIGHT = 0.01f
 
 class TrainerCards(
-    dictionaryId: Long,
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
-    onlyNotLearned: Boolean = true,
 ) :
-    IteratorTrainerSingle<Boolean>(dictionaryId,learnableDefinitionsRepository, onlyNotLearned, CARDS_WEIGHT) {
+    IteratorTrainerSingle<Boolean>(learnableDefinitionsRepository, CARDS_WEIGHT) {
 
     override fun rateEF(expectedWord: LearnableDefinition, userInput: Boolean): Int {
-        return if (userInput){
+        return if (userInput) {
             LearnableDefinition.DEFAULT_QUALITY
-        }else{
+        } else {
             0
         }
     }

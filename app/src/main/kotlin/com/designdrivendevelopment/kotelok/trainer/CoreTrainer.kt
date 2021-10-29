@@ -2,18 +2,24 @@ package com.designdrivendevelopment.kotelok.trainer
 
 import com.designdrivendevelopment.kotelok.LearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
-import java.util.*
+import java.util.Calendar
 
 abstract class CoreTrainer<NextOutType, CheckInputType>(
-    dictionaryId: Long,
-    learnableDefinitionsRepository: LearnableDefinitionsRepository,
-    onlyNotLearned: Boolean,
+    private val learnableDefinitionsRepository: LearnableDefinitionsRepository,
     private val trainerWeight: Float,
 ) {
+    var currentIdx = 0
+    var size = 0 // number of words which will the trainer give away
+    val isDone: Boolean
+        get() = currentIdx >= shuffledWords.size
 
-    var shuffledWords: List<LearnableDefinition>
+    var shuffledWords = emptyList<LearnableDefinition>()
+    private var repeatWordsSet = mutableSetOf<LearnableDefinition>()
 
-    init {
+    suspend fun loadDictionary(dictionaryId: Long, onlyNotLearned: Boolean) {
+        currentIdx = 0
+        size = shuffledWords.size
+
         shuffledWords = if (onlyNotLearned) {
             learnableDefinitionsRepository
                 .getLearnableDefinitionsByDictionaryId(
@@ -29,17 +35,8 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
                 )
         }
         shuffledWords.shuffled()
+        repeatWordsSet = mutableSetOf<LearnableDefinition>()
     }
-
-    var currentIdx = 0
-
-    // number of words which will the trainer give away
-    var size = shuffledWords.size
-
-    val isDone: Boolean
-        get() = currentIdx >= shuffledWords.size
-
-    private var repeatWordsSet = mutableSetOf<LearnableDefinition>()
 
     fun handleAnswer(word: LearnableDefinition, scoreEF: Int): Boolean {
         word.changeEFBasedOnNewQuality(scoreEF, trainerWeight)
