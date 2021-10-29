@@ -1,17 +1,26 @@
 package com.designdrivendevelopment.kotelok.trainer
 
-import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
+import com.designdrivendevelopment.kotelok.LearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 
-const val WRITE_PROGRESS = 0.15f
+const val WRITE_WEIGHT = 0.15f
 
 class WriteCoreTrainer(
-    learnableWords: List<LearnableWord>,
+    dictionaryId: Long,
+    learnableDefinitionsRepository: LearnableDefinitionsRepository,
     onlyNotLearned: Boolean = true,
 ) :
-    IteratorTrainerSingle<String>(learnableWords, onlyNotLearned, WRITE_PROGRESS) {
+    IteratorTrainerSingle<String>(dictionaryId,
+        learnableDefinitionsRepository,
+        onlyNotLearned,
+        WRITE_WEIGHT) {
 
-    override fun isUserRight(expectedWord: LearnableWord, userInput: String): Boolean {
+    override fun rateEF(expectedWord: LearnableDefinition, userInput: String): Int {
         // TODO return colored string with a highlighted error
-        return userInput == expectedWord.writing
+        if (userInput == expectedWord.writing) {
+            return 5
+        } else {
+            return 0
+        }
     }
 }

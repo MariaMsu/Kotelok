@@ -15,7 +15,7 @@ interface LearnableDefinitionsRepository {
     suspend fun getLearnableDefinitionsByDictionaryIdAndRepeatDate(
         dictionaryId: Long,
         repeatDate: Date
-    ): LearnableDefinition
+    ): List<LearnableDefinition>
 
     suspend fun updateLearnableDefinition(wordDefinition: LearnableDefinition)
 }

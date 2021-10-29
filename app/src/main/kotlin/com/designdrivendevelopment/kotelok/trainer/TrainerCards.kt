@@ -1,16 +1,22 @@
 package com.designdrivendevelopment.kotelok.trainer
 
-import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
+import com.designdrivendevelopment.kotelok.LearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 
-const val CARDS_PROGRESS = 0.01f
+const val CARDS_WEIGHT = 0.01f
 
 class TrainerCards(
-    learnableWords: List<LearnableWord>,
+    dictionaryId: Long,
+    learnableDefinitionsRepository: LearnableDefinitionsRepository,
     onlyNotLearned: Boolean = true,
 ) :
-    IteratorTrainerSingle<Boolean>(learnableWords, onlyNotLearned, CARDS_PROGRESS) {
+    IteratorTrainerSingle<Boolean>(dictionaryId,learnableDefinitionsRepository, onlyNotLearned, CARDS_WEIGHT) {
 
-    override fun isUserRight(expectedWord: LearnableWord, userInput: Boolean): Boolean {
-        return userInput
+    override fun rateEF(expectedWord: LearnableDefinition, userInput: Boolean): Int {
+        return if (userInput){
+            LearnableDefinition.DEFAULT_QUALITY
+        }else{
+            0
+        }
     }
 }

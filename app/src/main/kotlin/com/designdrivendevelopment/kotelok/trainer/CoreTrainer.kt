@@ -1,20 +1,37 @@
 package com.designdrivendevelopment.kotelok.trainer
 
-import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
-
-const val DECREASE_INDEX_COEF = 0.5f
+import com.designdrivendevelopment.kotelok.LearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
+import java.util.*
 
 abstract class CoreTrainer<NextOutType, CheckInputType>(
-    learnableWords: List<LearnableWord>,
+    dictionaryId: Long,
+    learnableDefinitionsRepository: LearnableDefinitionsRepository,
     onlyNotLearned: Boolean,
-    private val learnProgress: Float,
+    private val trainerWeight: Float,
 ) {
-    var currentIdx = 0
-    var shuffledWords = if (onlyNotLearned) {
-        learnableWords.toList().shuffled().filter { it.translation.learntIndex < 1f }
-    } else {
-        learnableWords.toList().shuffled()
+
+    var shuffledWords: List<LearnableDefinition>
+
+    init {
+        shuffledWords = if (onlyNotLearned) {
+            learnableDefinitionsRepository
+                .getLearnableDefinitionsByDictionaryId(
+                    dictionaryId = dictionaryId,
+                )
+        } else {
+            learnableDefinitionsRepository
+                .getLearnableDefinitionsByDictionaryIdAndRepeatDate(
+                    dictionaryId = dictionaryId,
+                    repeatDate = with(Calendar.getInstance()) {
+                        time
+                    }
+                )
+        }
+        shuffledWords.shuffled()
     }
+
+    var currentIdx = 0
 
     // number of words which will the trainer give away
     var size = shuffledWords.size
@@ -22,29 +39,24 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
     val isDone: Boolean
         get() = currentIdx >= shuffledWords.size
 
-    private var repeatWordsSet = mutableSetOf<LearnableWord>()
+    private var repeatWordsSet = mutableSetOf<LearnableDefinition>()
 
-    fun handleTrueAnswer(word: LearnableWord) {
-        word.translation.learntIndex = minOf(
-            word.translation.learntIndex + learnProgress,
-            1f
-        )
+    fun handleAnswer(word: LearnableDefinition, scoreEF: Int): Boolean {
+        word.changeEFBasedOnNewQuality(scoreEF, trainerWeight)
+        val isRight = scoreEF >= LearnableDefinition.DEFAULT_QUALITY
+        if (!isRight) {
+            repeatWordsSet.add(word)
+        }
 
         currentIdx += 1
         if (currentIdx >= shuffledWords.size) {
             // begin to iterate over words which were guessed incorrectly
             shuffledWords = repeatWordsSet.toList()
-            repeatWordsSet = mutableSetOf<LearnableWord>()
+            repeatWordsSet = mutableSetOf<LearnableDefinition>()
             currentIdx = 0
         }
-    }
 
-    fun handleFalseAnswer(word: LearnableWord) {
-        word.translation.learntIndex = maxOf(
-            word.translation.learntIndex - DECREASE_INDEX_COEF * learnProgress,
-            0f
-        )
-        repeatWordsSet.add(word)
+        return isRight
     }
 
     /* returns the data for training */

@@ -1,31 +1,29 @@
 package com.designdrivendevelopment.kotelok.trainer
 
-import com.designdrivendevelopment.kotelok.trainer.entities.LearnableWord
+import com.designdrivendevelopment.kotelok.LearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 
 abstract class IteratorTrainerSingle<CheckInputType>(
-    learnableWords: List<LearnableWord>,
+    dictionaryId: Long,
+    learnableDefinitionsRepository: LearnableDefinitionsRepository,
     onlyNotLearned: Boolean,
-    learnProgress: Float,
+    trainerWeight: Float,
 ) :
-    CoreTrainer<LearnableWord, CheckInputType>(
-        learnableWords,
+    CoreTrainer<LearnableDefinition, CheckInputType>(
+        dictionaryId,
+        learnableDefinitionsRepository,
         onlyNotLearned,
-        learnProgress
+        trainerWeight
     ) {
-    public override fun getNext(): LearnableWord {
+    public override fun getNext(): LearnableDefinition {
         return shuffledWords[this.currentIdx]
     }
 
     public override fun checkUserInput(userInput: CheckInputType): Boolean {
         val currWord = shuffledWords[this.currentIdx]
-        val isRight = isUserRight(currWord, userInput)
-        if (isRight) {
-            handleTrueAnswer(currWord)
-            return true
-        }
-        handleFalseAnswer(currWord)
-        return false
+        val scoreEF = rateEF(currWord, userInput)
+        return handleAnswer(currWord, scoreEF)
     }
 
-    abstract fun isUserRight(expectedWord: LearnableWord, userInput: CheckInputType): Boolean
+    abstract fun rateEF(expectedWord: LearnableDefinition, userInput: CheckInputType): Int
 }
