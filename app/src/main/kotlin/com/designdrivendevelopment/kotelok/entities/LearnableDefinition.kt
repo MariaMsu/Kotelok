@@ -21,23 +21,23 @@ class LearnableDefinition(
     var repeatDate = nextRepeatDate
         private set
 
-    fun changeEFBasedOnNewQuality(
-        quality: Int,
+    fun changeEFBasedOnNewGrade(
+        grade: Int,
         trainerWeight: Float = DEFAULT_COEFFICIENT
     ) {
-        if (quality !in MIN_QUALITY..MAX_QUALITY) throw IllegalArgumentException(
+        if (grade !in GRADE_ZERO..GRADE_FIVE) throw IllegalArgumentException(
             "The quality can only take the following values {0, 1, 2, 3, 4, 5}," +
-                " passed value = $quality"
+                " passed value = $grade"
         )
 
-        // Данная формула реализует алгоритм SuperMemo2, константы являются частью алгоритма
+        // Данная формула реализует алгоритм SuperMemo2, константы являются частью формулы алгоритма
         @Suppress("MagicNumber")
         easinessFactor +=
-            trainerWeight * (0.1F - (5F - quality) * (0.08F + (5F - quality) * 0.02F))
+            trainerWeight * (0.1F - (5F - grade) * (0.08F + (5F - grade) * 0.02F))
         if (easinessFactor < EF_MIN_VALUE) easinessFactor = EF_MIN_VALUE
 
         val calendar = Calendar.getInstance()
-        if (quality < PASSING_GRADE) {
+        if (grade < PASSING_GRADE) {
             repetitionNumber = 0
             interval = 1
             repeatDate = with(calendar) {
@@ -67,14 +67,17 @@ class LearnableDefinition(
     }
 
     companion object {
+        const val GRADE_ZERO = 0
+        const val GRADE_ONE = 1
+        const val GRADE_TWO = 2
+        const val GRADE_THREE = 3
+        const val GRADE_FOUR = 4
+        const val GRADE_FIVE = 5
+        const val PASSING_GRADE = 4
         private const val DEFAULT_COEFFICIENT = 1F
         private const val EF_MIN_VALUE = 1.3F
-        private const val MIN_QUALITY = 0
-        private const val MAX_QUALITY = 5
-        private const val PASSING_GRADE = 3
         private const val INITIAL_INTERVAL = 1
         private const val SECOND_INTERVAL = 6
         const val EF_INITIAL_VALUE = 2.5F
-        const val DEFAULT_QUALITY = 4
     }
 }
