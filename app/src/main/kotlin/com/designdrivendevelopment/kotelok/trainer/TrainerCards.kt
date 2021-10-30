@@ -12,7 +12,7 @@ class TrainerCards(
 
     override fun rateEF(expectedWord: LearnableDefinition, userInput: Boolean): Int {
         return if (userInput) {
-            LearnableDefinition.DEFAULT_QUALITY
+            LearnableDefinition.GRADE_FOUR
         } else {
             0
         }
