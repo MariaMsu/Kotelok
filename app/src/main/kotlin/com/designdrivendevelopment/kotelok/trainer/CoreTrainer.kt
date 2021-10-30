@@ -22,12 +22,12 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
 
         shuffledWords = if (onlyNotLearned) {
             learnableDefinitionsRepository
-                .getLearnableDefinitionsByDictionaryId(
+                .getByDictionaryId(
                     dictionaryId = dictionaryId,
                 )
         } else {
             learnableDefinitionsRepository
-                .getLearnableDefinitionsByDictionaryIdAndRepeatDate(
+                .getByDictionaryIdAndRepeatDate(
                     dictionaryId = dictionaryId,
                     repeatDate = with(Calendar.getInstance()) {
                         time
