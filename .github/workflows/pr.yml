@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: main_environment
     steps:
       - uses: actions/checkout@v2
       - name: ☕ Set up JDK 11
@@ -43,8 +44,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./detekt
-  check_aseemble:
+  check_assemble:
     runs-on: ubuntu-latest
+    environment: main_environment
     steps:
       - uses: actions/checkout@v2
       - name: ☕ Set up JDK 11
