@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.31'
 }
 
 android {
@@ -14,6 +15,18 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def yandex_dict_api_key
+        if (rootProject.file("local.properties").exists()) {
+            def localProperties = new Properties()
+            rootProject.file("local.properties").withInputStream {
+                localProperties.load(it)
+            }
+            yandex_dict_api_key = localProperties.getProperty("yandex_api_key")
+        } else {
+            yandex_dict_api_key = System.getenv('YANDEX_DICTIONARY_API_KEY')
+        }
+        buildConfigField("String", "YANDEX_DICT_API_KEY", yandex_dict_api_key)
     }
 
     buildTypes {
@@ -32,6 +45,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-rc01")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-rc01")
 
@@ -44,6 +58,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

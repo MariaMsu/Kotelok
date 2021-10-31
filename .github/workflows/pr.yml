@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: main_environment
     steps:
       - uses: actions/checkout@v2
       - name: ☕ Set up JDK 11
@@ -17,8 +18,12 @@ jobs:
       - name: 🔐 Set up permission
         run: chmod +x gradlew
       - name: 🔨 Build debug
+        env:
+          YANDEX_DICTIONARY_API_KEY: '"${{ secrets.YANDEX_DICTIONARY_API_KEY }}"'
         run: ./gradlew assembleDebug
       - name: 🛠️ Unit-test
+        env:
+          YANDEX_DICTIONARY_API_KEY: '"${{ secrets.YANDEX_DICTIONARY_API_KEY }}"'
         run: ./gradlew test
   static_analysis:
     runs-on: ubuntu-latest
@@ -43,8 +48,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./detekt
-  check_aseemble:
+  check_assemble:
     runs-on: ubuntu-latest
+    environment: main_environment
     steps:
       - uses: actions/checkout@v2
       - name: ☕ Set up JDK 11
@@ -54,6 +60,8 @@ jobs:
       - name: 🔐 Set up permission
         run: chmod +x gradlew
       - name: 🔨 Build internal release
+        env:
+          YANDEX_DICTIONARY_API_KEY: '"${{ secrets.YANDEX_DICTIONARY_API_KEY }}"'
         run: ./gradlew assembleDebug
       - name: 🔄 Upload debug apk
         uses: actions/upload-artifact@v2
