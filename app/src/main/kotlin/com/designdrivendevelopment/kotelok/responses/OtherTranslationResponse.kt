@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MeanResponse(
+data class OtherTranslationResponse(
     @SerialName("text")
     val text: String
 )
