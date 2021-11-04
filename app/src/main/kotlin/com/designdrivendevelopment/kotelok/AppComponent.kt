@@ -18,4 +18,11 @@ class AppComponent(applicationContext: Context) {
     }
 
     private val db = KotelokDatabase.create(applicationContext, CoroutineScope(Dispatchers.IO))
+
+    val dictionariesRepository by lazy {
+        DictionariesRepositoryImpl(
+            db.dictionariesDao,
+            db.dictionaryWordDefCrossRefDao
+        )
+    }
 }
