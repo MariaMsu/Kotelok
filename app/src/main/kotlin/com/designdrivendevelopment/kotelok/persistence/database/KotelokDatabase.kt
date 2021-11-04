@@ -93,7 +93,6 @@ abstract class KotelokDatabase : RoomDatabase() {
                         id = 0,
                         wordId = wordId,
                         writing = "time",
-                        language = Language.ENG,
                         partOfSpeech = PartOfSpeech.Noun(
                             language = Language.ENG,
                             originalTitle = "noun"
@@ -118,7 +117,6 @@ abstract class KotelokDatabase : RoomDatabase() {
                         id = 0,
                         wordId = wordId,
                         writing = "time",
-                        language = Language.ENG,
                         partOfSpeech = PartOfSpeech.Noun(
                             language = Language.ENG,
                             originalTitle = "noun"
