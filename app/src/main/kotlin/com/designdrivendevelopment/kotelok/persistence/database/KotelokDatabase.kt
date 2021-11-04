@@ -17,6 +17,7 @@ import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
 import com.designdrivendevelopment.kotelok.persistence.daos.ExamplesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.PartsOfSpeechDao
+import com.designdrivendevelopment.kotelok.persistence.daos.StatisticsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.SynonymsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.TranslationsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
@@ -57,6 +58,7 @@ abstract class KotelokDatabase : RoomDatabase() {
     abstract val wordDefinitionsDao: WordDefinitionsDao
     abstract val wordsDao: WordsDao
     abstract val dictionaryWordDefCrossRefDao: DictionaryWordDefCrossRefDao
+    abstract val statisticsDao: StatisticsDao
 
     companion object {
         private var database: KotelokDatabase? = null
