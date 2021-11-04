@@ -8,6 +8,7 @@ import com.designdrivendevelopment.kotelok.persistence.queryResults.LearnableDef
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionQueryResult
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
 
+@Suppress("TooManyFunctions")
 @Dao
 interface WordDefinitionsDao {
     @Insert
