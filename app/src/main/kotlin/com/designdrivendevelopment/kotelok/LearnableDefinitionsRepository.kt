@@ -6,8 +6,6 @@ import java.util.Date
 interface LearnableDefinitionsRepository {
     suspend fun getAll(): List<LearnableDefinition>
 
-    suspend fun getLearnableDefinitionById(wordId: Long): LearnableDefinition
-
     suspend fun getByDictionaryId(dictionaryId: Long): List<LearnableDefinition>
 
     suspend fun getByRepeatDate(repeatDate: Date): List<LearnableDefinition>
