@@ -25,4 +25,7 @@ class AppComponent(applicationContext: Context) {
         )
     }
     val wordRepository by lazy { WordsRepositoryImpl(db.wordsDao) }
+    val dictDefinitionsRepository by lazy {
+        DictWordDefinitionRepositoryImpl(db.wordDefinitionsDao)
+    }
 }
