@@ -7,7 +7,6 @@ import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.entities.PartOfSpeech
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
-import com.designdrivendevelopment.kotelok.entities.Word
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.entities.WordDefinitionStat
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
@@ -17,7 +16,6 @@ import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefiniti
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.PartOfSpeechEntity
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordEntity
 
 fun Dictionary.toDictionaryEntity(): DictionaryEntity {
     return DictionaryEntity(
@@ -39,7 +37,6 @@ fun DictionaryEntity.toDictionary(size: Int): Dictionary {
 fun WordDefinitionQueryResult.toWordDefinition(): WordDefinition {
     return WordDefinition(
         id = this.id,
-        wordId = this.wordId,
         writing = this.writing,
         partOfSpeech = this.partOfSpeechEntity?.toPartOfSpeech(),
         transcription = this.transcription,
@@ -115,7 +112,6 @@ fun ExampleEntity.toExampleOfDefinitionUse(): ExampleOfDefinitionUse {
 fun LearnableDefQueryResult.toLearnableDef(): LearnableDefinition {
     return LearnableDefinition(
         definitionId = this.id,
-        wordId = this.wordId,
         writing = this.writing,
         partOfSpeech = this.partOfSpeechEntity.toPartOfSpeech(),
         mainTranslation = this.mainTranslation,
@@ -155,21 +151,5 @@ fun WordDefinitionStatQuery.toWordDefinitionStat(): WordDefinitionStat {
         skillLevel = this.skillLevel,
         numOfCompletedTrainings = this.numOfCompletedTrainings,
         numOfSuccessfullyTrainings = this.numOfSuccessfullyTrainings
-    )
-}
-
-fun WordEntity.toWord(): Word {
-    return Word(
-        id = this.id,
-        language = this.language,
-        writing = this.writing
-    )
-}
-
-fun Word.toWordEntity(): WordEntity {
-    return WordEntity(
-        id = this.id,
-        language = this.language,
-        writing = this.writing
     )
 }

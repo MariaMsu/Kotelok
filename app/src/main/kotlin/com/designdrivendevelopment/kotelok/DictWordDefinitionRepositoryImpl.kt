@@ -26,12 +26,6 @@ class DictWordDefinitionRepositoryImpl(
         wordDefinitionsDao.getDefinitionById(wordDefinitionId).toWordDefinition()
     }
 
-    override suspend fun getWordDefinitionByWordId(
-        wordId: Long
-    ): WordDefinition = withContext(Dispatchers.IO) {
-        wordDefinitionsDao.getDefinitionsByWordId(wordId).toWordDefinition()
-    }
-
 //    override suspend fun deleteWordDefinitionById(wordDefinitionId: Long) {
 //        wordDefinitionsDao.deleteWordDefinitionById(wordDefinitionId)
 //        wordDefCrossRefDao.deleteByWordDefinitionId(wordDefinitionId)

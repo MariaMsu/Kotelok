@@ -35,11 +35,10 @@ interface WordDefinitionsDao {
     @Transaction
     @Query(
         """
-        SELECT words_d.def_id AS id, word_id, words.writing AS writing, part_of_speech,
+        SELECT def_id AS id, writing, part_of_speech, language,
         transcription, main_translation, next_repeat_date
-        FROM word_definitions AS words_d
-        JOIN words ON (words_d.word_id = words.id)
-        WHERE (words_d.def_id = :wordDefinitionId)
+        FROM word_definitions
+        WHERE (def_id = :wordDefinitionId)
     """
     )
     suspend fun getDefinitionById(wordDefinitionId: Long): WordDefinitionQueryResult
@@ -47,22 +46,20 @@ interface WordDefinitionsDao {
     @Transaction
     @Query(
         """
-        SELECT words_d.def_id AS id, word_id, words.writing AS writing, part_of_speech,
+        SELECT def_id AS id, writing, part_of_speech, language,
         transcription, main_translation, next_repeat_date
-        FROM word_definitions AS words_d
-        JOIN words ON (words_d.word_id = words.id)
-        WHERE (words_d.word_id = :wordId)
+        FROM word_definitions
+        WHERE (writing = :writing)
     """
     )
-    suspend fun getDefinitionsByWordId(wordId: Long): WordDefinitionQueryResult
+    suspend fun getDefinitionsByWriting(writing: String): WordDefinitionQueryResult
 
     @Transaction
     @Query(
         """
-        SELECT words_d.def_id AS id, word_id, words.writing AS writing, part_of_speech,
+        SELECT def_id AS id, writing, part_of_speech, language,
         transcription, main_translation, next_repeat_date
         FROM word_definitions AS words_d
-        JOIN words ON (words_d.word_id = words.id)
         WHERE (words_d.def_id IN (
             SELECT cross_refs.word_def_id
             FROM dictionary_word_def_cross_refs AS cross_refs
@@ -75,11 +72,9 @@ interface WordDefinitionsDao {
     @Transaction
     @Query(
         """
-        SELECT words_d.def_id AS id, word_id, words.writing AS writing, part_of_speech,
-        main_translation, next_repeat_date, repetition_number, last_interval AS interval,
-        easiness_factor
+        SELECT def_id AS id, writing, part_of_speech, main_translation, next_repeat_date,
+        repetition_number, last_interval AS interval, easiness_factor
         FROM word_definitions AS words_d
-        JOIN words ON (words_d.word_id = words.id)
         WHERE (words_d.def_id IN (
             SELECT cross_refs.word_def_id
             FROM dictionary_word_def_cross_refs AS cross_refs
@@ -94,12 +89,10 @@ interface WordDefinitionsDao {
     @Transaction
     @Query(
         """
-        SELECT words_d.def_id AS id, word_id, words.writing AS writing, part_of_speech,
-        main_translation, next_repeat_date, repetition_number, last_interval AS interval,
-        easiness_factor
-        FROM word_definitions AS words_d
-        JOIN words ON (words_d.word_id = words.id)
-        WHERE (:repeatDateInMillis >= words_d.next_repeat_date)
+        SELECT def_id AS id, writing, part_of_speech, main_translation, next_repeat_date,
+        repetition_number, last_interval AS interval, easiness_factor
+        FROM word_definitions
+        WHERE (:repeatDateInMillis >= next_repeat_date)
     """
     )
     suspend fun getLearnableDefinitionsByDate(
@@ -109,11 +102,9 @@ interface WordDefinitionsDao {
     @Transaction
     @Query(
         """
-        SELECT words_d.def_id AS id, word_id, words.writing AS writing, part_of_speech,
-        main_translation, next_repeat_date, repetition_number, last_interval AS interval,
-        easiness_factor
+        SELECT words_d.def_id AS id, writing, part_of_speech, main_translation, next_repeat_date,
+        repetition_number, last_interval AS interval, easiness_factor
         FROM word_definitions AS words_d
-        JOIN words ON (words_d.word_id = words.id)
         WHERE ((:repeatDateInMillis >= words_d.next_repeat_date) AND (words_d.def_id IN (
             SELECT cross_refs.word_def_id
             FROM dictionary_word_def_cross_refs AS cross_refs
@@ -129,10 +120,9 @@ interface WordDefinitionsDao {
     @Transaction
     @Query(
         """
-        SELECT words_d.def_id AS id, word_id, words.writing AS writing, part_of_speech,
+        SELECT def_id AS id, writing, part_of_speech, language,
         transcription, main_translation, next_repeat_date
-        FROM word_definitions AS words_d
-        JOIN words ON (words_d.word_id = words.id)
+        FROM word_definitions
         """
     )
     suspend fun getAllWordDefinitions(): List<WordDefinitionQueryResult>
@@ -140,11 +130,9 @@ interface WordDefinitionsDao {
     @Transaction
     @Query(
         """
-        SELECT words_d.def_id AS id, word_id, words.writing AS writing, part_of_speech,
-        main_translation, next_repeat_date, repetition_number, last_interval AS interval,
-        easiness_factor
+        SELECT def_id AS id, writing, part_of_speech, main_translation, next_repeat_date,
+        repetition_number, last_interval AS interval, easiness_factor
         FROM word_definitions AS words_d
-        JOIN words ON (words_d.word_id = words.id)
         """
     )
     suspend fun getAllLearnableDefinitions(): List<LearnableDefQueryResult>

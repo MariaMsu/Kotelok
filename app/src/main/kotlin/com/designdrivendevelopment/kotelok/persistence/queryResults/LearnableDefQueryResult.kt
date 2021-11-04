@@ -10,8 +10,6 @@ import java.util.Date
 data class LearnableDefQueryResult(
     @ColumnInfo(name = "id")
     val id: Long,
-    @ColumnInfo(name = "word_id")
-    val wordId: Long,
     @ColumnInfo(name = "writing")
     val writing: String,
     @ColumnInfo(name = "part_of_speech")

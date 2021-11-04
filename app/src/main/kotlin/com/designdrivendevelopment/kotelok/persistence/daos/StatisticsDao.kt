@@ -34,12 +34,11 @@ interface StatisticsDao {
 
     @Query(
         """
-        SELECT w_d.def_id AS id, w.writing AS writing, w_d.easiness_factor AS skill_level,
+        SELECT w_d.def_id AS id, w_d.writing AS writing, w_d.easiness_factor AS skill_level,
         w_d.completed_trainings_number AS completed_num,
         w_d.successfully_trainings_number AS successfully_num
         FROM dictionary_word_def_cross_refs AS c_r
         JOIN word_definitions AS w_d ON (c_r.word_def_id = w_d.def_id)
-        JOIN words AS w ON (w_d.word_id = w.id)
         WHERE (c_r.dict_id = :dictionaryId)
     """
     )

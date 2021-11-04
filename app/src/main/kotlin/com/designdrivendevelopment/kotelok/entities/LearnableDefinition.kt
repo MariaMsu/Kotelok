@@ -7,7 +7,6 @@ import kotlin.math.roundToInt
 @Suppress("LongParameterList")
 class LearnableDefinition(
     val definitionId: Long,
-    val wordId: Long,
     val writing: String,
     val partOfSpeech: PartOfSpeech?,
     val mainTranslation: String,

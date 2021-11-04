@@ -2,27 +2,21 @@ package com.designdrivendevelopment.kotelok.persistence.roomEntities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.designdrivendevelopment.kotelok.entities.Language
 import java.util.Date
 
 @Entity(
-    tableName = "word_definitions",
-    foreignKeys = [
-        ForeignKey(
-            entity = WordEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["word_id"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+    tableName = "word_definitions"
 )
 data class WordDefinitionEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "def_id")
     val id: Long,
-    @ColumnInfo(name = "word_id")
-    val wordId: Long,
+    @ColumnInfo(name = "writing")
+    val writing: String,
+    @ColumnInfo(name = "language")
+    val language: Language,
     @ColumnInfo(name = "part_of_speech")
     val partOfSpeech: String?,
     @ColumnInfo(name = "transcription")

@@ -24,7 +24,6 @@ class AppComponent(applicationContext: Context) {
             db.dictionaryWordDefCrossRefDao
         )
     }
-    val wordRepository by lazy { WordsRepositoryImpl(db.wordsDao) }
     val dictDefinitionsRepository by lazy {
         DictWordDefinitionRepositoryImpl(db.wordDefinitionsDao)
     }

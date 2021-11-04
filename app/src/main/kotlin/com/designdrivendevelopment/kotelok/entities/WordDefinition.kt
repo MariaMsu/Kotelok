@@ -4,8 +4,8 @@ import java.util.Date
 
 data class WordDefinition(
     val id: Long,
-    val wordId: Long,
     val writing: String,
+    val language: Language = Language.ENG,
     val partOfSpeech: PartOfSpeech?,
     val transcription: String,
     val synonyms: List<String>,

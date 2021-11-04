@@ -10,7 +10,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.Language
 import com.designdrivendevelopment.kotelok.entities.PartOfSpeech
-import com.designdrivendevelopment.kotelok.entities.Word
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.persistence.converters.DateConverter
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
@@ -21,7 +20,6 @@ import com.designdrivendevelopment.kotelok.persistence.daos.StatisticsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.SynonymsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.TranslationsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
-import com.designdrivendevelopment.kotelok.persistence.daos.WordsDao
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
@@ -29,7 +27,6 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.PartOfSpeech
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +39,6 @@ import java.util.Calendar
         PartOfSpeechEntity::class,
         SynonymEntity::class,
         TranslationEntity::class,
-        WordEntity::class,
         WordDefinitionEntity::class,
         DictionaryWordDefCrossRef::class
     ],
@@ -56,7 +52,6 @@ abstract class KotelokDatabase : RoomDatabase() {
     abstract val synonymsDao: SynonymsDao
     abstract val translationsDao: TranslationsDao
     abstract val wordDefinitionsDao: WordDefinitionsDao
-    abstract val wordsDao: WordsDao
     abstract val dictionaryWordDefCrossRefDao: DictionaryWordDefCrossRefDao
     abstract val statisticsDao: StatisticsDao
 
@@ -81,17 +76,11 @@ abstract class KotelokDatabase : RoomDatabase() {
         private class PrepopulateCallback(
             private val scope: CoroutineScope
         ) : RoomDatabase.Callback() {
-            val word = Word(
-                id = 0,
-                language = Language.ENG,
-                writing = "time"
-            )
 
-            private fun getDefinitions(wordId: Long): List<WordDefinition> {
+            private fun getDefinitions(): List<WordDefinition> {
                 val definitions = listOf(
                     WordDefinition(
                         id = 0,
-                        wordId = wordId,
                         writing = "time",
                         partOfSpeech = PartOfSpeech.Noun(
                             language = Language.ENG,
@@ -115,7 +104,6 @@ abstract class KotelokDatabase : RoomDatabase() {
                     ),
                     WordDefinition(
                         id = 0,
-                        wordId = wordId,
                         writing = "time",
                         partOfSpeech = PartOfSpeech.Noun(
                             language = Language.ENG,
@@ -145,7 +133,6 @@ abstract class KotelokDatabase : RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 scope.launch(Dispatchers.IO) {
-                    val wordsDao = database?.wordsDao
                     val wordDefinitionsDao = database?.wordDefinitionsDao
                     val translationsDao = database?.translationsDao
                     val partsOfSpeechDao = database?.partsOfSpeechDao
@@ -153,14 +140,6 @@ abstract class KotelokDatabase : RoomDatabase() {
                     val examplesDao = database?.examplesDao
                     val dictionariesDao = database?.dictionariesDao
                     val dictionaryWordDefCrossRefDao = database?.dictionaryWordDefCrossRefDao
-
-                    val wordEntity = WordEntity(
-                        id = word.id,
-                        language = Language.ENG,
-                        writing = word.writing
-                    )
-                    val id = wordsDao!!.insert(wordEntity)
-                    Log.d("DATABASE", "id = $id")
 
                     val dictionaryId = dictionariesDao!!.insert(
                         DictionaryEntity(
@@ -170,11 +149,12 @@ abstract class KotelokDatabase : RoomDatabase() {
                         )
                     )
 
-                    val defs = getDefinitions(id)
+                    val defs = getDefinitions()
                     defs.forEach { def ->
                         val entity = WordDefinitionEntity(
                             id = 0,
-                            wordId = def.wordId,
+                            writing = "time",
+                            language = Language.ENG,
                             partOfSpeech = if (def.synonyms.first() == "hour") null
                             else def.partOfSpeech?.originalTitle,
                             transcription = def.transcription,
