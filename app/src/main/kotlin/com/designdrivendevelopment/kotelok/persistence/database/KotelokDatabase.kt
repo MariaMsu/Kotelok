@@ -84,8 +84,7 @@ abstract class KotelokDatabase : RoomDatabase() {
             val word = Word(
                 id = 0,
                 language = Language.ENG,
-                writing = "time",
-                definitions = emptyList()
+                writing = "time"
             )
 
             private fun getDefinitions(wordId: Long): List<WordDefinition> {
