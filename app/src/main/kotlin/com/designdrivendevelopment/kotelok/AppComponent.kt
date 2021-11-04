@@ -31,4 +31,5 @@ class AppComponent(applicationContext: Context) {
     val learnableDefinitionsRepository by lazy {
         LearnableDefinitionsRepositoryImpl(db.wordDefinitionsDao)
     }
+    val statisticsRepository by lazy { StatisticsRepositoryImpl(db.statisticsDao) }
 }
