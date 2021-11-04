@@ -1,7 +1,7 @@
 package com.designdrivendevelopment.kotelok.entities
 
 data class ExampleOfDefinitionUse(
-    val id: Long,
+    val wordDefinitionId: Long,
     val originalText: String,
     val translatedText: String
 )
