@@ -4,7 +4,6 @@ import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -62,21 +61,4 @@ class DictionariesRepositoryImpl(
             wordDefinitionId = wordDefinition.id
         )
     }
-}
-
-fun Dictionary.toDictionaryEntity(): DictionaryEntity {
-    return DictionaryEntity(
-        id = this.id,
-        label = this.label,
-        isFavorite = this.isFavorite
-    )
-}
-
-fun DictionaryEntity.toDictionary(size: Int): Dictionary {
-    return Dictionary(
-        id = this.id,
-        label = this.label,
-        isFavorite = this.isFavorite,
-        size = size
-    )
 }

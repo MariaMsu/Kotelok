@@ -2,7 +2,6 @@ package com.designdrivendevelopment.kotelok
 
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
-import com.designdrivendevelopment.kotelok.persistence.queryResults.LearnableDefQueryResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Date
@@ -58,20 +57,4 @@ class LearnableDefinitionsRepositoryImpl(
             easinessFactor = wordDefinition.easinessFactor
         )
     }
-}
-
-fun LearnableDefQueryResult.toLearnableDef(): LearnableDefinition {
-    return LearnableDefinition(
-        definitionId = this.id,
-        wordId = this.wordId,
-        writing = this.writing,
-        partOfSpeech = this.partOfSpeechEntity.toPartOfSpeech(),
-        mainTranslation = this.mainTranslation,
-        otherTranslations = this.translations.map { tr -> tr.translation },
-        examples = this.exampleEntities.map { ex -> ex.toExampleOfDefinitionUse() },
-        nextRepeatDate = this.nextRepeatDate,
-        repetitionNum = this.repetitionNumber,
-        lastInterval = this.interval,
-        eFactor = this.easinessFactor
-    )
 }

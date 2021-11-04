@@ -1,12 +1,9 @@
 package com.designdrivendevelopment.kotelok
 
-import com.designdrivendevelopment.kotelok.entities.DictionaryStat
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.TotalStat
-import com.designdrivendevelopment.kotelok.entities.WordDefinitionStat
 import com.designdrivendevelopment.kotelok.persistence.daos.StatisticsDao
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
-import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -62,34 +59,4 @@ class StatisticsRepositoryImpl(
         private const val SUCCESS = 1
         private const val FAILURE = 0
     }
-}
-
-fun DictStatQueryResult.toDictionaryStat(): DictionaryStat {
-    return DictionaryStat(
-        id = this.id,
-        label = this.label,
-        averageSkillLevel = this.averageSkillLevel ?: 0F
-    )
-}
-
-fun DictStatQueryResult.toTotalDictionaryStat(
-    wordDefinitionsStats: List<WordDefinitionStat>
-): TotalDictionaryStat {
-    return TotalDictionaryStat(
-        label = this.label,
-        size = this.size ?: 0,
-        numOfCompletedTrainings = this.numOfCompletedTrainings ?: 0,
-        numOfSuccessfullyTrainings = this.numOfSuccessfullyTrainings ?: 0,
-        wordDefinitionStats = wordDefinitionsStats
-    )
-}
-
-fun WordDefinitionStatQuery.toWordDefinitionStat(): WordDefinitionStat {
-    return WordDefinitionStat(
-        id = this.id,
-        writing = this.writing,
-        skillLevel = this.skillLevel,
-        numOfCompletedTrainings = this.numOfCompletedTrainings,
-        numOfSuccessfullyTrainings = this.numOfSuccessfullyTrainings
-    )
 }
