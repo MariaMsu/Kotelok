@@ -35,6 +35,12 @@ sealed class PartOfSpeech(
         originalTitle: String
     ) : PartOfSpeech(language, originalTitle, ADVERB_RU_TITLE)
 
+    class Other(
+        language: Language = Language.ENG,
+        originalTitle: String,
+        russianTitle: String
+    ) : PartOfSpeech(language, originalTitle, russianTitle)
+
     companion object {
         const val NOUN_RU_TITLE = "сущ."
         const val VERB_RU_TITLE = "гл."

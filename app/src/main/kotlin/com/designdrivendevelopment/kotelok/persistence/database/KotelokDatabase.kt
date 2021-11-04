@@ -199,13 +199,15 @@ abstract class KotelokDatabase : RoomDatabase() {
                             )
                         }
 
-                        partsOfSpeechDao?.insert(
-                            PartOfSpeechEntity(
-                                language = def.partOfSpeech.language,
-                                originalTitle = def.partOfSpeech.originalTitle,
-                                russianTitle = def.partOfSpeech.russianTitle
+                        if (def.partOfSpeech != null) {
+                            partsOfSpeechDao?.insert(
+                                PartOfSpeechEntity(
+                                    language = def.partOfSpeech.language,
+                                    originalTitle = def.partOfSpeech.originalTitle,
+                                    russianTitle = def.partOfSpeech.russianTitle
+                                )
                             )
-                        )
+                        }
 
                         def.synonyms.forEach { synonym ->
                             synonymsDao?.insert(
