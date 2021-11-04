@@ -9,8 +9,8 @@ data class DictionaryEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long,
-    @ColumnInfo(name = "title")
-    val title: String,
-    @ColumnInfo(name = "id_favorite")
+    @ColumnInfo(name = "label")
+    val label: String,
+    @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean
 )

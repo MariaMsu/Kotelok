@@ -166,7 +166,7 @@ abstract class KotelokDatabase : RoomDatabase() {
                     val dictionaryId = dictionariesDao!!.insert(
                         DictionaryEntity(
                             id = 0,
-                            title = "Time",
+                            label = "Time",
                             isFavorite = false
                         )
                     )
@@ -176,7 +176,8 @@ abstract class KotelokDatabase : RoomDatabase() {
                         val entity = WordDefinitionEntity(
                             id = 0,
                             wordId = def.wordId,
-                            partOfSpeech = if (def.synonyms.first() == "hour") null else def.partOfSpeech.originalTitle,
+                            partOfSpeech = if (def.synonyms.first() == "hour") null
+                            else def.partOfSpeech?.originalTitle,
                             transcription = def.transcription,
                             mainTranslation = def.mainTranslation,
                             nextRepeatDate = def.nextRepeatDate,

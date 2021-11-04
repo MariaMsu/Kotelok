@@ -36,5 +36,9 @@ data class WordDefinitionEntity(
     @ColumnInfo(name = "last_interval")
     val interval: Int,
     @ColumnInfo(name = "easiness_factor")
-    val easinessFactor: Float
+    val easinessFactor: Float,
+    @ColumnInfo(name = "completed_trainings_number")
+    val completedTrainingsNum: Int = 0,
+    @ColumnInfo(name = "successfully_trainings_number")
+    val successfullyTrainingsNum: Int = 0
 )
