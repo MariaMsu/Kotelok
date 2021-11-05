@@ -6,6 +6,9 @@ import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class DictionariesRepositoryImpl(
@@ -17,6 +20,15 @@ class DictionariesRepositoryImpl(
             val size = dictionariesDao.getDictionarySizeById(dictionaryEntity.id)
             dictionaryEntity.toDictionary(size)
         }
+    }
+
+    override fun getAllDictionariesFlow(): Flow<List<Dictionary>> {
+        return dictionariesDao.getAllFlow().map { dictionaryEntities ->
+            dictionaryEntities.map { dictionaryEntity ->
+                val size = dictionariesDao.getDictionarySizeById(dictionaryEntity.id)
+                dictionaryEntity.toDictionary(size)
+            }
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun getDictionaryById(

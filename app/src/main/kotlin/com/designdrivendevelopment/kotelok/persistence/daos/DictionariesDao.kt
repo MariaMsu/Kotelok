@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DictionariesDao {
@@ -19,6 +20,9 @@ interface DictionariesDao {
 
     @Query("SELECT * FROM dictionaries")
     suspend fun getAll(): List<DictionaryEntity>
+
+    @Query("SELECT * FROM dictionaries")
+    fun getAllFlow(): Flow<List<DictionaryEntity>>
 
     @Query("SELECT * FROM dictionaries WHERE (id = :dictionaryId)")
     suspend fun getDictionaryById(dictionaryId: Long): DictionaryEntity

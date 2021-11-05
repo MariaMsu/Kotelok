@@ -2,9 +2,12 @@ package com.designdrivendevelopment.kotelok
 
 import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import kotlinx.coroutines.flow.Flow
 
 interface DictionariesRepository {
     suspend fun getAllDictionaries(): List<Dictionary>
+
+    fun getAllDictionariesFlow(): Flow<List<Dictionary>>
 
     suspend fun getDictionaryById(dictionaryId: Long): Dictionary
 
