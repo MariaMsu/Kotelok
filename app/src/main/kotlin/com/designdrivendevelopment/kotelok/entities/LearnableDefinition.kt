@@ -7,18 +7,23 @@ import kotlin.math.roundToInt
 @Suppress("LongParameterList")
 class LearnableDefinition(
     val definitionId: Long,
-    val wordId: Long,
     val writing: String,
-    val partOfSpeech: PartOfSpeech,
+    val partOfSpeech: String?,
     val mainTranslation: String,
     val otherTranslations: List<String>,
     val examples: List<ExampleOfDefinitionUse>,
     nextRepeatDate: Date,
-    private var repetitionNumber: Int,
-    private var interval: Int,
-    private var easinessFactor: Float = EF_INITIAL_VALUE,
+    repetitionNum: Int,
+    lastInterval: Int,
+    eFactor: Float = EF_INITIAL_VALUE,
 ) {
     var repeatDate = nextRepeatDate
+        private set
+    var repetitionNumber = repetitionNum
+        private set
+    var interval = lastInterval
+        private set
+    var easinessFactor = eFactor
         private set
 
     fun changeEFBasedOnNewGrade(

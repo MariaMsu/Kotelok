@@ -1,5 +1,6 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.yandexDictApi
 
+import com.designdrivendevelopment.kotelok.BuildConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
