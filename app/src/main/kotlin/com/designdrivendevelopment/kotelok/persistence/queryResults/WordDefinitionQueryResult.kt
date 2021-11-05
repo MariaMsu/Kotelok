@@ -18,7 +18,7 @@ data class WordDefinitionQueryResult(
     @ColumnInfo(name = "language")
     val language: Language,
     @ColumnInfo(name = "transcription")
-    val transcription: String,
+    val transcription: String?,
     @ColumnInfo(name = "main_translation")
     val mainTranslation: String,
     @ColumnInfo(name = "next_repeat_date")

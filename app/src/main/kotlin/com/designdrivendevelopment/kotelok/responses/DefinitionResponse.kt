@@ -12,5 +12,5 @@ data class DefinitionResponse(
     @SerialName("tr")
     val translations: List<TranslationResponse>,
     @SerialName("ts")
-    val transcription: String?
+    val transcription: String? = null
 )
