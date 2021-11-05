@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.responses
+package com.designdrivendevelopment.kotelok.yandexDictApi.responses
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -10,7 +10,7 @@ data class TranslationResponse(
     @SerialName("mean")
     val synonyms: List<SynonymResponse>? = null,
     @SerialName("text")
-    val text: String,
+    val translation: String,
     @SerialName("syn")
     val otherTranslations: List<OtherTranslationResponse>? = null,
     @SerialName("ex")

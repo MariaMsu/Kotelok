@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.responses
+package com.designdrivendevelopment.kotelok.yandexDictApi.responses
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DefinitionResponse(
     @SerialName("pos")
-    val partOfSpeech: String?,
+    val partOfSpeech: String? = null,
     @SerialName("text")
-    val text: String,
+    val writing: String,
     @SerialName("tr")
     val translations: List<TranslationResponse>,
     @SerialName("ts")
-    val transcription: String?
+    val transcription: String? = null
 )

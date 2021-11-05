@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.responses
+package com.designdrivendevelopment.kotelok.yandexDictApi.responses
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SynonymResponse(
     @SerialName("text")
-    val text: String
+    val writing: String
 )

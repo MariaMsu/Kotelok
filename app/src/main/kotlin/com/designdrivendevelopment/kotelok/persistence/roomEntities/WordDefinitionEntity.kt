@@ -1,0 +1,38 @@
+package com.designdrivendevelopment.kotelok.persistence.roomEntities
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.designdrivendevelopment.kotelok.entities.Language
+import java.util.Date
+
+@Entity(
+    tableName = "word_definitions"
+)
+data class WordDefinitionEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "def_id")
+    val id: Long,
+    @ColumnInfo(name = "writing")
+    val writing: String,
+    @ColumnInfo(name = "language")
+    val language: Language,
+    @ColumnInfo(name = "part_of_speech")
+    val partOfSpeech: String?,
+    @ColumnInfo(name = "transcription")
+    val transcription: String?,
+    @ColumnInfo(name = "main_translation")
+    val mainTranslation: String,
+    @ColumnInfo(name = "next_repeat_date")
+    val nextRepeatDate: Date,
+    @ColumnInfo(name = "repetition_number")
+    val repetitionNumber: Int,
+    @ColumnInfo(name = "last_interval")
+    val interval: Int,
+    @ColumnInfo(name = "easiness_factor")
+    val easinessFactor: Float,
+    @ColumnInfo(name = "completed_trainings_number")
+    val completedTrainingsNum: Int = 0,
+    @ColumnInfo(name = "successfully_trainings_number")
+    val successfullyTrainingsNum: Int = 0
+)
