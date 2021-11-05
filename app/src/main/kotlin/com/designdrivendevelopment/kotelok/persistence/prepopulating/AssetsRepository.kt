@@ -1,6 +1,6 @@
 package com.designdrivendevelopment.kotelok.persistence.prepopulating
-import android.content.Context
 
+import android.content.Context
 import com.designdrivendevelopment.kotelok.entities.Language
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
