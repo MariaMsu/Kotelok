@@ -7,9 +7,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
-import com.designdrivendevelopment.kotelok.entities.Language
-import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.persistence.converters.DateConverter
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
@@ -18,6 +15,11 @@ import com.designdrivendevelopment.kotelok.persistence.daos.StatisticsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.SynonymsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.TranslationsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
+import com.designdrivendevelopment.kotelok.persistence.prepopulating.AssetsRepository
+import com.designdrivendevelopment.kotelok.persistence.prepopulating.getExampleEntities
+import com.designdrivendevelopment.kotelok.persistence.prepopulating.getSynonymEntities
+import com.designdrivendevelopment.kotelok.persistence.prepopulating.getTranslationEntities
+import com.designdrivendevelopment.kotelok.persistence.prepopulating.getWordDefinitionEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
@@ -28,7 +30,6 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefiniti
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 @Database(
     entities = [
@@ -62,7 +63,7 @@ abstract class KotelokDatabase : RoomDatabase() {
                 "Kotelok_db"
             )
                 .fallbackToDestructiveMigration()
-                .addCallback(PrepopulateCallback(coroutineScope))
+                .addCallback(PrepopulateCallback(applicationContext, coroutineScope))
                 .build()
 
             database = instance
@@ -71,126 +72,61 @@ abstract class KotelokDatabase : RoomDatabase() {
         }
 
         private class PrepopulateCallback(
+            private val context: Context,
             private val scope: CoroutineScope
         ) : RoomDatabase.Callback() {
 
-            private fun getDefinitions(): List<WordDefinition> {
-                val definitions = listOf(
-                    WordDefinition(
-                        id = 0,
-                        writing = "time",
-                        partOfSpeech = "сущ.",
-                        transcription = "time",
-                        synonyms = listOf("period", "once", "moment"),
-                        mainTranslation = "время",
-                        allTranslations = listOf("раз", "момент", "срок"),
-                        examples = listOf(
-                            ExampleOfDefinitionUse(
-                                originalText = "take some time",
-                                translatedText = "занять некоторое время"
-                            )
-                        ),
-                        nextRepeatDate = with(Calendar.getInstance()) {
-                            add(Calendar.DAY_OF_MONTH, 5)
-                            time
-                        }
-                    ),
-                    WordDefinition(
-                        id = 0,
-                        writing = "time",
-                        partOfSpeech = "сущ.",
-                        transcription = "time",
-                        synonyms = listOf("hour"),
-                        mainTranslation = "час",
-                        allTranslations = emptyList(),
-                        examples = listOf(
-                            ExampleOfDefinitionUse(
-                                originalText = "checkout time",
-                                translatedText = "расчетный час"
-                            )
-                        ),
-                        nextRepeatDate = with(Calendar.getInstance()) {
-                            add(Calendar.DAY_OF_MONTH, 3)
-                            time
-                        }
-                    )
-                )
+            private fun prepopulate(context: Context, coroutineScope: CoroutineScope) {
+                val wordDefinitionsDao = database?.wordDefinitionsDao
+                val translationsDao = database?.translationsDao
+                val synonymsDao = database?.synonymsDao
+                val examplesDao = database?.examplesDao
+                val dictionariesDao = database?.dictionariesDao
+                val dictionaryWordDefCrossRefDao = database?.dictionaryWordDefCrossRefDao
 
-                return definitions
-            }
-
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                scope.launch(Dispatchers.IO) {
-                    val wordDefinitionsDao = database?.wordDefinitionsDao
-                    val translationsDao = database?.translationsDao
-                    val synonymsDao = database?.synonymsDao
-                    val examplesDao = database?.examplesDao
-                    val dictionariesDao = database?.dictionariesDao
-                    val dictionaryWordDefCrossRefDao = database?.dictionaryWordDefCrossRefDao
-
+                val assetsRepository = AssetsRepository(context)
+                val definitions = assetsRepository.readDefinitionsFromAssets()
+                coroutineScope.launch(Dispatchers.IO) {
                     val dictionaryId = dictionariesDao!!.insert(
                         DictionaryEntity(
                             id = 0,
-                            label = "Time",
+                            label = "Базовый словарь",
                             isFavorite = false
                         )
                     )
 
-                    val defs = getDefinitions()
-                    defs.forEach { def ->
-                        val entity = WordDefinitionEntity(
-                            id = 0,
-                            writing = "time",
-                            language = Language.ENG,
-                            partOfSpeech = if (def.synonyms.first() == "hour") null
-                            else def.partOfSpeech,
-                            transcription = def.transcription,
-                            mainTranslation = def.mainTranslation,
-                            nextRepeatDate = def.nextRepeatDate,
-                            repetitionNumber = 2,
-                            interval = 5,
-                            easinessFactor = 2.5F
-                        )
-                        val wordDefId = wordDefinitionsDao!!.insert(entity)
+                    definitions.forEach { definitionResponse ->
+                        val writing = definitionResponse.writing
+                        val transcription = definitionResponse.transcription
 
-                        val translations = def.allTranslations + def.mainTranslation
-                        translations.forEach { tr ->
-                            translationsDao?.insert(
-                                TranslationEntity(
-                                    wordDefinitionId = wordDefId,
-                                    translation = tr
+                        definitionResponse.translations.forEach { translationResponse ->
+                            val wordDefinitionEntity = translationResponse
+                                .getWordDefinitionEntity(writing, transcription)
+                            val defId = wordDefinitionsDao!!.insert(wordDefinitionEntity)
+
+                            val synonyms = translationResponse.getSynonymEntities(defId)
+                            synonymsDao?.insert(synonyms)
+
+                            val translations = translationResponse.getTranslationEntities(defId)
+                            translationsDao?.insert(translations)
+
+                            val examples = translationResponse.getExampleEntities(defId)
+                            examplesDao?.insert(examples)
+
+                            dictionaryWordDefCrossRefDao?.insert(
+                                DictionaryWordDefCrossRef(
+                                    dictionaryId = dictionaryId,
+                                    wordDefinitionId = defId
                                 )
                             )
                         }
-
-                        def.synonyms.forEach { synonym ->
-                            synonymsDao?.insert(
-                                SynonymEntity(
-                                    wordDefinitionId = wordDefId,
-                                    writing = synonym
-                                )
-                            )
-                        }
-
-                        def.examples.forEach { example ->
-                            examplesDao?.insert(
-                                ExampleEntity(
-                                    wordDefinitionId = wordDefId,
-                                    original = example.originalText,
-                                    translation = example.translatedText
-                                )
-                            )
-                        }
-
-                        dictionaryWordDefCrossRefDao?.insert(
-                            DictionaryWordDefCrossRef(
-                                dictionaryId,
-                                wordDefId
-                            )
-                        )
                     }
                 }
+            }
+
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
+                prepopulate(context, scope)
             }
         }
     }

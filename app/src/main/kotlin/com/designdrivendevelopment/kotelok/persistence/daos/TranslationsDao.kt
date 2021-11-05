@@ -8,4 +8,7 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationE
 interface TranslationsDao {
     @Insert
     suspend fun insert(translationEntity: TranslationEntity)
+
+    @Insert
+    suspend fun insert(translationEntities: List<TranslationEntity>)
 }

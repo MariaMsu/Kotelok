@@ -8,4 +8,7 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntit
 interface ExamplesDao {
     @Insert
     suspend fun insert(exampleEntity: ExampleEntity)
+
+    @Insert
+    suspend fun insert(exampleEntities: List<ExampleEntity>)
 }

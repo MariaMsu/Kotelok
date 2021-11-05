@@ -1,0 +1,514 @@
+[
+    {
+        "head": {},
+        "def": [
+            {
+                "text": "pot",
+                "pos": "noun",
+                "ts": "pɒt",
+                "tr": [
+                    {
+                        "text": "котелок",
+                        "pos": "noun",
+                        "gen": "м",
+                        "fr": 5,
+                        "syn": [
+                            {
+                                "text": "чайник",
+                                "pos": "noun",
+                                "gen": "м",
+                                "fr": 5
+                            },
+                            {
+                                "text": "кофейник",
+                                "pos": "noun",
+                                "gen": "м",
+                                "fr": 5
+                            }
+                        ],
+                        "mean": [
+                            {
+                                "text": "kettle"
+                            },
+                            {
+                                "text": "coffee pot"
+                            }
+                        ],
+                        "ex": [
+                            {
+                                "text": "steel pot",
+                                "tr": [
+                                    {
+                                        "text": "стальной котелок"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "text": "кружка",
+                        "pos": "noun",
+                        "gen": "ж",
+                        "fr": 1,
+                        "mean": [
+                            {
+                                "text": "mug"
+                            }
+                        ],
+                        "ex": [
+                            {
+                                "text": "pewter pot",
+                                "tr": [
+                                    {
+                                        "text": "оловянная кружка"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "text": "вазон",
+                        "pos": "noun",
+                        "gen": "м",
+                        "fr": 1,
+                        "syn": [
+                            {
+                                "text": "цветочный горшок",
+                                "pos": "noun",
+                                "fr": 1
+                            }
+                        ],
+                        "mean": [
+                            {
+                                "text": "flowerpot"
+                            },
+                            {
+                                "text": "flower pot"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "pot",
+                "pos": "adjective",
+                "ts": "pɒt",
+                "tr": [
+                    {
+                        "text": "горшечный",
+                        "pos": "adjective",
+                        "fr": 5,
+                        "syn": [
+                            {
+                                "text": "горшочный",
+                                "pos": "adjective",
+                                "fr": 1
+                            }
+                        ],
+                        "mean": [
+                            {
+                                "text": "pottery"
+                            }
+                        ],
+                        "ex": [
+                            {
+                                "text": "pot plant",
+                                "tr": [
+                                    {
+                                        "text": "горшечное растение"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "head": {},
+        "def": [
+            {
+                "text": "flame",
+                "pos": "noun",
+                "ts": "fleɪm",
+                "tr": [
+                    {
+                        "text": "пламя",
+                        "pos": "noun",
+                        "gen": "ср",
+                        "fr": 10,
+                        "syn": [
+                            {
+                                "text": "огонь",
+                                "pos": "noun",
+                                "gen": "м",
+                                "fr": 10
+                            },
+                            {
+                                "text": "пламень",
+                                "pos": "noun",
+                                "gen": "м",
+                                "fr": 5
+                            },
+                            {
+                                "text": "факел",
+                                "pos": "noun",
+                                "gen": "м",
+                                "fr": 5
+                            },
+                            {
+                                "text": "пожар",
+                                "pos": "noun",
+                                "gen": "м",
+                                "fr": 1
+                            }
+                        ],
+                        "mean": [
+                            {
+                                "text": "fire"
+                            },
+                            {
+                                "text": "torch"
+                            }
+                        ],
+                        "ex": [
+                            {
+                                "text": "battle of sudden flame",
+                                "tr": [
+                                    {
+                                        "text": "битва внезапного пламени"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "eternal flame",
+                                "tr": [
+                                    {
+                                        "text": "вечный огонь"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "blue flame",
+                                "tr": [
+                                    {
+                                        "text": "голубой факел"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "text": "пыл",
+                        "pos": "noun",
+                        "gen": "м",
+                        "fr": 1,
+                        "mean": [
+                            {
+                                "text": "heat"
+                            }
+                        ]
+                    },
+                    {
+                        "text": "огонек",
+                        "pos": "noun",
+                        "gen": "м",
+                        "fr": 5,
+                        "mean": [
+                            {
+                                "text": "light"
+                            }
+                        ],
+                        "ex": [
+                            {
+                                "text": "tiny flame",
+                                "tr": [
+                                    {
+                                        "text": "крошечный огонек"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "text": "пламя костра",
+                        "pos": "noun",
+                        "fr": 1
+                    }
+                ]
+            },
+            {
+                "text": "flame",
+                "pos": "verb",
+                "ts": "fleɪm",
+                "tr": [
+                    {
+                        "text": "вспыхнуть",
+                        "pos": "verb",
+                        "asp": "сов",
+                        "fr": 1,
+                        "syn": [
+                            {
+                                "text": "разгораться",
+                                "pos": "verb",
+                                "asp": "несов",
+                                "fr": 1
+                            }
+                        ],
+                        "mean": [
+                            {
+                                "text": "flare"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "head": {},
+        "def": [
+            {
+                "text": "study",
+                "pos": "verb",
+                "ts": "ˈstʌdɪ",
+                "tr": [
+                    {
+                        "text": "изучать",
+                        "pos": "verb",
+                        "asp": "несов",
+                        "fr": 10,
+                        "syn": [
+                            {
+                                "text": "исследовать",
+                                "pos": "verb",
+                                "fr": 5
+                            },
+                            {
+                                "text": "заниматься",
+                                "pos": "verb",
+                                "asp": "несов",
+                                "fr": 1
+                            },
+                            {
+                                "text": "изучить",
+                                "pos": "verb",
+                                "asp": "сов",
+                                "fr": 5
+                            },
+                            {
+                                "text": "заняться",
+                                "pos": "verb",
+                                "asp": "сов",
+                                "fr": 1
+                            },
+                            {
+                                "text": "прорабатывать",
+                                "pos": "verb",
+                                "asp": "несов",
+                                "fr": 1
+                            }
+                        ],
+                        "mean": [
+                            {
+                                "text": "examine"
+                            },
+                            {
+                                "text": "investigate"
+                            },
+                            {
+                                "text": "work"
+                            },
+                            {
+                                "text": "explore"
+                            },
+                            {
+                                "text": "engage"
+                            }
+                        ],
+                        "ex": [
+                            {
+                                "text": "study graphic design",
+                                "tr": [
+                                    {
+                                        "text": "изучать графический дизайн"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "study the scriptures",
+                                "tr": [
+                                    {
+                                        "text": "исследовать писания"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "study martial arts",
+                                "tr": [
+                                    {
+                                        "text": "заниматься боевыми искусствами"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "study the documents",
+                                "tr": [
+                                    {
+                                        "text": "изучить документы"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "study",
+                "pos": "noun",
+                "ts": "ˈstʌdɪ",
+                "tr": [
+                    {
+                        "text": "исследование",
+                        "pos": "noun",
+                        "gen": "ср",
+                        "fr": 10,
+                        "syn": [
+                            {
+                                "text": "изучение",
+                                "pos": "noun",
+                                "gen": "ср",
+                                "fr": 10
+                            },
+                            {
+                                "text": "анализ",
+                                "pos": "noun",
+                                "gen": "м",
+                                "fr": 1
+                            },
+                            {
+                                "text": "проработка",
+                                "pos": "noun",
+                                "gen": "ж",
+                                "fr": 1
+                            }
+                        ],
+                        "mean": [
+                            {
+                                "text": "research"
+                            },
+                            {
+                                "text": "analysis"
+                            },
+                            {
+                                "text": "elaboration"
+                            }
+                        ],
+                        "ex": [
+                            {
+                                "text": "case study",
+                                "tr": [
+                                    {
+                                        "text": "тематическое исследование"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "prospective randomized study",
+                                "tr": [
+                                    {
+                                        "text": "проспективное рандомизированное исследование"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "numerous scientific studies",
+                                "tr": [
+                                    {
+                                        "text": "многочисленные научные исследования"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "study of climate change",
+                                "tr": [
+                                    {
+                                        "text": "исследование изменений климата"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "studies in pregnant women",
+                                "tr": [
+                                    {
+                                        "text": "исследования у беременных женщин"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "study of cosmic rays",
+                                "tr": [
+                                    {
+                                        "text": "исследование космических лучей"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "experimental study",
+                                "tr": [
+                                    {
+                                        "text": "экспериментальное исследование"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "geological study",
+                                "tr": [
+                                    {
+                                        "text": "геологическое изучение"
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "careful study",
+                                "tr": [
+                                    {
+                                        "text": "тщательная проработка"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "text": "study",
+                "pos": "adjective",
+                "ts": "ˈstʌdɪ",
+                "tr": [
+                    {
+                        "text": "учебный",
+                        "pos": "adjective",
+                        "fr": 5,
+                        "mean": [
+                            {
+                                "text": "training"
+                            }
+                        ],
+                        "ex": [
+                            {
+                                "text": "study program",
+                                "tr": [
+                                    {
+                                        "text": "учебная программа"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

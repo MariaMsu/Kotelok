@@ -8,4 +8,7 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntit
 interface SynonymsDao {
     @Insert
     suspend fun insert(synonymEntity: SynonymEntity)
+
+    @Insert
+    suspend fun insert(synonymEntities: List<SynonymEntity>)
 }
