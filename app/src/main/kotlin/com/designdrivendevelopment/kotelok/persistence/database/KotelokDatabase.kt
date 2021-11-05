@@ -9,13 +9,11 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.Language
-import com.designdrivendevelopment.kotelok.entities.PartOfSpeech
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.persistence.converters.DateConverter
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
 import com.designdrivendevelopment.kotelok.persistence.daos.ExamplesDao
-import com.designdrivendevelopment.kotelok.persistence.daos.PartsOfSpeechDao
 import com.designdrivendevelopment.kotelok.persistence.daos.StatisticsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.SynonymsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.TranslationsDao
@@ -48,7 +46,6 @@ import java.util.Calendar
 abstract class KotelokDatabase : RoomDatabase() {
     abstract val dictionariesDao: DictionariesDao
     abstract val examplesDao: ExamplesDao
-    abstract val partsOfSpeechDao: PartsOfSpeechDao
     abstract val synonymsDao: SynonymsDao
     abstract val translationsDao: TranslationsDao
     abstract val wordDefinitionsDao: WordDefinitionsDao
@@ -82,10 +79,7 @@ abstract class KotelokDatabase : RoomDatabase() {
                     WordDefinition(
                         id = 0,
                         writing = "time",
-                        partOfSpeech = PartOfSpeech.Noun(
-                            language = Language.ENG,
-                            originalTitle = "noun"
-                        ),
+                        partOfSpeech = "сущ.",
                         transcription = "time",
                         synonyms = listOf("period", "once", "moment"),
                         mainTranslation = "время",
@@ -104,10 +98,7 @@ abstract class KotelokDatabase : RoomDatabase() {
                     WordDefinition(
                         id = 0,
                         writing = "time",
-                        partOfSpeech = PartOfSpeech.Noun(
-                            language = Language.ENG,
-                            originalTitle = "noun"
-                        ),
+                        partOfSpeech = "сущ.",
                         transcription = "time",
                         synonyms = listOf("hour"),
                         mainTranslation = "час",
@@ -133,7 +124,6 @@ abstract class KotelokDatabase : RoomDatabase() {
                 scope.launch(Dispatchers.IO) {
                     val wordDefinitionsDao = database?.wordDefinitionsDao
                     val translationsDao = database?.translationsDao
-                    val partsOfSpeechDao = database?.partsOfSpeechDao
                     val synonymsDao = database?.synonymsDao
                     val examplesDao = database?.examplesDao
                     val dictionariesDao = database?.dictionariesDao
@@ -154,7 +144,7 @@ abstract class KotelokDatabase : RoomDatabase() {
                             writing = "time",
                             language = Language.ENG,
                             partOfSpeech = if (def.synonyms.first() == "hour") null
-                            else def.partOfSpeech?.originalTitle,
+                            else def.partOfSpeech,
                             transcription = def.transcription,
                             mainTranslation = def.mainTranslation,
                             nextRepeatDate = def.nextRepeatDate,
@@ -170,16 +160,6 @@ abstract class KotelokDatabase : RoomDatabase() {
                                 TranslationEntity(
                                     wordDefinitionId = wordDefId,
                                     translation = tr
-                                )
-                            )
-                        }
-
-                        if (def.partOfSpeech != null) {
-                            partsOfSpeechDao?.insert(
-                                PartOfSpeechEntity(
-                                    language = def.partOfSpeech.language,
-                                    originalTitle = def.partOfSpeech.originalTitle,
-                                    russianTitle = def.partOfSpeech.russianTitle
                                 )
                             )
                         }

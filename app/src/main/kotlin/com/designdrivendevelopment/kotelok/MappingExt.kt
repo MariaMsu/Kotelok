@@ -5,7 +5,6 @@ import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.DictionaryStat
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
-import com.designdrivendevelopment.kotelok.entities.PartOfSpeech
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.entities.WordDefinitionStat
@@ -15,7 +14,6 @@ import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefiniti
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.PartOfSpeechEntity
 
 fun Dictionary.toDictionaryEntity(): DictionaryEntity {
     return DictionaryEntity(
@@ -38,7 +36,7 @@ fun WordDefinitionQueryResult.toWordDefinition(): WordDefinition {
     return WordDefinition(
         id = this.id,
         writing = this.writing,
-        partOfSpeech = this.partOfSpeechEntity?.toPartOfSpeech(),
+        partOfSpeech = this.partOfSpeech,
         transcription = this.transcription,
         synonyms = this.synonyms.map { synonymEntity -> synonymEntity.writing },
         mainTranslation = this.mainTranslation,
@@ -48,57 +46,6 @@ fun WordDefinitionQueryResult.toWordDefinition(): WordDefinition {
             .map { exampleEntity -> exampleEntity.toExampleOfDefinitionUse() },
         nextRepeatDate = this.nextRepeatDate
     )
-}
-
-fun PartOfSpeechEntity?.toPartOfSpeech(): PartOfSpeech? {
-    if (this == null) {
-        return null
-    }
-    return when (this.russianTitle) {
-        PartOfSpeech.NOUN_RU_TITLE -> {
-            PartOfSpeech.Noun(
-                language = this.language,
-                originalTitle = this.originalTitle
-            )
-        }
-        PartOfSpeech.ADJECTIVE_RU_TITLE -> {
-            PartOfSpeech.Adjective(
-                language = this.language,
-                originalTitle = this.originalTitle
-            )
-        }
-        PartOfSpeech.ADVERB_RU_TITLE -> {
-            PartOfSpeech.Adverb(
-                language = this.language,
-                originalTitle = this.originalTitle
-            )
-        }
-        PartOfSpeech.NUMERAL_RU_TITLE -> {
-            PartOfSpeech.Numeral(
-                language = this.language,
-                originalTitle = this.originalTitle
-            )
-        }
-        PartOfSpeech.PRONOUN_RU_TITLE -> {
-            PartOfSpeech.Pronoun(
-                language = this.language,
-                originalTitle = this.originalTitle
-            )
-        }
-        PartOfSpeech.VERB_RU_TITLE -> {
-            PartOfSpeech.Verb(
-                language = this.language,
-                originalTitle = this.originalTitle
-            )
-        }
-        else -> {
-            PartOfSpeech.Other(
-                language = this.language,
-                originalTitle = this.originalTitle,
-                russianTitle = this.russianTitle
-            )
-        }
-    }
 }
 
 fun ExampleEntity.toExampleOfDefinitionUse(): ExampleOfDefinitionUse {
@@ -112,7 +59,7 @@ fun LearnableDefQueryResult.toLearnableDef(): LearnableDefinition {
     return LearnableDefinition(
         definitionId = this.id,
         writing = this.writing,
-        partOfSpeech = this.partOfSpeechEntity.toPartOfSpeech(),
+        partOfSpeech = this.partOfSpeech,
         mainTranslation = this.mainTranslation,
         otherTranslations = this.translations.map { tr -> tr.translation },
         examples = this.exampleEntities.map { ex -> ex.toExampleOfDefinitionUse() },

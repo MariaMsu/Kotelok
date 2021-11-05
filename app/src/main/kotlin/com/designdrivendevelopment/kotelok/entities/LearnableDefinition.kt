@@ -8,7 +8,7 @@ import kotlin.math.roundToInt
 class LearnableDefinition(
     val definitionId: Long,
     val writing: String,
-    val partOfSpeech: PartOfSpeech?,
+    val partOfSpeech: String?,
     val mainTranslation: String,
     val otherTranslations: List<String>,
     val examples: List<ExampleOfDefinitionUse>,
