@@ -15,9 +15,9 @@ import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefiniti
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
 
-fun Dictionary.toDictionaryEntity(): DictionaryEntity {
+fun Dictionary.toDictionaryEntity(entityId: Long): DictionaryEntity {
     return DictionaryEntity(
-        id = this.id,
+        id = entityId,
         label = this.label,
         isFavorite = this.isFavorite
     )

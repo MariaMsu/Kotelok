@@ -31,11 +31,11 @@ class DictionariesRepositoryImpl(
         dictionary: Dictionary,
         addedWordDefinitions: List<WordDefinition>?
     ) = withContext(Dispatchers.IO) {
-        dictionariesDao.insert(dictionary.toDictionaryEntity())
+        val dictionaryId = dictionariesDao.insert(dictionary.toDictionaryEntity(entityId = 0))
         if (addedWordDefinitions != null) {
             val crossRefs = addedWordDefinitions.map { wordDefinition ->
                 DictionaryWordDefCrossRef(
-                    dictionaryId = dictionary.id,
+                    dictionaryId = dictionaryId,
                     wordDefinitionId = wordDefinition.id
                 )
             }
@@ -44,7 +44,7 @@ class DictionariesRepositoryImpl(
     }
 
     override suspend fun updateDictionary(dictionary: Dictionary) = withContext(Dispatchers.IO) {
-        dictionariesDao.update(dictionary.toDictionaryEntity())
+        dictionariesDao.update(dictionary.toDictionaryEntity(dictionary.id))
     }
 
     override suspend fun deleteDictionary(dictionary: Dictionary) = withContext(Dispatchers.IO) {
