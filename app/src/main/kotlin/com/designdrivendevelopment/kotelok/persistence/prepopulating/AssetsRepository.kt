@@ -6,9 +6,9 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntit
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
-import com.designdrivendevelopment.kotelok.responses.DefinitionResponse
-import com.designdrivendevelopment.kotelok.responses.TranslationResponse
-import com.designdrivendevelopment.kotelok.responses.YandexDictionaryResponse
+import com.designdrivendevelopment.kotelok.yandexDictApi.responses.DefinitionResponse
+import com.designdrivendevelopment.kotelok.yandexDictApi.responses.TranslationResponse
+import com.designdrivendevelopment.kotelok.yandexDictApi.responses.YandexDictionaryResponse
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.util.Calendar

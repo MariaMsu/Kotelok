@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.responses
+package com.designdrivendevelopment.kotelok.yandexDictApi.responses
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
