@@ -10,7 +10,7 @@ import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 
-class ChooseTrainingDialog: DialogFragment() {
+class ChooseTrainingDialog : DialogFragment() {
     var selectedSimulator: String? = null
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater: LayoutInflater? = activity?.layoutInflater
@@ -20,29 +20,29 @@ class ChooseTrainingDialog: DialogFragment() {
         val write: ConstraintLayout? = view?.findViewById(R.id.cl_write)
         val btn: Button? = view?.findViewById(R.id.ok)
         val b: AlertDialog.Builder = AlertDialog.Builder(activity)
-        cards?.setOnClickListener{
+        cards?.setOnClickListener {
             cards.setBackgroundColor(resources.getColor(R.color.gray))
             choice?.setBackgroundColor(resources.getColor(R.color.white))
             write?.setBackgroundColor(resources.getColor(R.color.white))
             btn?.visibility = View.VISIBLE
             selectedSimulator = "cards"
         }
-        choice?.setOnClickListener{
+        choice?.setOnClickListener {
             cards?.setBackgroundColor(resources.getColor(R.color.white))
             choice.setBackgroundColor(resources.getColor(R.color.gray))
             write?.setBackgroundColor(resources.getColor(R.color.white))
             btn?.visibility = View.VISIBLE
             selectedSimulator = "choice"
         }
-        write?.setOnClickListener{
+        write?.setOnClickListener {
             cards?.setBackgroundColor(resources.getColor(R.color.white))
             choice?.setBackgroundColor(resources.getColor(R.color.white))
             write.setBackgroundColor(resources.getColor(R.color.gray))
             btn?.visibility = View.VISIBLE
             selectedSimulator = "write"
         }
-        btn?.setOnClickListener{
-            val message = when(selectedSimulator){
+        btn?.setOnClickListener {
+            val message = when (selectedSimulator) {
                 "cards" -> "выбраны карточки"
                 "choice" -> "выбрано соответствие"
                 "write" -> "выбран ввод слова"

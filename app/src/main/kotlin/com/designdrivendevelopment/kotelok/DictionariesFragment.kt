@@ -2,51 +2,61 @@ package com.designdrivendevelopment.kotelok
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.*
+import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.SearchView
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.adapters.DictionariesAdapter
-import com.designdrivendevelopment.kotelok.entity.Dictionary
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 
-class DictionariesFragment(fm: FragmentManager) : Fragment() {
-    val dictList = mutableListOf(Dictionary("Животные", "12"), Dictionary("Профессии", "1"),
-        Dictionary("Еда", "22"), Dictionary("Айти", "35"))
-    val adapter = DictionariesAdapter(dictList, fm, requireContext())
+class DictionariesFragment : Fragment() {
+    var dictList = mutableListOf(
+        Dictionary(0, "Животные", "12", listOf()),
+        Dictionary(1,"Профессии", "1", listOf()),
+        Dictionary(2,"Еда", "22", listOf()),
+        Dictionary(3, "Айти", "35", listOf())
+    )
+    lateinit var adapter: DictionariesAdapter
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_dictionaries, container, false)
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val fab: ImageView = view.findViewById(R.id.fab)
         (activity as AppCompatActivity).supportActionBar?.setTitle("Словари")
         val rv: RecyclerView? = getView()?.findViewById(R.id.rv)
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(
-                recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder,
-            ): Boolean {
-                return false
-            }
+        adapter = DictionariesAdapter(dictList, requireContext())
+        ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder,
+                ): Boolean {
+                    return false
+                }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.absoluteAdapterPosition
-                dictList.removeAt(position)
-                adapter.updateAdapter(dictList)
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.absoluteAdapterPosition
+                    dictList.removeAt(position)
+                    adapter.updateAdapter(dictList)
+                }
             }
-
-        }).attachToRecyclerView(view.findViewById(R.id.rv))
+        ).attachToRecyclerView(view.findViewById(R.id.rv))
         rv?.adapter = adapter
         rv?.layoutManager = LinearLayoutManager(context)
-        fab.setOnClickListener{
-
+        fab.setOnClickListener {
         }
     }
 
@@ -58,23 +68,41 @@ class DictionariesFragment(fm: FragmentManager) : Fragment() {
         val search: SearchView = item.actionView as SearchView
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         item.setActionView(search)
-        search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                return false
-            }
-            override fun onQueryTextChange(p0: String?): Boolean {
-                if (TextUtils.isEmpty(p0)) {
-                    adapter.getFilter().filter("")
-                } else {
-                    adapter.getFilter().filter(p0.toString())
+        search.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    return false
                 }
-                return true
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    if (TextUtils.isEmpty(p0)) {
+                        adapter.getFilter().filter("")
+                    } else {
+                        adapter.getFilter().filter(p0.toString())
+                    }
+                    return true
+                }
             }
-        })
-
+        )
     }
-    /*companion object {
+    companion object {
+        const val OPEN_DICTIONARIES_TAG = "open_dictionaries"
+
         @JvmStatic
         fun newInstance() = DictionariesFragment()
-    }*/
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("search", "onstop")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.i("search", "save")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i("search", "start")
+    }
 }
