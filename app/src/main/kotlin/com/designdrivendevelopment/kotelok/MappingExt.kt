@@ -103,7 +103,6 @@ fun PartOfSpeechEntity?.toPartOfSpeech(): PartOfSpeech? {
 
 fun ExampleEntity.toExampleOfDefinitionUse(): ExampleOfDefinitionUse {
     return ExampleOfDefinitionUse(
-        wordDefinitionId = this.wordDefinitionId,
         originalText = this.original,
         translatedText = this.translation.orEmpty()
     )

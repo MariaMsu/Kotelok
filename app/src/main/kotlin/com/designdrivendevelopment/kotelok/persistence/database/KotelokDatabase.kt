@@ -92,7 +92,6 @@ abstract class KotelokDatabase : RoomDatabase() {
                         otherTranslations = listOf("раз", "момент", "срок"),
                         examples = listOf(
                             ExampleOfDefinitionUse(
-                                wordDefinitionId = 0,
                                 originalText = "take some time",
                                 translatedText = "занять некоторое время"
                             )
@@ -115,7 +114,6 @@ abstract class KotelokDatabase : RoomDatabase() {
                         otherTranslations = emptyList(),
                         examples = listOf(
                             ExampleOfDefinitionUse(
-                                wordDefinitionId = 0,
                                 originalText = "checkout time",
                                 translatedText = "расчетный час"
                             )
