@@ -83,7 +83,7 @@ abstract class KotelokDatabase : RoomDatabase() {
                         transcription = "time",
                         synonyms = listOf("period", "once", "moment"),
                         mainTranslation = "время",
-                        otherTranslations = listOf("раз", "момент", "срок"),
+                        allTranslations = listOf("раз", "момент", "срок"),
                         examples = listOf(
                             ExampleOfDefinitionUse(
                                 originalText = "take some time",
@@ -102,7 +102,7 @@ abstract class KotelokDatabase : RoomDatabase() {
                         transcription = "time",
                         synonyms = listOf("hour"),
                         mainTranslation = "час",
-                        otherTranslations = emptyList(),
+                        allTranslations = emptyList(),
                         examples = listOf(
                             ExampleOfDefinitionUse(
                                 originalText = "checkout time",
@@ -154,7 +154,7 @@ abstract class KotelokDatabase : RoomDatabase() {
                         )
                         val wordDefId = wordDefinitionsDao!!.insert(entity)
 
-                        val translations = def.otherTranslations + def.mainTranslation
+                        val translations = def.allTranslations + def.mainTranslation
                         translations.forEach { tr ->
                             translationsDao?.insert(
                                 TranslationEntity(

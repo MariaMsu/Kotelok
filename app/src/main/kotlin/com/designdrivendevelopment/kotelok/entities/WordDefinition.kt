@@ -10,7 +10,7 @@ data class WordDefinition(
     val transcription: String?,
     val synonyms: List<String>,
     val mainTranslation: String,
-    val otherTranslations: List<String>,
+    val allTranslations: List<String>,
     val examples: List<ExampleOfDefinitionUse>,
     val nextRepeatDate: Date
 )

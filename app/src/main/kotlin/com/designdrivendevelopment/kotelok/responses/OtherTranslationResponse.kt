@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OtherTranslationResponse(
     @SerialName("text")
-    val text: String
+    val writing: String
 )

@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DefinitionResponse(
     @SerialName("pos")
-    val partOfSpeech: String?,
+    val partOfSpeech: String? = null,
     @SerialName("text")
-    val text: String,
+    val writing: String,
     @SerialName("tr")
     val translations: List<TranslationResponse>,
     @SerialName("ts")

@@ -40,7 +40,7 @@ fun WordDefinitionQueryResult.toWordDefinition(): WordDefinition {
         transcription = this.transcription,
         synonyms = this.synonyms.map { synonymEntity -> synonymEntity.writing },
         mainTranslation = this.mainTranslation,
-        otherTranslations = this.translations.apply { minus(mainTranslation) }
+        allTranslations = this.translations
             .map { translationEntity -> translationEntity.translation },
         examples = this.exampleEntities
             .map { exampleEntity -> exampleEntity.toExampleOfDefinitionUse() },
