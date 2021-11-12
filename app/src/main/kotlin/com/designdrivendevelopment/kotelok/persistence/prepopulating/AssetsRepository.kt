@@ -40,13 +40,7 @@ fun TranslationResponse.getWordDefinitionEntity(
         transcription = transcription,
         language = Language.ENG,
         mainTranslation = translation,
-        nextRepeatDate = with(Calendar.getInstance()) {
-            add(Calendar.DAY_OF_MONTH, 1)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 1)
-            time
-        },
+        nextRepeatDate = with(Calendar.getInstance()) { time },
         repetitionNumber = 0,
         interval = 1,
         easinessFactor = 2.5F
