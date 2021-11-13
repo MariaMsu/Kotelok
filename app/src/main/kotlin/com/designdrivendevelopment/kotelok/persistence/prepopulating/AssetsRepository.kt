@@ -40,9 +40,15 @@ fun TranslationResponse.getWordDefinitionEntity(
         transcription = transcription,
         language = Language.ENG,
         mainTranslation = translation,
-        nextRepeatDate = with(Calendar.getInstance()) { time },
-        repetitionNumber = 0,
-        interval = 1,
+        cardsNextRepeatDate = with(Calendar.getInstance()) { time },
+        cardsRepetitionNumber = 0,
+        cardsInterval = 1,
+        writerRepeatDate = with(Calendar.getInstance()) { time },
+        writerRepetitionNumber = 0,
+        writerInterval = 1,
+        pairsNextRepeatDate = with(Calendar.getInstance()) { time },
+        pairsRepetitionNumber = 0,
+        pairsInterval = 1,
         easinessFactor = 2.5F
     )
 }
