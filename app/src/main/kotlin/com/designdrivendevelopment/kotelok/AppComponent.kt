@@ -27,8 +27,14 @@ class AppComponent(applicationContext: Context) {
     val dictDefinitionsRepository by lazy {
         DictWordDefinitionRepositoryImpl(db.wordDefinitionsDao)
     }
-    val learnableDefinitionsRepository by lazy {
-        LearnableDefinitionsRepositoryImpl(db.wordDefinitionsDao)
+    val cardsLearnDefRepository by lazy {
+        CardsLearnableDefinitionsRepository(db.cardsLearnableDefDao)
+    }
+    val writerLearnDefRepository by lazy {
+        WriterLearnableDefinitionsRepository(db.writerLearnableDefDao)
+    }
+    val pairsLearnDefRepository by lazy {
+        PairsLearnableDefinitionsRepository(db.pairsLearnableDefDao)
     }
     val statisticsRepository by lazy { StatisticsRepositoryImpl(db.statisticsDao) }
 }

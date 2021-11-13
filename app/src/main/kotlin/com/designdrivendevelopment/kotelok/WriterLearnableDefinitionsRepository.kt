@@ -1,16 +1,16 @@
 package com.designdrivendevelopment.kotelok
 
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
-import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
+import com.designdrivendevelopment.kotelok.persistence.daos.WriterLearnableDefDao
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class LearnableDefinitionsRepositoryImpl(
-    private val wordDefinitionsDao: WordDefinitionsDao
+class WriterLearnableDefinitionsRepository(
+    private val writerLearnableDefDao: WriterLearnableDefDao
 ) : LearnableDefinitionsRepository {
     override suspend fun getAll(): List<LearnableDefinition> = withContext(Dispatchers.IO) {
-        wordDefinitionsDao.getAllLearnableDefinitions().map { learnableDefQueryResult ->
+        writerLearnableDefDao.getAllLearnableDefinitions().map { learnableDefQueryResult ->
             learnableDefQueryResult.toLearnableDef()
         }
     }
@@ -18,7 +18,7 @@ class LearnableDefinitionsRepositoryImpl(
     override suspend fun getByDictionaryId(
         dictionaryId: Long
     ): List<LearnableDefinition> = withContext(Dispatchers.IO) {
-        wordDefinitionsDao
+        writerLearnableDefDao
             .getLearnableDefinitionsByDictId(dictionaryId)
             .map { learnableDefQueryResult ->
                 learnableDefQueryResult.toLearnableDef()
@@ -28,7 +28,7 @@ class LearnableDefinitionsRepositoryImpl(
     override suspend fun getByRepeatDate(
         repeatDate: Date
     ): List<LearnableDefinition> = withContext(Dispatchers.IO) {
-        wordDefinitionsDao
+        writerLearnableDefDao
             .getLearnableDefinitionsByDate(repeatDate.time)
             .map { learnableDefQueryResult ->
                 learnableDefQueryResult.toLearnableDef()
@@ -39,7 +39,7 @@ class LearnableDefinitionsRepositoryImpl(
         dictionaryId: Long,
         repeatDate: Date,
     ): List<LearnableDefinition> = withContext(Dispatchers.IO) {
-        wordDefinitionsDao
+        writerLearnableDefDao
             .getLearnableDefinitionsByDateAndDictId(repeatDate.time, dictionaryId)
             .map { learnableDefQueryResult ->
                 learnableDefQueryResult.toLearnableDef()
@@ -49,7 +49,7 @@ class LearnableDefinitionsRepositoryImpl(
     override suspend fun updateLearnableDefinition(
         wordDefinition: LearnableDefinition
     ) = withContext(Dispatchers.IO) {
-        wordDefinitionsDao.updateWordDefinition(
+        writerLearnableDefDao.updateWordDefinition(
             wordDefinitionId = wordDefinition.definitionId,
             nextRepeatDateInMillis = wordDefinition.repeatDate.time,
             repetitionNumber = wordDefinition.repetitionNumber,
