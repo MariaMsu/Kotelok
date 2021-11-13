@@ -23,12 +23,24 @@ data class WordDefinitionEntity(
     val transcription: String?,
     @ColumnInfo(name = "main_translation")
     val mainTranslation: String,
-    @ColumnInfo(name = "next_repeat_date")
-    val nextRepeatDate: Date,
-    @ColumnInfo(name = "repetition_number")
-    val repetitionNumber: Int,
-    @ColumnInfo(name = "last_interval")
-    val interval: Int,
+    @ColumnInfo(name = "cards_next_repeat_date")
+    val cardsNextRepeatDate: Date,
+    @ColumnInfo(name = "cards_repetition_number")
+    val cardsRepetitionNumber: Int,
+    @ColumnInfo(name = "cards_last_interval")
+    val cardsInterval: Int,
+    @ColumnInfo(name = "writer_next_repeat_date")
+    val writerRepeatDate: Date,
+    @ColumnInfo(name = "writer_repetition_number")
+    val writerRepetitionNumber: Int,
+    @ColumnInfo(name = "writer_last_interval")
+    val writerInterval: Int,
+    @ColumnInfo(name = "pairs_next_repeat_date")
+    val pairsNextRepeatDate: Date,
+    @ColumnInfo(name = "pairs_repetition_number")
+    val pairsRepetitionNumber: Int,
+    @ColumnInfo(name = "pairs_last_interval")
+    val pairsInterval: Int,
     @ColumnInfo(name = "easiness_factor")
     val easinessFactor: Float,
     @ColumnInfo(name = "completed_trainings_number")
