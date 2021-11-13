@@ -36,7 +36,7 @@ interface WordDefinitionsDao {
     @Query(
         """
         SELECT def_id AS id, writing, part_of_speech, language,
-        transcription, main_translation, next_repeat_date
+        transcription, main_translation
         FROM word_definitions
         WHERE (def_id = :wordDefinitionId)
     """
@@ -47,7 +47,7 @@ interface WordDefinitionsDao {
     @Query(
         """
         SELECT def_id AS id, writing, part_of_speech, language,
-        transcription, main_translation, next_repeat_date
+        transcription, main_translation
         FROM word_definitions
         WHERE (writing = :writing)
     """
@@ -58,7 +58,7 @@ interface WordDefinitionsDao {
     @Query(
         """
         SELECT def_id AS id, writing, part_of_speech, language,
-        transcription, main_translation, next_repeat_date
+        transcription, main_translation
         FROM word_definitions AS words_d
         WHERE (words_d.def_id IN (
             SELECT cross_refs.word_def_id
@@ -121,7 +121,7 @@ interface WordDefinitionsDao {
     @Query(
         """
         SELECT def_id AS id, writing, part_of_speech, language,
-        transcription, main_translation, next_repeat_date
+        transcription, main_translation
         FROM word_definitions
         """
     )

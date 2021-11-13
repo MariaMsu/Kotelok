@@ -43,8 +43,7 @@ fun WordDefinitionQueryResult.toWordDefinition(): WordDefinition {
         allTranslations = this.translations
             .map { translationEntity -> translationEntity.translation },
         examples = this.exampleEntities
-            .map { exampleEntity -> exampleEntity.toExampleOfDefinitionUse() },
-        nextRepeatDate = this.nextRepeatDate
+            .map { exampleEntity -> exampleEntity.toExampleOfDefinitionUse() }
     )
 }
 

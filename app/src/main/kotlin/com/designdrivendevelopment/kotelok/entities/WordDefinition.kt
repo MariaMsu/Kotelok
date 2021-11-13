@@ -1,7 +1,5 @@
 package com.designdrivendevelopment.kotelok.entities
 
-import java.util.Date
-
 data class WordDefinition(
     val id: Long,
     val writing: String,
@@ -11,6 +9,5 @@ data class WordDefinition(
     val synonyms: List<String>,
     val mainTranslation: String,
     val allTranslations: List<String>,
-    val examples: List<ExampleOfDefinitionUse>,
-    val nextRepeatDate: Date
+    val examples: List<ExampleOfDefinitionUse>
 )
