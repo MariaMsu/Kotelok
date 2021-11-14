@@ -6,16 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class DictionaryDetailsFragment : Fragment() {
+    private var scrollPosition = SCROLL_START_POSITION
     var wordDefinitionsList: RecyclerView? = null
-    private var scrollPosition = 0
+    var viewModel: DictDetailsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,21 +30,18 @@ class DictionaryDetailsFragment : Fragment() {
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: 0
         initViews(view)
 
+        scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
         val context = requireContext()
-        val dictionaryId = arguments?.getLong(DICT_ID_KEY, NOT_EXIST_DICT_ID) ?: NOT_EXIST_DICT_ID
-        val repo = (requireActivity().application as KotelokApplication)
-            .appComponent.dictDefinitionsRepository
+        val adapter = createAdapter(context, emptyList())
+        setupWordDefinitionsList(wordDefinitionsList, context, adapter, scrollPosition)
 
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-            val definitions = repo.getDefinitionsByDictionaryId(dictionaryId)
-            val adapter = createAdapter(context, definitions)
-            val layoutManager = createLayoutManager(context)
-            val marginItemDecoration = MarginItemDecoration(
-                marginVertical = 10,
-                marginHorizontal = 12
-            )
-            setupWordDefinitionsList(adapter, layoutManager, marginItemDecoration, scrollPosition)
-        }
+        val dictionaryId = arguments?.getLong(DICT_ID_KEY, NOT_EXIST_DICT_ID) ?: NOT_EXIST_DICT_ID
+        val factory = DictDetailsViewModelFactory(
+            dictionaryId,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.dictDefinitionsRepository
+        )
+        viewModel = setupFragmentViewModel(this, factory, adapter)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -58,15 +55,32 @@ class DictionaryDetailsFragment : Fragment() {
     }
 
     private fun setupWordDefinitionsList(
+        wordDefinitionsList: RecyclerView?,
+        context: Context,
         adapter: WordDefinitionsAdapter,
-        layoutManager: LinearLayoutManager,
-        itemDecoration: RecyclerView.ItemDecoration,
         position: Int
     ) {
+        val layoutManager = createLayoutManager(context)
+        val marginItemDecoration = MarginItemDecoration(
+            marginVertical = 10,
+            marginHorizontal = 12
+        )
         wordDefinitionsList?.adapter = adapter
         wordDefinitionsList?.layoutManager = layoutManager
         wordDefinitionsList?.scrollToPosition(position)
-        wordDefinitionsList?.addItemDecoration(itemDecoration)
+        wordDefinitionsList?.addItemDecoration(marginItemDecoration)
+    }
+
+    private fun setupFragmentViewModel(
+        fragment: Fragment,
+        factory: DictDetailsViewModelFactory,
+        adapter: WordDefinitionsAdapter
+    ): DictDetailsViewModel {
+        return ViewModelProvider(fragment, factory)[DictDetailsViewModel::class.java].apply {
+            dictionaryDefinitions.observe(fragment) { definitions ->
+                onDefinitionsChanged(definitions, adapter)
+            }
+        }
     }
 
     private fun createAdapter(
@@ -78,6 +92,18 @@ class DictionaryDetailsFragment : Fragment() {
 
     private fun createLayoutManager(context: Context): LinearLayoutManager {
         return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun onDefinitionsChanged(
+        newDefinitions: List<WordDefinition>,
+        adapter: WordDefinitionsAdapter
+    ) {
+        val diffCallback = DefinitionsDiffCallback(
+            oldDefinitionsList = adapter.wordDefinitions,
+            newDefinitionsList = newDefinitions
+        )
+        DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
+        adapter.wordDefinitions = newDefinitions
     }
 
     private fun initViews(view: View) {
@@ -101,6 +127,7 @@ class DictionaryDetailsFragment : Fragment() {
     }
 
     companion object {
+        private const val SCROLL_START_POSITION = 0
         private const val NOT_EXIST_DICT_ID = 0L
         private const val SCROLL_POS_KEY = "position"
         const val DICT_ID_KEY = "dictionary_id"
