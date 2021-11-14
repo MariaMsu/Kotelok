@@ -10,7 +10,7 @@ import com.designdrivendevelopment.kotelok.entities.WordDefinition
 
 class WordDefinitionsAdapter(
     private val context: Context,
-    private val wordDefinitions: List<WordDefinition>
+    var wordDefinitions: List<WordDefinition>
 ) : RecyclerView.Adapter<WordDefinitionsAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
