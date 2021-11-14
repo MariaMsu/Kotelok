@@ -3,8 +3,11 @@ package com.designdrivendevelopment.kotelok
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 
+@Suppress("TooManyFunctions")
 class DictionaryDetailsFragment : Fragment() {
     private var scrollPosition = SCROLL_START_POSITION
     var wordDefinitionsList: RecyclerView? = null
@@ -27,7 +31,7 @@ class DictionaryDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: 0
+        setHasOptionsMenu(true)
         initViews(view)
 
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
@@ -52,6 +56,38 @@ class DictionaryDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_word_def_search, menu)
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    val initialDefinitions = viewModel?.dictionaryDefinitions?.value
+                        ?: throw NullPointerException("DictDefinitionsViewModel is null")
+
+                    wordDefinitionsList?.adapter?.let { adapter ->
+                        val wordDefinitionsAdapter = adapter as WordDefinitionsAdapter
+
+                        if (newText.isNullOrEmpty()) {
+                            onDefinitionsChanged(initialDefinitions, wordDefinitionsAdapter)
+                            wordDefinitionsList?.scrollToPosition(SCROLL_START_POSITION)
+                        } else {
+                            val filteredDefinitions = initialDefinitions.filter { definition ->
+                                definition.writing.startsWith(newText, ignoreCase = true)
+                            }
+                            onDefinitionsChanged(filteredDefinitions, wordDefinitionsAdapter)
+                        }
+                    }
+                    return true
+                }
+            }
+        )
     }
 
     private fun setupWordDefinitionsList(
