@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 
 class WordDefinitionsFragment : Fragment() {
     var wordDefinitionsList: RecyclerView? = null
+    private var scrollPosition = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +27,7 @@ class WordDefinitionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: 0
         initViews(view)
 
         val context = requireContext()
@@ -41,8 +43,13 @@ class WordDefinitionsFragment : Fragment() {
                 marginVertical = 10,
                 marginHorizontal = 12
             )
-            setupWordDefinitionsList(adapter, layoutManager, marginItemDecoration)
+            setupWordDefinitionsList(adapter, layoutManager, marginItemDecoration, scrollPosition)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(SCROLL_POS_KEY, scrollPosition)
     }
 
     override fun onDestroyView() {
@@ -54,9 +61,11 @@ class WordDefinitionsFragment : Fragment() {
         adapter: WordDefinitionsAdapter,
         layoutManager: LinearLayoutManager,
         itemDecoration: RecyclerView.ItemDecoration,
+        position: Int
     ) {
         wordDefinitionsList?.adapter = adapter
         wordDefinitionsList?.layoutManager = layoutManager
+        wordDefinitionsList?.scrollToPosition(position)
         wordDefinitionsList?.addItemDecoration(itemDecoration)
     }
 
@@ -73,14 +82,27 @@ class WordDefinitionsFragment : Fragment() {
 
     private fun initViews(view: View) {
         wordDefinitionsList = view.findViewById(R.id.word_definitions_list)
+
+        val onScrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    scrollPosition = (recyclerView.layoutManager as LinearLayoutManager)
+                        .findFirstVisibleItemPosition()
+                }
+            }
+        }
+        wordDefinitionsList?.addOnScrollListener(onScrollListener)
     }
 
     private fun clearViews() {
+        wordDefinitionsList?.clearOnScrollListeners()
         wordDefinitionsList = null
     }
 
     companion object {
         private const val NOT_EXIST_DICT_ID = 0L
+        private const val SCROLL_POS_KEY = "position"
         const val DICT_ID_KEY = "dictionary_id"
 
         @JvmStatic
