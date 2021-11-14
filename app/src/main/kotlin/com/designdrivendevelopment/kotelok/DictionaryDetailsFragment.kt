@@ -13,7 +13,7 @@ import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WordDefinitionsFragment : Fragment() {
+class DictionaryDetailsFragment : Fragment() {
     var wordDefinitionsList: RecyclerView? = null
     private var scrollPosition = 0
 
@@ -22,7 +22,7 @@ class WordDefinitionsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_word_definitions, container, false)
+        return inflater.inflate(R.layout.fragment_dictionary_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,7 +107,7 @@ class WordDefinitionsFragment : Fragment() {
 
         @JvmStatic
         fun newInstance(dictionaryId: Long) =
-            WordDefinitionsFragment().apply {
+            DictionaryDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putLong(DICT_ID_KEY, dictionaryId)
                 }
