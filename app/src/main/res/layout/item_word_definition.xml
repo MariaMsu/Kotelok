@@ -36,12 +36,20 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="10dp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/play_speech_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_play_speech"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1"
+        android:layout_marginTop="4dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/play_speech_btn_description"
+        android:padding="0dp"
+        app:iconPadding="0dp"
+        app:iconTint="?attr/colorPrimaryVariant"
+        app:icon="@drawable/ic_play_speech"
         app:layout_constraintTop_toTopOf="@id/top_border"
         app:layout_constraintEnd_toStartOf="@id/end_border" />
 
