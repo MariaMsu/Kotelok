@@ -4,4 +4,8 @@
     <string name="recognize_ru">Распознать</string>
     <string name="profile_ru">Профиль</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="play_speech_btn_description">Прослушать произношение слова</string>
+    <string name="translation_pos_line">%1s, %2s</string>
+    <string name="search_item_title">search</string>
+    <string name="add_word_fab_description">Довить значение слова</string>
 </resources>
