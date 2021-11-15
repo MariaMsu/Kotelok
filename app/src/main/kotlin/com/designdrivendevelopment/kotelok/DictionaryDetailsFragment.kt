@@ -2,6 +2,8 @@ package com.designdrivendevelopment.kotelok
 
 import android.content.Context
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -14,10 +16,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import java.util.Locale
 
 @Suppress("TooManyFunctions")
-class DictionaryDetailsFragment : Fragment() {
+class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlaySoundBtnClickListener {
     private var scrollPosition = SCROLL_START_POSITION
+    private var textToSpeech: TextToSpeech? = null
     var wordDefinitionsList: RecyclerView? = null
     var viewModel: DictDetailsViewModel? = null
 
@@ -38,6 +42,8 @@ class DictionaryDetailsFragment : Fragment() {
         val context = requireContext()
         val adapter = createAdapter(context, emptyList())
         setupWordDefinitionsList(wordDefinitionsList, context, adapter, scrollPosition)
+
+        textToSpeech = TextToSpeech(context, this)
 
         val dictionaryId = arguments?.getLong(DICT_ID_KEY, NOT_EXIST_DICT_ID) ?: NOT_EXIST_DICT_ID
         val factory = DictDetailsViewModelFactory(
@@ -75,8 +81,8 @@ class DictionaryDetailsFragment : Fragment() {
                         val wordDefinitionsAdapter = adapter as WordDefinitionsAdapter
 
                         if (newText.isNullOrEmpty()) {
-                            onDefinitionsChanged(initialDefinitions, wordDefinitionsAdapter)
                             wordDefinitionsList?.scrollToPosition(SCROLL_START_POSITION)
+                            onDefinitionsChanged(initialDefinitions, wordDefinitionsAdapter)
                         } else {
                             val filteredDefinitions = initialDefinitions.filter { definition ->
                                 definition.writing.startsWith(newText, ignoreCase = true)
@@ -88,6 +94,25 @@ class DictionaryDetailsFragment : Fragment() {
                 }
             }
         )
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = textToSpeech?.setLanguage(Locale.US)
+            textToSpeech?.setPitch(1f)
+            textToSpeech?.setSpeechRate(STANDARD_SPEECH_RATE)
+            if (result == TextToSpeech.LANG_MISSING_DATA ||
+                result == TextToSpeech.LANG_NOT_SUPPORTED
+            ) {
+                Log.d("TTS", "Lang is not available")
+            }
+        } else {
+            Log.d("TTS", "TTS init error")
+        }
+    }
+
+    override fun onPlayBtnClick(text: String) {
+        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, text)
     }
 
     private fun setupWordDefinitionsList(
@@ -114,6 +139,7 @@ class DictionaryDetailsFragment : Fragment() {
     ): DictDetailsViewModel {
         return ViewModelProvider(fragment, factory)[DictDetailsViewModel::class.java].apply {
             dictionaryDefinitions.observe(fragment) { definitions ->
+                Log.d("HUAWEI", "Data = $definitions")
                 onDefinitionsChanged(definitions, adapter)
             }
         }
@@ -123,7 +149,7 @@ class DictionaryDetailsFragment : Fragment() {
         context: Context,
         definitions: List<WordDefinition>
     ): WordDefinitionsAdapter {
-        return WordDefinitionsAdapter(context, definitions)
+        return WordDefinitionsAdapter(context, this, definitions)
     }
 
     private fun createLayoutManager(context: Context): LinearLayoutManager {
@@ -163,6 +189,7 @@ class DictionaryDetailsFragment : Fragment() {
     }
 
     companion object {
+        private const val STANDARD_SPEECH_RATE = 0.7f
         private const val SCROLL_START_POSITION = 0
         private const val NOT_EXIST_DICT_ID = 0L
         private const val SCROLL_POS_KEY = "position"

@@ -4,12 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 
 class WordDefinitionsAdapter(
     private val context: Context,
+    private val playSoundBtnClickListener: PlaySoundBtnClickListener,
     var wordDefinitions: List<WordDefinition>
 ) : RecyclerView.Adapter<WordDefinitionsAdapter.ViewHolder>() {
 
@@ -63,6 +65,16 @@ class WordDefinitionsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(wordDefinitions[position])
+        val playSoundBtn: Button = holder.itemView.findViewById(R.id.play_speech_btn)
+        // Воспроизводимый текст необходимо сохранить в переменную, а затем её уже передать в
+        // setOnClickListener. В обратном случае в ClickListener`е будет сохранена позиция.
+        // Тогда в случае, если позиция item`а будет изменена без вызова onBind, то в листенере
+        // будет сохранено старое значение позиции, а массив wordDefinitions при этом
+        // будет новый. Поэтому будет впоспроизведен неправильный текст.
+        val text = wordDefinitions[position].writing
+        playSoundBtn.setOnClickListener {
+            playSoundBtnClickListener.onPlayBtnClick(text)
+        }
     }
 
     override fun getItemCount(): Int {
