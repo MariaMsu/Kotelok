@@ -54,4 +54,19 @@
         android:visibility="invisible"
         android:clickable="false" />
 
+    <TextView
+        android:text="Поздравляем, вы завершили тренировку по данному словарю"
+        android:layout_width="338dp"
+        android:layout_height="53dp"
+        android:id="@+id/textCompleted"
+        android:textColor="@color/dark_purple_main"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/FlashcardButton"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="@+id/FlashcardButton"
+        app:layout_constraintEnd_toEndOf="@+id/FlashcardButton"
+        app:layout_constraintHorizontal_bias="0.5" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
