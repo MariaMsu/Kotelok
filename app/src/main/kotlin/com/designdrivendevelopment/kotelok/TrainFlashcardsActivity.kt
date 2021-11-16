@@ -29,12 +29,12 @@ class TrainFlashcardsActivity : AppCompatActivity() {
         val noButton = findViewById<ImageButton>(R.id.NoButton)
         noButton.setOnClickListener(listener)
 
-        val repository = (application as KotelokApplication).appComponent.learnableDefinitionsRepository
+        val repository = (application as KotelokApplication).appComponent.cardsLearnDefRepository
         trainerCards = TrainerCards(repository)
         lifecycleScope.launch {
             trainerCards.loadDictionary(
                 1,
-                true
+                false
             )
             currentWord = trainerCards.getNext()
             UpdateFlashcard()
@@ -56,8 +56,8 @@ class TrainFlashcardsActivity : AppCompatActivity() {
     }
 
     fun updateButtonVisibility(isActive : Boolean) {
-        var YesButton = findViewById<ImageButton>(R.id.YesButton)
-        var NoButton = findViewById<ImageButton>(R.id.NoButton)
+        val YesButton = findViewById<ImageButton>(R.id.YesButton)
+        val NoButton = findViewById<ImageButton>(R.id.NoButton)
         YesButton.isVisible = isActive
         YesButton.isClickable = isActive
         NoButton.isVisible = isActive
@@ -89,8 +89,13 @@ class TrainFlashcardsActivity : AppCompatActivity() {
         state =  State.NOT_GUESSED
         updateButtonVisibility(false)
         trainerCards.checkUserInput(guess)
-        currentWord = trainerCards.getNext()
-        UpdateFlashcard()
+        if (!trainerCards.isDone) {
+            currentWord = trainerCards.getNext()
+            UpdateFlashcard()
+        } else {
+            val textCompleted = findViewById<TextView>(R.id.textCompleted)
+            textCompleted.isVisible = true
+        }
     }
 
     enum class State {
