@@ -32,7 +32,7 @@ interface WordDefinitionsDao {
         WHERE (writing = :writing)
     """
     )
-    suspend fun getDefinitionsByWriting(writing: String): WordDefinitionQueryResult
+    suspend fun getDefinitionsByWriting(writing: String): List<WordDefinitionQueryResult>
 
     @Transaction
     @Query(
