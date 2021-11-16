@@ -16,7 +16,9 @@ import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefiniti
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
+import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
 import com.designdrivendevelopment.kotelok.yandexDictApi.responses.TranslationResponse
+import java.util.Calendar
 
 fun Dictionary.toDictionaryEntity(entityId: Long): DictionaryEntity {
     return DictionaryEntity(
@@ -125,5 +127,26 @@ fun TranslationResponse.toWordDefinition(
                 translatedText = exampleResponse.translations?.first()?.translation.orEmpty()
             )
         }.orEmpty()
+    )
+}
+
+fun WordDefinition.toWordDefinitionEntity(): WordDefinitionEntity {
+    return WordDefinitionEntity(
+        id = 0,
+        writing = writing,
+        partOfSpeech = this.partOfSpeech,
+        transcription = transcription,
+        language = language,
+        mainTranslation = mainTranslation,
+        cardsNextRepeatDate = with(Calendar.getInstance()) { time },
+        cardsRepetitionNumber = 0,
+        cardsInterval = 1,
+        writerRepeatDate = with(Calendar.getInstance()) { time },
+        writerRepetitionNumber = 0,
+        writerInterval = 1,
+        pairsNextRepeatDate = with(Calendar.getInstance()) { time },
+        pairsRepetitionNumber = 0,
+        pairsInterval = 1,
+        easinessFactor = 2.5F
     )
 }
