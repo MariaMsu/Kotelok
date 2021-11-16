@@ -8,13 +8,16 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.designdrivendevelopment.kotelok.persistence.converters.DateConverter
+import com.designdrivendevelopment.kotelok.persistence.daos.CardsLearnableDefDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
 import com.designdrivendevelopment.kotelok.persistence.daos.ExamplesDao
+import com.designdrivendevelopment.kotelok.persistence.daos.PairsLearnableDefDao
 import com.designdrivendevelopment.kotelok.persistence.daos.StatisticsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.SynonymsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.TranslationsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
+import com.designdrivendevelopment.kotelok.persistence.daos.WriterLearnableDefDao
 import com.designdrivendevelopment.kotelok.persistence.prepopulating.AssetsRepository
 import com.designdrivendevelopment.kotelok.persistence.prepopulating.getExampleEntities
 import com.designdrivendevelopment.kotelok.persistence.prepopulating.getSynonymEntities
@@ -50,6 +53,9 @@ abstract class KotelokDatabase : RoomDatabase() {
     abstract val synonymsDao: SynonymsDao
     abstract val translationsDao: TranslationsDao
     abstract val wordDefinitionsDao: WordDefinitionsDao
+    abstract val cardsLearnableDefDao: CardsLearnableDefDao
+    abstract val writerLearnableDefDao: WriterLearnableDefDao
+    abstract val pairsLearnableDefDao: PairsLearnableDefDao
     abstract val dictionaryWordDefCrossRefDao: DictionaryWordDefCrossRefDao
     abstract val statisticsDao: StatisticsDao
 
