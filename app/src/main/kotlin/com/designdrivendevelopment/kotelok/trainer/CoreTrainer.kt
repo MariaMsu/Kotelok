@@ -17,9 +17,6 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
     private var repeatWordsSet = mutableSetOf<LearnableDefinition>()
 
     suspend fun loadDictionary(dictionaryId: Long, onlyNotLearned: Boolean) {
-        currentIdx = 0
-        size = shuffledWords.size
-
         shuffledWords = if (onlyNotLearned) {
             learnableDefinitionsRepository
                 .getByDictionaryId(
@@ -36,6 +33,9 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
         }
         shuffledWords.shuffled()
         repeatWordsSet = mutableSetOf<LearnableDefinition>()
+
+        currentIdx = 0
+        size = shuffledWords.size
     }
 
     fun handleAnswer(word: LearnableDefinition, scoreEF: Int): Boolean {
