@@ -29,18 +29,11 @@ class EditWordDefRepositoryImpl(
     private val synonymsDao: SynonymsDao,
     private val examplesDao: ExamplesDao
 ) : EditWordDefinitionsRepository {
-    // Отключаю проверку для данной функции, так как здесь в любом случае будет присутствовать не
-    // менее 3х return (два из них возвразают результат обработки исключения, а один возвращает
-    // результат в случае успеха)
-    @Suppress("ReturnCount")
     override fun loadDefinitionsByWriting(
         writing: String
     ): Flow<DefinitionsRequestResult> = flow {
         try {
             val response: YandexDictionaryResponse = yandexDictApiService.lookupWord(writing)
-            if (response.definitions.isEmpty()) {
-                emit(DefinitionsRequestResult.EmptyResult())
-            }
             val definitionsList: List<WordDefinition> = response
                 .definitions.flatMap { definitionResponse ->
                     definitionResponse.translations.map { translationResponse ->
