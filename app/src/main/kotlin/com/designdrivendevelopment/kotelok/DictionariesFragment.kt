@@ -3,14 +3,14 @@ package com.designdrivendevelopment.kotelok
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SearchView
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,9 +22,9 @@ import com.designdrivendevelopment.kotelok.entities.Dictionary
 class DictionariesFragment : Fragment() {
     var dictList = mutableListOf(
         Dictionary(0, "Животные", "12", listOf()),
-        Dictionary(1,"Профессии", "1", listOf()),
-        Dictionary(2,"Еда", "22", listOf()),
-        Dictionary(3, "Айти", "35", listOf())
+        Dictionary(1, "Профессии", "1", listOf()),
+        Dictionary(2, "Еда", "22", listOf()),
+        Dictionary(THREE, "Айти", "35", listOf())
     )
     lateinit var adapter: DictionariesAdapter
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -86,7 +86,7 @@ class DictionariesFragment : Fragment() {
     }
     companion object {
         const val OPEN_DICTIONARIES_TAG = "open_dictionaries"
-
+        const val THREE: Long = 3;
         @JvmStatic
         fun newInstance() = DictionariesFragment()
     }

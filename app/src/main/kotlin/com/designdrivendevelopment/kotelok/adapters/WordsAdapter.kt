@@ -36,6 +36,7 @@ class WordsAdapter(var wordList: List<Word>) : RecyclerView.Adapter<WordsAdapter
     }
 
     override fun getFilter(): Filter {
+
         return object : Filter() {
             override fun performFiltering(p0: CharSequence?): FilterResults {
                 val filterRes = FilterResults()
@@ -56,7 +57,6 @@ class WordsAdapter(var wordList: List<Word>) : RecyclerView.Adapter<WordsAdapter
                 }
                 return filterRes
             }
-
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
                 wordList = p1?.values as List<Word>
                 notifyDataSetChanged()

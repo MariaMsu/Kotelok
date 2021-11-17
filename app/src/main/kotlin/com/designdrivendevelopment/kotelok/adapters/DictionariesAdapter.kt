@@ -13,9 +13,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.ChooseTrainingDialog
-import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.WordsFragment
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 
 class DictionariesAdapter(var dictList: MutableList<Dictionary>, context: Context) :
     RecyclerView.Adapter<DictionariesAdapter.DictionaryViewHolder>(), Filterable {
@@ -80,6 +80,7 @@ class DictionariesAdapter(var dictList: MutableList<Dictionary>, context: Contex
     override fun getItemCount(): Int = dictList.size
 
     inner class DictionaryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         val title: TextView = itemView.findViewById(R.id.title)
         val count: TextView = itemView.findViewById(R.id.word_count)
         fun bind(dict: Dictionary) {
@@ -88,9 +89,9 @@ class DictionariesAdapter(var dictList: MutableList<Dictionary>, context: Contex
                 (dict.wordCount.length - 2).equals('1')
             ) "слов" else
                 when (dict.wordCount.get(dict.wordCount.length - 1).digitToInt()) {
-                    0, in 5..9 -> "слов"
+                    0, in FIVE..NINE -> "слов"
                     1 -> "слово"
-                    in 2..4 -> "слова"
+                    in 2..FOUR -> "слова"
                     else -> "слов"
                 }
             count.text = cont.resources.getString(R.string.word_count, dict.wordCount, word)
@@ -130,5 +131,11 @@ class DictionariesAdapter(var dictList: MutableList<Dictionary>, context: Contex
     fun updateAdapter(mDataList: MutableList<Dictionary>) {
         this.dictList = mDataList
         notifyDataSetChanged()
+    }
+
+    companion object{
+        private const val FIVE = 5
+        private const val NINE = 9
+        private const val FOUR = 4
     }
 }
