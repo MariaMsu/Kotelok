@@ -1,6 +1,7 @@
 package com.designdrivendevelopment.kotelok
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +9,14 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.trainer.TrainerCards
 import kotlinx.coroutines.launch
 
 class TrainFlashcardsFragment :  Fragment() {
-    private var state: State = State.NOT_GUESSED
-    private lateinit var trainerCards : TrainerCards
-    private lateinit var currentWord: LearnableDefinition
+    var viewModel : TrainFlashcardsViewModel? = null
 
     private var yesButton: ImageButton? = null
     private var noButton: ImageButton? = null
@@ -31,6 +31,14 @@ class TrainFlashcardsFragment :  Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dictionaryId = arguments?.getLong("id") ?: 1
+
+        val factory = TrainFlashcardsViewModelFactory(
+            dictionaryId,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.cardsLearnDefRepository
+        )
+        viewModel = ViewModelProvider(this, factory).get(TrainFlashcardsViewModel::class.java)
+
         word = view.findViewById(R.id.Word)
         textCompleted = view.findViewById(R.id.textCompleted)
         flashcardButton = view.findViewById(R.id.FlashcardButton)
@@ -40,17 +48,9 @@ class TrainFlashcardsFragment :  Fragment() {
         noButton = view.findViewById(R.id.NoButton)
         noButton?.setOnClickListener(listener)
 
-        val repository = (requireActivity().application as KotelokApplication).appComponent.cardsLearnDefRepository
-        trainerCards = TrainerCards(repository)
-        lifecycleScope.launch {
-            trainerCards.loadDictionary(
-                dictionaryId,
-                false
-            )
-            currentWord = trainerCards.getNext()
-            UpdateFlashcard()
-        }
+        UpdateFlashcard()
     }
+
 
     private val listener = View.OnClickListener { view ->
         when (view.id) {
@@ -74,31 +74,33 @@ class TrainFlashcardsFragment :  Fragment() {
     }
 
     private fun PressFlashcard() {
-        state =  when(state) {
+        viewModel?.state =  when(viewModel?.state) {
             State.NOT_GUESSED -> State.GUESSED_TRANSLATION
             State.GUESSED_TRANSLATION -> State.GUESSED_WORD
             State.GUESSED_WORD -> State.GUESSED_TRANSLATION
+            else -> State.NOT_GUESSED
         }
-        if (state != State.NOT_GUESSED) {
+        if (viewModel?.state != State.NOT_GUESSED) {
             updateButtonVisibility(true)
         }
         UpdateFlashcard()
     }
 
     private fun UpdateFlashcard() {
-        word?.text = when(state) {
-            State.NOT_GUESSED -> currentWord.writing
-            State.GUESSED_TRANSLATION -> currentWord.mainTranslation
-            State.GUESSED_WORD -> currentWord.writing
+        word?.text = when(viewModel?.state) {
+            State.NOT_GUESSED -> viewModel?.currentWord?.writing
+            State.GUESSED_TRANSLATION -> viewModel?.currentWord?.mainTranslation
+            State.GUESSED_WORD -> viewModel?.currentWord?.writing
+            else -> "Error"
         }
     }
 
     private fun PressGuessButton(guess: Boolean) {
-        state =  State.NOT_GUESSED
+        viewModel?.state =  State.NOT_GUESSED
         updateButtonVisibility(false)
-        trainerCards.checkUserInput(guess)
-        if (!trainerCards.isDone) {
-            currentWord = trainerCards.getNext()
+        viewModel?.trainerCards?.checkUserInput(guess)
+        if (!viewModel?.trainerCards?.isDone!!) {
+            viewModel?.currentWord = viewModel?.trainerCards!!.getNext()
             UpdateFlashcard()
         } else {
             textCompleted?.isVisible = true
