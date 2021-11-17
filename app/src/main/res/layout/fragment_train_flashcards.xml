@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:text="Слово"
+        android:text="@string/default_word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Word"
@@ -55,7 +55,7 @@
         android:clickable="false" />
 
     <TextView
-        android:text="Поздравляем, вы завершили тренировку по данному словарю"
+        android:text="@string/dict_completed"
         android:layout_width="338dp"
         android:layout_height="53dp"
         android:id="@+id/textCompleted"
