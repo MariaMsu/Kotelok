@@ -12,6 +12,7 @@ import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
@@ -21,14 +22,18 @@ class LookupViewModel(
     private val _foundDefinitions = MutableLiveData<List<ItemWithType>>(emptyList())
     private val _events = MutableLiveData<UiEvent<Any?>>()
     val foundDefinitions: LiveData<List<ItemWithType>> = _foundDefinitions
-    private val events: LiveData<UiEvent<Any?>> = _events
+    val events: LiveData<UiEvent<Any?>> = _events
 
-    fun getItemsByWriting(writing: String) {
+    fun lookupByWriting(writing: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val flowFromRemote = editWordDefRepository.loadDefinitionsByWriting(writing)
             val flowFromLocal = editWordDefRepository.getSavedDefinitionsByWriting(writing)
 
             flowFromRemote.combine(flowFromLocal) { networkResult, localDefinitions ->
+                Pair(networkResult, localDefinitions)
+            }.collect { pair ->
+                val networkResult = pair.first
+                val localDefinitions = pair.second
                 when (networkResult) {
                     is DefinitionsRequestResult.Failure.Error -> {
                         _events.postValue(
@@ -76,7 +81,7 @@ class LookupViewModel(
         val items = mutableListOf<ItemWithType>(
             ButtonItem(buttonText = "Добавить собственное определение")
         )
-        if (localDefinitions.isNotEmpty()) {
+        if (remoteDefinitions.isNotEmpty()) {
             items.add(CategoryHeaderItem(header = "Загруженные определения"))
             items.addAll(remoteDefinitions.map { WordDefinitionItem(it) })
         }
