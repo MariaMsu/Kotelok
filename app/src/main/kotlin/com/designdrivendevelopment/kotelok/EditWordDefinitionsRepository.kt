@@ -1,5 +1,6 @@
 package com.designdrivendevelopment.kotelok
 
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 
 interface EditWordDefinitionsRepository {
@@ -9,9 +10,12 @@ interface EditWordDefinitionsRepository {
 
     suspend fun addWordDefinition(wordDefinition: WordDefinition)
 
-    suspend fun updateWordDefinition(wordDefinition: WordDefinition)
+    suspend fun addNewWordDefinitionWithDictionaries(
+        wordDefinition: WordDefinition,
+        dictionaries: List<Dictionary>
+    )
 
-    suspend fun deleteWordDefinition(definition: WordDefinition)
+    suspend fun deleteWordDefinition(wordDefinition: WordDefinition)
 
-    suspend fun deleteWordDefinitions(definitions: List<WordDefinition>)
+    suspend fun deleteWordDefinitions(wordDefinitions: List<WordDefinition>)
 }
