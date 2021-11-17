@@ -11,7 +11,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
 
         android:background="@drawable/lookup_word_enter_section_background"
         android:elevation="4dp"
@@ -21,6 +20,7 @@
             android:id="@+id/enter_writing_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_marginHorizontal="12dp"
             android:hint="@string/enter_writing_hint"
             android:textSize="20sp"
