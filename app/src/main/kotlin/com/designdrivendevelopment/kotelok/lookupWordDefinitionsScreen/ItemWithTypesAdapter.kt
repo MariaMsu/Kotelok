@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
-import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ButtonItem
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemWithType
-import org.w3c.dom.Text
+import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
 
 class ItemWithTypesAdapter(
     private val context: Context,
@@ -31,7 +30,8 @@ class ItemWithTypesAdapter(
             }
         }
 
-        fun bind(definition: WordDefinition) {
+        fun bind(definitionItem: WordDefinitionItem) {
+            val definition = definitionItem.data
             writingText.text = definition.writing.capitalize()
             if (definition.partOfSpeech != null) {
                 translationText.text = context.resources.getString(
@@ -78,7 +78,7 @@ class ItemWithTypesAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
         return when (viewType) {
-            ItemViewTypes.ITEM_WORD_DEFINITION-> {
+            ItemViewTypes.ITEM_WORD_DEFINITION -> {
                 WordDefinitionViewHolder(
                     inflater.inflate(
                         R.layout.item_word_definition,
@@ -110,7 +110,19 @@ class ItemWithTypesAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val item = items[position]
+        when (item.viewType) {
+            ItemViewTypes.ITEM_WORD_DEFINITION -> {
+                (holder as WordDefinitionViewHolder).bind((item as WordDefinitionItem))
+            }
+            ItemViewTypes.ITEM_CATEGORY_HEADER -> {
+                (holder as CategoryHeaderViewHolder).bind((item as CategoryHeaderItem))
+            }
+            ItemViewTypes.ITEM_BUTTON -> {
+                (holder as ButtonViewHolder).bind((item as ButtonItem))
+            }
+            else -> throw IllegalArgumentException("Unexpected View type")
+        }
     }
 
     override fun getItemCount(): Int {
