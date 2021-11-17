@@ -2,15 +2,16 @@ package com.designdrivendevelopment.kotelok.persistence.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 
 @Dao
 interface DictionaryWordDefCrossRefDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(dictionaryWordDefCrossRef: DictionaryWordDefCrossRef)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(dictionaryWordDefCrossRefs: List<DictionaryWordDefCrossRef>)
 
     @Query(
