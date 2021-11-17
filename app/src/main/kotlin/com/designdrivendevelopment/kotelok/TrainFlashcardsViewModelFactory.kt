@@ -3,7 +3,7 @@ package com.designdrivendevelopment.kotelok
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class TrainFlashcardsViewModelFactory (
+class TrainFlashcardsViewModelFactory(
     private val dictionaryId: Long,
     private val cardsLearnDefRepository: CardsLearnableDefinitionsRepository
 ) : ViewModelProvider.Factory {
