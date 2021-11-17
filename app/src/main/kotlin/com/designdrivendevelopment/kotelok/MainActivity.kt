@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initViews()
         bottomNavigator.subscribe(supportFragmentManager)
+        setupDictionariesFragmentResultListeners()
+
         if (savedInstanceState == null) {
             val item = bottomNavigationView?.menu?.findItem(R.id.dictionary_tab)
             item?.isChecked = true
@@ -36,10 +39,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDictionariesFragmentResultListeners() {
-        supportFragmentManager.setFragmentResultListener(
-            FragmentResult.DictionariesTab.OPEN_DICTIONARY_KEY,
-            this@MainActivity
-        ) { _, bundle ->
+        supportFragmentManager.apply {
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_DICTIONARY_KEY,
+                this@MainActivity
+            ) { _, bundle ->
+            }
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
+                this@MainActivity
+            ) { _, _ ->
+                addFragment(
+                    fragment = LookupWordDefinitionsFragment.newInstance(),
+                    tag = "Lookup_word_def_fragment",
+                    transactionName = "open_lookup_word_def_fragment"
+                )
+            }
         }
     }
 
