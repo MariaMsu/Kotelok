@@ -14,6 +14,11 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationE
 import com.designdrivendevelopment.kotelok.yandexDictApi.YandexDictionaryApiService
 import com.designdrivendevelopment.kotelok.yandexDictApi.responses.YandexDictionaryResponse
 import java.net.UnknownHostException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 
 class EditWordDefRepositoryImpl(
@@ -28,11 +33,13 @@ class EditWordDefRepositoryImpl(
     // менее 3х return (два из них возвразают результат обработки исключения, а один возвращает
     // результат в случае успеха)
     @Suppress("ReturnCount")
-    override suspend fun loadDefinitionsByWriting(writing: String): DefinitionsRequestResult {
+    override fun loadDefinitionsByWriting(
+        writing: String
+    ): Flow<DefinitionsRequestResult> = flow {
         try {
             val response: YandexDictionaryResponse = yandexDictApiService.lookupWord(writing)
             if (response.definitions.isEmpty()) {
-                return DefinitionsRequestResult.EmptyResult()
+                emit(DefinitionsRequestResult.EmptyResult())
             }
             val definitionsList: List<WordDefinition> = response
                 .definitions.flatMap { definitionResponse ->
@@ -43,22 +50,27 @@ class EditWordDefRepositoryImpl(
                         )
                     }
                 }
-            return DefinitionsRequestResult.Success(definitionsList)
+            emit(DefinitionsRequestResult.Success(definitionsList))
         } catch (e: UnknownHostException) {
-            return DefinitionsRequestResult.Failure.Error("UnknownHostException")
+            emit(DefinitionsRequestResult.Failure.Error("UnknownHostException"))
         } catch (e: HttpException) {
-            return DefinitionsRequestResult.Failure.HttpError(
-                code = e.code(),
-                message = e.message()
+            emit(
+                DefinitionsRequestResult.Failure.HttpError(
+                    code = e.code(),
+                    message = e.message()
+                )
             )
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
-    override suspend fun getSavedDefinitionsByWriting(writing: String): List<WordDefinition> {
-        return wordDefinitionsDao.getDefinitionsByWriting(writing)
-            .map { wordDefinitionQueryResult ->
+    override fun getSavedDefinitionsByWriting(
+        writing: String
+    ): Flow<List<WordDefinition>> {
+        return wordDefinitionsDao.getFlowOfDefinitionsByWriting(writing).map { definitionsList ->
+            definitionsList.map { wordDefinitionQueryResult ->
                 wordDefinitionQueryResult.toWordDefinition()
             }
+        }
     }
 
     override suspend fun addWordDefinition(wordDefinition: WordDefinition) {

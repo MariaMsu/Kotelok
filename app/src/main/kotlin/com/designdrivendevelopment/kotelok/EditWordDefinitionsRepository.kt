@@ -2,11 +2,12 @@ package com.designdrivendevelopment.kotelok
 
 import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import kotlinx.coroutines.flow.Flow
 
 interface EditWordDefinitionsRepository {
-    suspend fun loadDefinitionsByWriting(writing: String): DefinitionsRequestResult
+    fun loadDefinitionsByWriting(writing: String): Flow<DefinitionsRequestResult>
 
-    suspend fun getSavedDefinitionsByWriting(writing: String): List<WordDefinition>
+    fun getSavedDefinitionsByWriting(writing: String): Flow<List<WordDefinition>>
 
     suspend fun addWordDefinition(wordDefinition: WordDefinition)
 
