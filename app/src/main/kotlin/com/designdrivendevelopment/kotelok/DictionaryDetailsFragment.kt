@@ -11,19 +11,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Locale
 
 @Suppress("TooManyFunctions")
 class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlaySoundBtnClickListener {
     private var scrollPosition = SCROLL_START_POSITION
     private var textToSpeech: TextToSpeech? = null
-    var wordDefinitionsList: RecyclerView? = null
-    var viewModel: DictDetailsViewModel? = null
+    private var wordDefinitionsList: RecyclerView? = null
+    private var addFab: FloatingActionButton? = null
+    private var viewModel: DictDetailsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +40,7 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         initViews(view)
+        setupListeners()
 
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
         val context = requireContext()
@@ -139,7 +143,6 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
     ): DictDetailsViewModel {
         return ViewModelProvider(fragment, factory)[DictDetailsViewModel::class.java].apply {
             dictionaryDefinitions.observe(fragment) { definitions ->
-                Log.d("HUAWEI", "Data = $definitions")
                 onDefinitionsChanged(definitions, adapter)
             }
         }
@@ -168,9 +171,13 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         adapter.wordDefinitions = newDefinitions
     }
 
-    private fun initViews(view: View) {
-        wordDefinitionsList = view.findViewById(R.id.word_definitions_list)
-
+    private fun setupListeners() {
+        addFab?.setOnClickListener {
+            setFragmentResult(
+                FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
+                Bundle()
+            )
+        }
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -181,6 +188,11 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
             }
         }
         wordDefinitionsList?.addOnScrollListener(onScrollListener)
+    }
+
+    private fun initViews(view: View) {
+        addFab = view.findViewById(R.id.open_lookup_fragment_btn)
+        wordDefinitionsList = view.findViewById(R.id.word_definitions_list)
     }
 
     private fun clearViews() {

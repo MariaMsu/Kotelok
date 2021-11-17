@@ -4,16 +4,21 @@ package com.designdrivendevelopment.kotelok
 import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.DictionaryStat
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
+import com.designdrivendevelopment.kotelok.entities.Language
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.entities.WordDefinitionStat
+import com.designdrivendevelopment.kotelok.persistence.prepopulating.toRuPosOrNull
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.LearnableDefQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
+import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
+import com.designdrivendevelopment.kotelok.yandexDictApi.responses.TranslationResponse
+import java.util.Calendar
 
 fun Dictionary.toDictionaryEntity(entityId: Long): DictionaryEntity {
     return DictionaryEntity(
@@ -96,5 +101,52 @@ fun WordDefinitionStatQuery.toWordDefinitionStat(): WordDefinitionStat {
         skillLevel = this.skillLevel,
         numOfCompletedTrainings = this.numOfCompletedTrainings,
         numOfSuccessfullyTrainings = this.numOfSuccessfullyTrainings
+    )
+}
+
+fun TranslationResponse.toWordDefinition(
+    writing: String,
+    transcription: String?
+): WordDefinition {
+    return WordDefinition(
+        id = 0,
+        writing = writing,
+        language = Language.ENG,
+        partOfSpeech = this.partOfSpeech.toRuPosOrNull(),
+        transcription = transcription,
+        synonyms = synonyms?.map { synonymResponse -> synonymResponse.writing }.orEmpty(),
+        mainTranslation = translation,
+        allTranslations = (
+            otherTranslations?.map { otherTranslationResponse ->
+                otherTranslationResponse.writing
+            }.orEmpty() + translation
+            ),
+        examples = examples?.map { exampleResponse ->
+            ExampleOfDefinitionUse(
+                originalText = exampleResponse.original,
+                translatedText = exampleResponse.translations?.first()?.translation.orEmpty()
+            )
+        }.orEmpty()
+    )
+}
+
+fun WordDefinition.toWordDefinitionEntity(): WordDefinitionEntity {
+    return WordDefinitionEntity(
+        id = 0,
+        writing = writing,
+        partOfSpeech = this.partOfSpeech,
+        transcription = transcription,
+        language = language,
+        mainTranslation = mainTranslation,
+        cardsNextRepeatDate = with(Calendar.getInstance()) { time },
+        cardsRepetitionNumber = 0,
+        cardsInterval = 1,
+        writerRepeatDate = with(Calendar.getInstance()) { time },
+        writerRepetitionNumber = 0,
+        writerInterval = 1,
+        pairsNextRepeatDate = with(Calendar.getInstance()) { time },
+        pairsRepetitionNumber = 0,
+        pairsInterval = 1,
+        easinessFactor = 2.5F
     )
 }

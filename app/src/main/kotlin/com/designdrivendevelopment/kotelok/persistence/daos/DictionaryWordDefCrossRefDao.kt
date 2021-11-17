@@ -2,15 +2,16 @@ package com.designdrivendevelopment.kotelok.persistence.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 
 @Dao
 interface DictionaryWordDefCrossRefDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(dictionaryWordDefCrossRef: DictionaryWordDefCrossRef)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(dictionaryWordDefCrossRefs: List<DictionaryWordDefCrossRef>)
 
     @Query(
@@ -21,4 +22,16 @@ interface DictionaryWordDefCrossRefDao {
         """
     )
     suspend fun deleteCrossRefByIds(dictionaryId: Long, wordDefinitionId: Long)
+
+    @Query(
+        """
+        DELETE
+        FROM dictionary_word_def_cross_refs
+        WHERE (word_def_id = :wordDefinitionId) AND (dict_id NOT IN (:newDictionariesIds))
+        """
+    )
+    suspend fun deleteRedundantCrossRefsById(
+        newDictionariesIds: List<Long>,
+        wordDefinitionId: Long
+    )
 }
