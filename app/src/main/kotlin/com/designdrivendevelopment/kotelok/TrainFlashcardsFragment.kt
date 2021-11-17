@@ -13,9 +13,9 @@ import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.trainer.TrainerCards
 import kotlinx.coroutines.launch
 
-class TrainFlashcardsFragment :  Fragment() {
+class TrainFlashcardsFragment : Fragment() {
     private var state: State = State.NOT_GUESSED
-    private lateinit var trainerCards : TrainerCards
+    private lateinit var trainerCards: TrainerCards
     private lateinit var currentWord: LearnableDefinition
 
     private var yesButton: ImageButton? = null
@@ -48,33 +48,33 @@ class TrainFlashcardsFragment :  Fragment() {
                 false
             )
             currentWord = trainerCards.getNext()
-            UpdateFlashcard()
+            updateFlashcard()
         }
     }
 
     private val listener = View.OnClickListener { view ->
         when (view.id) {
             R.id.FlashcardButton -> {
-                PressFlashcard()
+                pressFlashcard()
             }
             R.id.YesButton -> {
-                PressGuessButton( true)
+                pressGuessButton(true)
             }
             R.id.NoButton -> {
-                PressGuessButton(false)
+                pressGuessButton(false)
             }
         }
     }
 
-    private fun updateButtonVisibility(isActive : Boolean) {
+    private fun updateButtonVisibility(isActive: Boolean) {
         yesButton?.isVisible = isActive
         yesButton?.isClickable = isActive
         noButton?.isVisible = isActive
         noButton?.isClickable = isActive
     }
 
-    private fun PressFlashcard() {
-        state =  when(state) {
+    private fun pressFlashcard() {
+        state = when (state) {
             State.NOT_GUESSED -> State.GUESSED_TRANSLATION
             State.GUESSED_TRANSLATION -> State.GUESSED_WORD
             State.GUESSED_WORD -> State.GUESSED_TRANSLATION
@@ -82,24 +82,24 @@ class TrainFlashcardsFragment :  Fragment() {
         if (state != State.NOT_GUESSED) {
             updateButtonVisibility(true)
         }
-        UpdateFlashcard()
+        updateFlashcard()
     }
 
-    private fun UpdateFlashcard() {
-        word?.text = when(state) {
+    private fun updateFlashcard() {
+        word?.text = when (state) {
             State.NOT_GUESSED -> currentWord.writing
             State.GUESSED_TRANSLATION -> currentWord.mainTranslation
             State.GUESSED_WORD -> currentWord.writing
         }
     }
 
-    private fun PressGuessButton(guess: Boolean) {
-        state =  State.NOT_GUESSED
+    private fun pressGuessButton(guess: Boolean) {
+        state = State.NOT_GUESSED
         updateButtonVisibility(false)
         trainerCards.checkUserInput(guess)
         if (!trainerCards.isDone) {
             currentWord = trainerCards.getNext()
-            UpdateFlashcard()
+            updateFlashcard()
         } else {
             textCompleted?.isVisible = true
             flashcardButton?.isClickable = false
@@ -111,7 +111,7 @@ class TrainFlashcardsFragment :  Fragment() {
     }
 
     companion object {
-        fun newInstance(dictionaryId : Long) = TrainFlashcardsFragment().apply {
+        fun newInstance(dictionaryId: Long) = TrainFlashcardsFragment().apply {
             arguments = Bundle().apply {
                 putLong("id", dictionaryId)
             }
