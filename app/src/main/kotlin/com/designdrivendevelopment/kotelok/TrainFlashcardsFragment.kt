@@ -1,39 +1,54 @@
 package com.designdrivendevelopment.kotelok
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.trainer.TrainerCards
 import androidx.lifecycle.lifecycleScope
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
 import kotlinx.coroutines.launch
 
 
-class TrainFlashcardsActivity : AppCompatActivity() {
+class TrainFlashcardsFragment :  Fragment() {
     private var state: State = State.NOT_GUESSED
     private lateinit var trainerCards : TrainerCards
     private lateinit var currentWord: LearnableDefinition
 
+    var yesButton: ImageButton? = null
+    var noButton: ImageButton? = null
+    var flashcardButton: ImageButton? = null
+    var word: TextView? = null
+    var textCompleted: TextView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_train_flashcards)
-        val flashcardButton = findViewById<ImageButton>(R.id.FlashcardButton)
-        flashcardButton.setOnClickListener(listener)
-        val yesButton = findViewById<ImageButton>(R.id.YesButton)
-        yesButton.setOnClickListener(listener)
-        val noButton = findViewById<ImageButton>(R.id.NoButton)
-        noButton.setOnClickListener(listener)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_train_flashcards, container, false)
+    }
 
-        val repository = (application as KotelokApplication).appComponent.cardsLearnDefRepository
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val dictionaryId = arguments?.getLong("id") ?: 1
+        word = view.findViewById<TextView>(R.id.Word)
+        textCompleted = view.findViewById<TextView>(R.id.textCompleted)
+        flashcardButton = view.findViewById<ImageButton>(R.id.FlashcardButton)
+        flashcardButton?.setOnClickListener(listener)
+        yesButton = view.findViewById<ImageButton>(R.id.YesButton)
+        yesButton?.setOnClickListener(listener)
+        noButton = view.findViewById<ImageButton>(R.id.NoButton)
+        noButton?.setOnClickListener(listener)
+
+        val repository = (requireActivity().application as KotelokApplication).appComponent.cardsLearnDefRepository
         trainerCards = TrainerCards(repository)
         lifecycleScope.launch {
             trainerCards.loadDictionary(
-                1,
+                dictionaryId,
                 false
             )
             currentWord = trainerCards.getNext()
@@ -47,7 +62,7 @@ class TrainFlashcardsActivity : AppCompatActivity() {
                 PressFlashcard()
             }
             R.id.YesButton -> {
-                PressGuessButton(true)
+                PressGuessButton( true)
             }
             R.id.NoButton -> {
                 PressGuessButton(false)
@@ -56,12 +71,10 @@ class TrainFlashcardsActivity : AppCompatActivity() {
     }
 
     fun updateButtonVisibility(isActive : Boolean) {
-        val YesButton = findViewById<ImageButton>(R.id.YesButton)
-        val NoButton = findViewById<ImageButton>(R.id.NoButton)
-        YesButton.isVisible = isActive
-        YesButton.isClickable = isActive
-        NoButton.isVisible = isActive
-        NoButton.isClickable = isActive
+        yesButton?.isVisible = isActive
+        yesButton?.isClickable = isActive
+        noButton?.isVisible = isActive
+        noButton?.isClickable = isActive
     }
 
     fun PressFlashcard() {
@@ -77,8 +90,7 @@ class TrainFlashcardsActivity : AppCompatActivity() {
     }
 
     fun UpdateFlashcard() {
-        val Word = findViewById<TextView>(R.id.Word)
-        Word.text = when(state) {
+        word?.text = when(state) {
             State.NOT_GUESSED -> currentWord.writing
             State.GUESSED_TRANSLATION -> currentWord.mainTranslation
             State.GUESSED_WORD -> currentWord.writing
@@ -93,12 +105,20 @@ class TrainFlashcardsActivity : AppCompatActivity() {
             currentWord = trainerCards.getNext()
             UpdateFlashcard()
         } else {
-            val textCompleted = findViewById<TextView>(R.id.textCompleted)
-            textCompleted.isVisible = true
+            textCompleted?.isVisible = true
+            flashcardButton?.isClickable = false
         }
     }
 
     enum class State {
         NOT_GUESSED, GUESSED_TRANSLATION, GUESSED_WORD
+    }
+
+    companion object {
+        fun newInstance(dictionaryId : Long) = TrainFlashcardsFragment().apply {
+            arguments = Bundle().apply {
+                putLong("id", dictionaryId)
+            }
+        }
     }
 }

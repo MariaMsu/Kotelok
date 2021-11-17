@@ -27,8 +27,7 @@ class DictionariesFragment : Fragment() {
 
         val tempTrainButton = view.findViewById<Button>(R.id.temp_train_button)
         tempTrainButton.setOnClickListener {
-            val intent = Intent(this@DictionariesFragment.context, TrainFlashcardsActivity::class.java)
-            startActivity(intent)
+
         }
     }
 
