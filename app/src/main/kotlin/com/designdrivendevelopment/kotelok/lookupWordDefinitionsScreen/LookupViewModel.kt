@@ -34,7 +34,7 @@ class LookupViewModel(
             }.collect { pair ->
                 val networkResult = pair.first
                 val localDefinitions = pair.second
-                when (networkResult) {
+                val items: List<ItemWithType> = when (networkResult) {
                     is DefinitionsRequestResult.Failure.Error -> {
                         _events.postValue(
                             UiEvent(
@@ -42,6 +42,7 @@ class LookupViewModel(
                                     "Попробуйте повторить попытку"
                             )
                         )
+                        createItemsList(localDefinitions, emptyList())
                     }
 
                     is DefinitionsRequestResult.Failure.HttpError -> {
@@ -51,6 +52,7 @@ class LookupViewModel(
                                     "Попробуйте повторить попытку"
                             )
                         )
+                        createItemsList(localDefinitions, emptyList())
                     }
 
                     is DefinitionsRequestResult.Success -> {
@@ -62,10 +64,10 @@ class LookupViewModel(
                                 )
                             )
                         }
-                        val items = createItemsList(localDefinitions, remoteDefinitions)
-                        _foundDefinitions.postValue(items)
+                        createItemsList(localDefinitions, remoteDefinitions)
                     }
                 }
+                _foundDefinitions.postValue(items)
             }
         }
     }
