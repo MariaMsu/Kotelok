@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ButtonItem
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemWithType
@@ -67,7 +68,11 @@ class ItemWithTypesAdapter(
     }
 
     private inner class ButtonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val buttonText: TextView = view.findViewById(R.id.add_definition_button)
 
+        fun bind(button: ButtonItem) {
+            buttonText.text = button.buttonText
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
