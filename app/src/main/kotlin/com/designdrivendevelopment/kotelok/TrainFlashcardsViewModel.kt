@@ -1,5 +1,6 @@
 package com.designdrivendevelopment.kotelok
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -11,11 +12,12 @@ class TrainFlashcardsViewModel (
     dictionaryId: Long,
     cardsLearnDefRepository: CardsLearnableDefinitionsRepository
     ): ViewModel() {
-    var state: TrainFlashcardsFragment.State = TrainFlashcardsFragment.State.NOT_GUESSED
+    var state: MutableLiveData<TrainFlashcardsFragment.State> = MutableLiveData<TrainFlashcardsFragment.State>()
     var trainerCards : TrainerCards? = null
-    var currentWord: LearnableDefinition? = null
+    var currentWord: MutableLiveData<LearnableDefinition>? = null
 
     init {
+        state.value = TrainFlashcardsFragment.State.NOT_GUESSED
         loadTrainerCardsById(dictionaryId, cardsLearnDefRepository)
     }
 
@@ -26,7 +28,7 @@ class TrainFlashcardsViewModel (
                 dictionaryId,
                 false
             )
-            currentWord = trainerCards?.getNext()
+            currentWord?.value = trainerCards?.getNext()
         }
     }
 }
