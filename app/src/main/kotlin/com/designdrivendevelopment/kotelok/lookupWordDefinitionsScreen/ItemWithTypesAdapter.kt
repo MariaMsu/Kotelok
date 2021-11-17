@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import org.w3c.dom.Text
@@ -58,7 +59,11 @@ class ItemWithTypesAdapter(
     }
 
     private inner class CategoryHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val categoryHeaderText: TextView = view.findViewById(R.id.category_header_text)
 
+        fun bind(categoryHeader: CategoryHeaderItem) {
+            categoryHeaderText.text = categoryHeader.header
+        }
     }
 
     private inner class ButtonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
