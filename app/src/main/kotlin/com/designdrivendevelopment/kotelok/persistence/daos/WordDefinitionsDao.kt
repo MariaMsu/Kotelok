@@ -7,6 +7,7 @@ import androidx.room.Transaction
 import com.designdrivendevelopment.kotelok.entities.Language
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionQueryResult
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WordDefinitionsDao {
@@ -56,6 +57,17 @@ interface WordDefinitionsDao {
     """
     )
     suspend fun getDefinitionsByWriting(writing: String): List<WordDefinitionQueryResult>
+
+    @Transaction
+    @Query(
+        """
+        SELECT def_id AS id, writing, part_of_speech, language,
+        transcription, main_translation
+        FROM word_definitions
+        WHERE (writing = :writing)
+    """
+    )
+    fun getFlowOfDefinitionsByWriting(writing: String): Flow<List<WordDefinitionQueryResult>>
 
     @Transaction
     @Query(
