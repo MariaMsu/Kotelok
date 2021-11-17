@@ -1,9 +1,6 @@
 package com.designdrivendevelopment.kotelok
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,22 +8,21 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.trainer.TrainerCards
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-
 
 class TrainFlashcardsFragment :  Fragment() {
     private var state: State = State.NOT_GUESSED
     private lateinit var trainerCards : TrainerCards
     private lateinit var currentWord: LearnableDefinition
 
-    var yesButton: ImageButton? = null
-    var noButton: ImageButton? = null
-    var flashcardButton: ImageButton? = null
-    var word: TextView? = null
-    var textCompleted: TextView? = null
+    private var yesButton: ImageButton? = null
+    private var noButton: ImageButton? = null
+    private var flashcardButton: ImageButton? = null
+    private var word: TextView? = null
+    private var textCompleted: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_flashcards, container, false)
@@ -35,13 +31,13 @@ class TrainFlashcardsFragment :  Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dictionaryId = arguments?.getLong("id") ?: 1
-        word = view.findViewById<TextView>(R.id.Word)
-        textCompleted = view.findViewById<TextView>(R.id.textCompleted)
-        flashcardButton = view.findViewById<ImageButton>(R.id.FlashcardButton)
+        word = view.findViewById(R.id.Word)
+        textCompleted = view.findViewById(R.id.textCompleted)
+        flashcardButton = view.findViewById(R.id.FlashcardButton)
         flashcardButton?.setOnClickListener(listener)
-        yesButton = view.findViewById<ImageButton>(R.id.YesButton)
+        yesButton = view.findViewById(R.id.YesButton)
         yesButton?.setOnClickListener(listener)
-        noButton = view.findViewById<ImageButton>(R.id.NoButton)
+        noButton = view.findViewById(R.id.NoButton)
         noButton?.setOnClickListener(listener)
 
         val repository = (requireActivity().application as KotelokApplication).appComponent.cardsLearnDefRepository
@@ -56,8 +52,8 @@ class TrainFlashcardsFragment :  Fragment() {
         }
     }
 
-    val listener = View.OnClickListener { view ->
-        when (view.getId()) {
+    private val listener = View.OnClickListener { view ->
+        when (view.id) {
             R.id.FlashcardButton -> {
                 PressFlashcard()
             }
@@ -70,14 +66,14 @@ class TrainFlashcardsFragment :  Fragment() {
         }
     }
 
-    fun updateButtonVisibility(isActive : Boolean) {
+    private fun updateButtonVisibility(isActive : Boolean) {
         yesButton?.isVisible = isActive
         yesButton?.isClickable = isActive
         noButton?.isVisible = isActive
         noButton?.isClickable = isActive
     }
 
-    fun PressFlashcard() {
+    private fun PressFlashcard() {
         state =  when(state) {
             State.NOT_GUESSED -> State.GUESSED_TRANSLATION
             State.GUESSED_TRANSLATION -> State.GUESSED_WORD
@@ -89,7 +85,7 @@ class TrainFlashcardsFragment :  Fragment() {
         UpdateFlashcard()
     }
 
-    fun UpdateFlashcard() {
+    private fun UpdateFlashcard() {
         word?.text = when(state) {
             State.NOT_GUESSED -> currentWord.writing
             State.GUESSED_TRANSLATION -> currentWord.mainTranslation
@@ -97,7 +93,7 @@ class TrainFlashcardsFragment :  Fragment() {
         }
     }
 
-    fun PressGuessButton(guess: Boolean) {
+    private fun PressGuessButton(guess: Boolean) {
         state =  State.NOT_GUESSED
         updateButtonVisibility(false)
         trainerCards.checkUserInput(guess)
