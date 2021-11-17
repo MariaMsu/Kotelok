@@ -8,4 +8,6 @@
     <string name="translation_pos_line">%1s, %2s</string>
     <string name="search_item_title">search</string>
     <string name="add_word_fab_description">Довить значение слова</string>
+    <string name="enter_writing_hint">Введите слово</string>
+    <string name="lookup_word_button_text">Найти определения</string>
 </resources>
