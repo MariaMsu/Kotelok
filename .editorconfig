@@ -121,8 +121,8 @@ ij_kotlin_blank_lines_around_block_when_branches = 1
 ij_kotlin_blank_lines_before_declaration_with_comment_or_annotation_on_separate_line = 1
 
 ## Imports
-ij_kotlin_name_count_to_use_star_import = 5
-ij_kotlin_name_count_to_use_star_import_for_members = 3
+ij_kotlin_name_count_to_use_star_import = 99
+ij_kotlin_name_count_to_use_star_import_for_members = 99
 ij_kotlin_import_nested_classes = false
 
 ## Other

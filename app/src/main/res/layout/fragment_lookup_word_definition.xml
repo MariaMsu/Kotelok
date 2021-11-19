@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?attr/colorOnPrimary"
-    tools:context=".lookupWordDefinitionsScreen.LookupWordDefinitionsFragment">
+    tools:context=".screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
