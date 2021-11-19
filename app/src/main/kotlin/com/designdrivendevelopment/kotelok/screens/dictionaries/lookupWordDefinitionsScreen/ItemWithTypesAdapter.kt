@@ -46,7 +46,7 @@ class ItemWithTypesAdapter(
                 val mainExample = definition.examples.first()
                 originalExampleText.visibility = View.VISIBLE
                 originalExampleText.text = mainExample.originalText.capitalize()
-                if (mainExample.translatedText.isNotEmpty()) {
+                if (mainExample.translatedText != null) {
                     translationExampleText.visibility = View.VISIBLE
                     translationExampleText.text = mainExample.translatedText.capitalize()
                 } else {
