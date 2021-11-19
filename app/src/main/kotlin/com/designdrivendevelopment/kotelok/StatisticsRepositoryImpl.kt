@@ -4,6 +4,7 @@ import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.TotalStat
 import com.designdrivendevelopment.kotelok.persistence.daos.StatisticsDao
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
+import com.designdrivendevelopment.kotelok.screens.StatisticsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

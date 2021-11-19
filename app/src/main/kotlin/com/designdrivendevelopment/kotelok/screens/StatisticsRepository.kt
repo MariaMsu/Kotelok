@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens
 
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.TotalStat

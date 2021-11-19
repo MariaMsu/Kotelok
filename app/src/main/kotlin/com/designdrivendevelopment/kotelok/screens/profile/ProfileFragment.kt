@@ -1,10 +1,11 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.designdrivendevelopment.kotelok.R
 
 class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
