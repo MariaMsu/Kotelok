@@ -1,17 +1,18 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository
 
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
-import com.designdrivendevelopment.kotelok.persistence.daos.CardsLearnableDefDao
+import com.designdrivendevelopment.kotelok.persistence.daos.PairsLearnableDefDao
+import com.designdrivendevelopment.kotelok.repositoryImplementations.toLearnableDef
 import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CardsLearnableDefinitionsRepository(
-    private val cardsLearnableDefDao: CardsLearnableDefDao
+class PairsLearnableDefinitionsRepository(
+    private val pairsLearnableDefDao: PairsLearnableDefDao
 ) : LearnableDefinitionsRepository {
     override suspend fun getAll(): List<LearnableDefinition> = withContext(Dispatchers.IO) {
-        cardsLearnableDefDao.getAllLearnableDefinitions().map { learnableDefQueryResult ->
+        pairsLearnableDefDao.getAllLearnableDefinitions().map { learnableDefQueryResult ->
             learnableDefQueryResult.toLearnableDef()
         }
     }
@@ -19,7 +20,7 @@ class CardsLearnableDefinitionsRepository(
     override suspend fun getByDictionaryId(
         dictionaryId: Long
     ): List<LearnableDefinition> = withContext(Dispatchers.IO) {
-        cardsLearnableDefDao
+        pairsLearnableDefDao
             .getLearnableDefinitionsByDictId(dictionaryId)
             .map { learnableDefQueryResult ->
                 learnableDefQueryResult.toLearnableDef()
@@ -29,7 +30,7 @@ class CardsLearnableDefinitionsRepository(
     override suspend fun getByRepeatDate(
         repeatDate: Date
     ): List<LearnableDefinition> = withContext(Dispatchers.IO) {
-        cardsLearnableDefDao
+        pairsLearnableDefDao
             .getLearnableDefinitionsByDate(repeatDate.time)
             .map { learnableDefQueryResult ->
                 learnableDefQueryResult.toLearnableDef()
@@ -40,7 +41,7 @@ class CardsLearnableDefinitionsRepository(
         dictionaryId: Long,
         repeatDate: Date,
     ): List<LearnableDefinition> = withContext(Dispatchers.IO) {
-        cardsLearnableDefDao
+        pairsLearnableDefDao
             .getLearnableDefinitionsByDateAndDictId(repeatDate.time, dictionaryId)
             .map { learnableDefQueryResult ->
                 learnableDefQueryResult.toLearnableDef()
@@ -50,7 +51,7 @@ class CardsLearnableDefinitionsRepository(
     override suspend fun updateLearnableDefinition(
         wordDefinition: LearnableDefinition
     ) = withContext(Dispatchers.IO) {
-        cardsLearnableDefDao.updateWordDefinition(
+        pairsLearnableDefDao.updateWordDefinition(
             wordDefinitionId = wordDefinition.definitionId,
             nextRepeatDateInMillis = wordDefinition.repeatDate.time,
             repetitionNumber = wordDefinition.repetitionNumber,

@@ -1,5 +1,5 @@
 @file:Suppress("TooManyFunctions")
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.repositoryImplementations
 
 import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.DictionaryStat

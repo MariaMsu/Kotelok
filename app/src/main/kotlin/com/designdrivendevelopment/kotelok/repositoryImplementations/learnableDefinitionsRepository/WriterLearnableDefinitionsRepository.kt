@@ -1,7 +1,8 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository
 
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.persistence.daos.WriterLearnableDefDao
+import com.designdrivendevelopment.kotelok.repositoryImplementations.toLearnableDef
 import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
 import java.util.Date
 import kotlinx.coroutines.Dispatchers

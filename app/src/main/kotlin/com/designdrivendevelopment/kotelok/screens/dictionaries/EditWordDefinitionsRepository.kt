@@ -1,8 +1,8 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries
 
-import com.designdrivendevelopment.kotelok.DefinitionsRequestResult
 import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.repositoryImplementations.editWordDefnititionsRepository.DefinitionsRequestResult
 import kotlinx.coroutines.flow.Flow
 
 interface EditWordDefinitionsRepository {

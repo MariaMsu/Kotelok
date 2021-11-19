@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.repositoryImplementations.editWordDefnititionsRepository
 
 import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
@@ -11,6 +11,8 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWo
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationEntity
+import com.designdrivendevelopment.kotelok.repositoryImplementations.toWordDefinition
+import com.designdrivendevelopment.kotelok.repositoryImplementations.toWordDefinitionEntity
 import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
 import com.designdrivendevelopment.kotelok.yandexDictApi.YandexDictionaryApiService
 import com.designdrivendevelopment.kotelok.yandexDictApi.responses.YandexDictionaryResponse

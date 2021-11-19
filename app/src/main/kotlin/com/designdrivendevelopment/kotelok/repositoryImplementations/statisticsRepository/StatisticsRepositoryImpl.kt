@@ -1,9 +1,12 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.repositoryImplementations.statisticsRepository
 
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.TotalStat
 import com.designdrivendevelopment.kotelok.persistence.daos.StatisticsDao
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
+import com.designdrivendevelopment.kotelok.repositoryImplementations.toDictionaryStat
+import com.designdrivendevelopment.kotelok.repositoryImplementations.toTotalDictionaryStat
+import com.designdrivendevelopment.kotelok.repositoryImplementations.toWordDefinitionStat
 import com.designdrivendevelopment.kotelok.screens.StatisticsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
