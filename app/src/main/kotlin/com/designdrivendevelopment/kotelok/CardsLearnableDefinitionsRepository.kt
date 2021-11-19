@@ -2,6 +2,7 @@ package com.designdrivendevelopment.kotelok
 
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.persistence.daos.CardsLearnableDefDao
+import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

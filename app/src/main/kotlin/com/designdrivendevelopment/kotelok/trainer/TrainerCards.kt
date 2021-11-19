@@ -1,7 +1,7 @@
 package com.designdrivendevelopment.kotelok.trainer
 
-import com.designdrivendevelopment.kotelok.LearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
+import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
 
 const val CARDS_WEIGHT = 0.01f
 

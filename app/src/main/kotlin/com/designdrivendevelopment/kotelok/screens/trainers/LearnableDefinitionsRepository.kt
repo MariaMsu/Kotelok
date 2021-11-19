@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.trainers
 
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import java.util.Date

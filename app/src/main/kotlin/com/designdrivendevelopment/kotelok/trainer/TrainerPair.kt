@@ -1,7 +1,7 @@
 package com.designdrivendevelopment.kotelok.trainer
 
-import com.designdrivendevelopment.kotelok.LearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
+import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.trainer.utils.PairCheckInput
 
 const val PAIR_WEIGHT = 0.1f
