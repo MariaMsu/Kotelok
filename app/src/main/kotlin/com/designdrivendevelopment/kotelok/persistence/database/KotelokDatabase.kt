@@ -19,10 +19,6 @@ import com.designdrivendevelopment.kotelok.persistence.daos.TranslationsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.WriterLearnableDefDao
 import com.designdrivendevelopment.kotelok.persistence.prepopulating.AssetsRepository
-import com.designdrivendevelopment.kotelok.persistence.prepopulating.getExampleEntities
-import com.designdrivendevelopment.kotelok.persistence.prepopulating.getSynonymEntities
-import com.designdrivendevelopment.kotelok.persistence.prepopulating.getTranslationEntities
-import com.designdrivendevelopment.kotelok.persistence.prepopulating.getWordDefinitionEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
@@ -30,6 +26,10 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.PartOfSpeech
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.getExampleEntities
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.getSynonymEntities
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.getTranslationEntities
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.getWordDefinitionEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

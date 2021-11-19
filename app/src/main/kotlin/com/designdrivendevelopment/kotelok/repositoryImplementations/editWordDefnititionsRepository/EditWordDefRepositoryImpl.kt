@@ -8,10 +8,10 @@ import com.designdrivendevelopment.kotelok.persistence.daos.SynonymsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.TranslationsDao
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationEntity
-import com.designdrivendevelopment.kotelok.repositoryImplementations.toWordDefinitionEntity
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toExampleEntity
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toSynonymEntity
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toTranslationEntity
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toWordDefinitionEntity
 import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
 
 class EditWordDefRepositoryImpl(
@@ -54,23 +54,13 @@ class EditWordDefRepositoryImpl(
     ): Long {
         val definitionId = wordDefinitionsDao.insert(wordDefinition.toWordDefinitionEntity())
         val synonymEntities = wordDefinition.synonyms.map { synonym ->
-            SynonymEntity(
-                wordDefinitionId = definitionId,
-                writing = synonym
-            )
+            synonym.toSynonymEntity(definitionId)
         }
         val translationEntities = wordDefinition.allTranslations.map { translation ->
-            TranslationEntity(
-                wordDefinitionId = definitionId,
-                translation = translation
-            )
+            translation.toTranslationEntity(definitionId)
         }
         val exampleEntities = wordDefinition.examples.map { exampleOfDefinitionUse ->
-            ExampleEntity(
-                wordDefinitionId = definitionId,
-                original = exampleOfDefinitionUse.originalText,
-                translation = exampleOfDefinitionUse.translatedText
-            )
+            exampleOfDefinitionUse.toExampleEntity(definitionId)
         }
 
         synonymsDao.insert(synonymEntities)
@@ -87,8 +77,9 @@ class EditWordDefRepositoryImpl(
         wordDefinition: WordDefinition,
         dictionaries: List<Dictionary>? = null
     ) {
+        val definitionId = wordDefinition.id
         wordDefinitionsDao.updateWordDefinitionAttributes(
-            wordDefinitionId = wordDefinition.id,
+            wordDefinitionId = definitionId,
             writing = wordDefinition.writing,
             language = wordDefinition.language,
             partOfSpeech = wordDefinition.partOfSpeech,
@@ -97,23 +88,13 @@ class EditWordDefRepositoryImpl(
         )
 
         val synonymEntities = wordDefinition.synonyms.map { synonym ->
-            SynonymEntity(
-                wordDefinitionId = wordDefinition.id,
-                writing = synonym
-            )
+            synonym.toSynonymEntity(definitionId)
         }
         val translationEntities = wordDefinition.allTranslations.map { translation ->
-            TranslationEntity(
-                wordDefinitionId = wordDefinition.id,
-                translation = translation
-            )
+            translation.toTranslationEntity(definitionId)
         }
         val exampleEntities = wordDefinition.examples.map { exampleOfDefinitionUse ->
-            ExampleEntity(
-                wordDefinitionId = wordDefinition.id,
-                original = exampleOfDefinitionUse.originalText,
-                translation = exampleOfDefinitionUse.translatedText
-            )
+            exampleOfDefinitionUse.toExampleEntity(definitionId)
         }
 
         synonymsDao.insert(synonymEntities)

@@ -5,8 +5,8 @@ import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
-import com.designdrivendevelopment.kotelok.repositoryImplementations.toDictionary
-import com.designdrivendevelopment.kotelok.repositoryImplementations.toDictionaryEntity
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toDictionary
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toDictionaryEntity
 import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionariesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
