@@ -3,7 +3,7 @@ package com.designdrivendevelopment.kotelok.repositoryImplementations.dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
 import com.designdrivendevelopment.kotelok.repositoryImplementations.toWordDefinition
-import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionaryWordDefinitionsRepository
+import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryWordDefinitionsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

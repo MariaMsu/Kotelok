@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.repositoryImplementations.editWordDefnititionsRepository
+package com.designdrivendevelopment.kotelok.repositoryImplementations.lookupWordDefinitionRepository
 
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 
