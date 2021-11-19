@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 
 class WordDefinitionsAdapter(

@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen
 
 import androidx.recyclerview.widget.DiffUtil
 import com.designdrivendevelopment.kotelok.entities.WordDefinition

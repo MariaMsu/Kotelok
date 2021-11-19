@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen
+package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen
 
 import android.content.Context
 import android.os.Bundle
@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
-import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 
 class LookupWordDefinitionsFragment : Fragment() {
     private var enterWritingText: EditText? = null

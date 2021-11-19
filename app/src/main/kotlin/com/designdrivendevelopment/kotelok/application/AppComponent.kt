@@ -14,7 +14,7 @@ import com.designdrivendevelopment.kotelok.WriterLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.persistence.database.KotelokDatabase
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.Tab
-import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionariesFragment
+import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.DictionariesFragment
 import com.designdrivendevelopment.kotelok.yandexDictApi.RetrofitModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

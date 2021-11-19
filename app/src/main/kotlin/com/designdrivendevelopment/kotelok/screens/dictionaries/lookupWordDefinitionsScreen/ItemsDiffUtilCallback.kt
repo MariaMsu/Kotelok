@@ -1,11 +1,11 @@
-package com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen
+package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen
 
 import androidx.recyclerview.widget.DiffUtil
-import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.ButtonItem
-import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
-import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
-import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.ItemWithType
-import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ButtonItem
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
 
 class ItemsDiffUtilCallback(
     private val oldList: List<ItemWithType>,

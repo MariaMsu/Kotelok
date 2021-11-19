@@ -7,8 +7,8 @@ import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
-import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {

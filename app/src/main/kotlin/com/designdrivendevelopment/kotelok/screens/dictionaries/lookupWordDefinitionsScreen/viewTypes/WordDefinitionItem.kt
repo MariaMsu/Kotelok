@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes
+package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes
 
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 

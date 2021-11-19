@@ -1,8 +1,8 @@
-package com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen
+package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.designdrivendevelopment.kotelok.EditWordDefinitionsRepository
+import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
 
 class LookupViewModelFactory(
     private val editWordDefinitionsRepository: EditWordDefinitionsRepository

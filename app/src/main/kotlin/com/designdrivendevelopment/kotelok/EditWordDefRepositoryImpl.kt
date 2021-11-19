@@ -11,6 +11,7 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWo
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationEntity
+import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
 import com.designdrivendevelopment.kotelok.yandexDictApi.YandexDictionaryApiService
 import com.designdrivendevelopment.kotelok.yandexDictApi.responses.YandexDictionaryResponse
 import java.net.UnknownHostException

@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

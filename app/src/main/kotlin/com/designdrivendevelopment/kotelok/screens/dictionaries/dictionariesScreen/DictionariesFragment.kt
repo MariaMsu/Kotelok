@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.screens.dictionaries
+package com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
