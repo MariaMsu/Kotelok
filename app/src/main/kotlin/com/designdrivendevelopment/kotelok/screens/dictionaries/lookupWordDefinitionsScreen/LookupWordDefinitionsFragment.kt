@@ -44,7 +44,7 @@ class LookupWordDefinitionsFragment : Fragment() {
         val adapter = createAdapter(context, emptyList())
         val factory = LookupViewModelFactory(
             (requireActivity().application as KotelokApplication)
-                .appComponent.editWordDefinitionsRepository
+                .appComponent.lookupWordDefRepository
         )
         val lookupViewModel = setupFragmentViewModel(context, this, factory, adapter)
         resultList?.adapter = adapter

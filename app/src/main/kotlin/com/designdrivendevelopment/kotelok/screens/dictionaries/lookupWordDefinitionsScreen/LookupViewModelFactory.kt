@@ -2,15 +2,14 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
 
 class LookupViewModelFactory(
-    private val editWordDefinitionsRepository: EditWordDefinitionsRepository
+    private val lookupWordDefinitionsRepository: LookupWordDefinitionsRepository
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LookupViewModel::class.java)) {
-            return LookupViewModel(editWordDefinitionsRepository) as T
+            return LookupViewModel(lookupWordDefinitionsRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

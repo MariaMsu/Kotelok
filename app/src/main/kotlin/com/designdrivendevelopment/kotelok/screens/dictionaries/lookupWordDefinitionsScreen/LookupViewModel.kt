@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
-import com.designdrivendevelopment.kotelok.repositoryImplementations.editWordDefnititionsRepository.DefinitionsRequestResult
-import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
+import com.designdrivendevelopment.kotelok.repositoryImplementations.lookupWordDefinitionRepository.DefinitionsRequestResult
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ButtonItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class LookupViewModel(
-    private val editWordDefRepository: EditWordDefinitionsRepository
+    private val lookupWordDefRepository: LookupWordDefinitionsRepository
 ) : ViewModel() {
     private val _foundDefinitions = MutableLiveData<List<ItemWithType>>(emptyList())
     private val _events = MutableLiveData<UiEvent<Any?>>()
@@ -27,8 +26,8 @@ class LookupViewModel(
 
     fun lookupByWriting(writing: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val flowFromRemote = editWordDefRepository.loadDefinitionsByWriting(writing)
-            val flowFromLocal = editWordDefRepository.getSavedDefinitionsByWriting(writing)
+            val flowFromRemote = lookupWordDefRepository.loadDefinitionsByWriting(writing)
+            val flowFromLocal = lookupWordDefRepository.getSavedDefinitionsByWriting(writing)
 
             flowFromRemote.combine(flowFromLocal) { networkResult, localDefinitions ->
                 Pair(networkResult, localDefinitions)
