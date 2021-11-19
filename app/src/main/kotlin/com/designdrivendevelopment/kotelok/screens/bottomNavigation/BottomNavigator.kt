@@ -1,7 +1,6 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.bottomNavigation
 
 import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import java.util.LinkedList
@@ -84,12 +83,4 @@ class BottomNavigator(
     companion object {
         const val OPERATION_OPEN_NEW_TAB = "OPERATION_OPEN_NEW_TAB"
     }
-}
-
-data class Tab(
-    val name: String,
-    private val hostFragmentInstantiation: () -> Fragment
-) {
-    val hostFragment: Fragment by lazy { hostFragmentInstantiation.invoke() }
-    val tag = "OPEN_" + name.uppercase()
 }

@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotelok">
         <activity
-            android:name=".MainActivity"
+            android:name=".screens.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>

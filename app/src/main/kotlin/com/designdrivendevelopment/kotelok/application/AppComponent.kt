@@ -1,7 +1,6 @@
 package com.designdrivendevelopment.kotelok.application
 
 import android.content.Context
-import com.designdrivendevelopment.kotelok.BottomNavigator
 import com.designdrivendevelopment.kotelok.CardsLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.DictWordDefinitionRepositoryImpl
 import com.designdrivendevelopment.kotelok.DictionariesFragment
@@ -12,9 +11,10 @@ import com.designdrivendevelopment.kotelok.ProfileFragment
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.RecognizeFragment
 import com.designdrivendevelopment.kotelok.StatisticsRepositoryImpl
-import com.designdrivendevelopment.kotelok.Tab
 import com.designdrivendevelopment.kotelok.WriterLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.persistence.database.KotelokDatabase
+import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
+import com.designdrivendevelopment.kotelok.screens.bottomNavigation.Tab
 import com.designdrivendevelopment.kotelok.yandexDictApi.RetrofitModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,11 +1,14 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.designdrivendevelopment.kotelok.FragmentResult
+import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
+import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
