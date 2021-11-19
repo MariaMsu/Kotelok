@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="headlineColor" format="reference|color" />
+    <attr name="titleColor" format="reference|color" />
+    <attr name="subheadingColor" format="reference|color" />
+</resources>
