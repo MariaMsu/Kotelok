@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen
+package com.designdrivendevelopment.kotelok.screens.screensUtils
 
 data class UiEvent<out T : Any?>(
     val message: String,

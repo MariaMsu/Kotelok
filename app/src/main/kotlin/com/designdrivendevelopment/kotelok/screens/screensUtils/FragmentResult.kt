@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.screensUtils
 
 object FragmentResult {
     object DictionariesTab {

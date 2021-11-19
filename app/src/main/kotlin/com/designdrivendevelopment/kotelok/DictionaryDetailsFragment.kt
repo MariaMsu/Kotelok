@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Locale
 

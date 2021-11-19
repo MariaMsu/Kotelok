@@ -11,6 +11,7 @@ import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
+import com.designdrivendevelopment.kotelok.screens.screensUtils.UiEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
