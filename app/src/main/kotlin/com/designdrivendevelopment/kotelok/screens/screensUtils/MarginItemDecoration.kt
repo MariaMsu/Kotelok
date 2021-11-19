@@ -9,7 +9,8 @@ import kotlin.math.roundToInt
 
 class MarginItemDecoration(
     private val marginVertical: Int,
-    private val marginHorizontal: Int
+    private val marginHorizontal: Int,
+    private val marginBottomInPx: Int = dpToPx(marginVertical).roundToInt()
 ) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
@@ -21,9 +22,14 @@ class MarginItemDecoration(
             if (parent.getChildAdapterPosition(view) == 0) {
                 top = dpToPx(marginVertical).roundToInt()
             }
+            val lastPos = parent.adapter?.itemCount?.minus(1)
             left = dpToPx(marginHorizontal).roundToInt()
             right = dpToPx(marginHorizontal).roundToInt()
-            bottom = dpToPx(marginVertical).roundToInt()
+            bottom = if (parent.getChildAdapterPosition(view) == lastPos) {
+                marginBottomInPx
+            } else {
+                dpToPx(marginVertical).roundToInt()
+            }
         }
     }
 }
