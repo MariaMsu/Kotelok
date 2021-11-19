@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes
+package com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes
 
 object ItemViewTypes {
     const val ITEM_WORD_DEFINITION = 1

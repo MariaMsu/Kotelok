@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes
+package com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes
 
 class CategoryHeaderItem(val header: String) : ItemWithType {
     override val viewType: Int

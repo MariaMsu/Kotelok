@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen
+package com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,11 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.DefinitionsRequestResult
 import com.designdrivendevelopment.kotelok.EditWordDefinitionsRepository
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
-import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ButtonItem
-import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
-import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemWithType
-import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
 import com.designdrivendevelopment.kotelok.screens.screensUtils.UiEvent
+import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.ButtonItem
+import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
+import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.ItemWithType
+import com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine

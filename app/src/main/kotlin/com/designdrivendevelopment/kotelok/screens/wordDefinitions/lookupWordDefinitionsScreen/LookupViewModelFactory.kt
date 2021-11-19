@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen
+package com.designdrivendevelopment.kotelok.screens.wordDefinitions.lookupWordDefinitionsScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
