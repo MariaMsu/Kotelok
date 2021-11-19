@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.repositoryImplementations.statisticsRepository
+package com.designdrivendevelopment.kotelok.repositoryImplementations.getStatisticsRepository
 
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.TotalStat
@@ -7,13 +7,13 @@ import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQuer
 import com.designdrivendevelopment.kotelok.repositoryImplementations.toDictionaryStat
 import com.designdrivendevelopment.kotelok.repositoryImplementations.toTotalDictionaryStat
 import com.designdrivendevelopment.kotelok.repositoryImplementations.toWordDefinitionStat
-import com.designdrivendevelopment.kotelok.screens.StatisticsRepository
+import com.designdrivendevelopment.kotelok.screens.profile.GetStatisticsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class StatisticsRepositoryImpl(
+class GetStatisticsRepositoryImpl(
     private val statisticsDao: StatisticsDao
-) : StatisticsRepository {
+) : GetStatisticsRepository {
     private var dictStatQueryResultCache = emptyList<DictStatQueryResult>()
 
     override suspend fun getStatisticsForAllDict(): TotalStat = withContext(Dispatchers.IO) {
@@ -45,22 +45,5 @@ class StatisticsRepositoryImpl(
             dictStatQueryResultCache.first { it.id == dictionaryId }
                 .toTotalDictionaryStat(wordDefinitionsStats)
         }
-    }
-
-    override suspend fun addSuccessfulResultToWordDef(
-        wordDefinitionsId: Long
-    ) = withContext(Dispatchers.IO) {
-        statisticsDao.updateWordDefinitionStat(wordDefinitionsId, SUCCESS)
-    }
-
-    override suspend fun addFailedResultToWordDef(
-        wordDefinitionsId: Long
-    ) = withContext(Dispatchers.IO) {
-        statisticsDao.updateWordDefinitionStat(wordDefinitionsId, FAILURE)
-    }
-
-    companion object {
-        private const val SUCCESS = 1
-        private const val FAILURE = 0
     }
 }

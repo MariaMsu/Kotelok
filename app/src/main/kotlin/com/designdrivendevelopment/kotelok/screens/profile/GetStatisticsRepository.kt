@@ -1,14 +1,10 @@
-package com.designdrivendevelopment.kotelok.screens
+package com.designdrivendevelopment.kotelok.screens.profile
 
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.TotalStat
 
-interface StatisticsRepository {
+interface GetStatisticsRepository {
     suspend fun getStatisticsForAllDict(): TotalStat
 
     suspend fun getStatisticsForDictionary(dictionaryId: Long): TotalDictionaryStat
-
-    suspend fun addSuccessfulResultToWordDef(wordDefinitionsId: Long)
-
-    suspend fun addFailedResultToWordDef(wordDefinitionsId: Long)
 }

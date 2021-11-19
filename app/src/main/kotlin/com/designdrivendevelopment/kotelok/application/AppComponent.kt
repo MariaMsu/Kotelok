@@ -6,10 +6,10 @@ import com.designdrivendevelopment.kotelok.persistence.database.KotelokDatabase
 import com.designdrivendevelopment.kotelok.repositoryImplementations.dictionariesRepository.DictionariesRepositoryImpl
 import com.designdrivendevelopment.kotelok.repositoryImplementations.dictionaryWordDefinitionsRepository.DictWordDefinitionRepositoryImpl
 import com.designdrivendevelopment.kotelok.repositoryImplementations.editWordDefnititionsRepository.EditWordDefRepositoryImpl
+import com.designdrivendevelopment.kotelok.repositoryImplementations.getStatisticsRepository.GetStatisticsRepositoryImpl
 import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.CardsLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.PairsLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.WriterLearnableDefinitionsRepository
-import com.designdrivendevelopment.kotelok.repositoryImplementations.statisticsRepository.StatisticsRepositoryImpl
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.Tab
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.DictionariesFragment
@@ -51,7 +51,7 @@ class AppComponent(applicationContext: Context) {
     val pairsLearnDefRepository by lazy {
         PairsLearnableDefinitionsRepository(db.pairsLearnableDefDao)
     }
-    val statisticsRepository by lazy { StatisticsRepositoryImpl(db.statisticsDao) }
+    val statisticsRepository by lazy { GetStatisticsRepositoryImpl(db.statisticsDao) }
     val editWordDefinitionsRepository by lazy {
         EditWordDefRepositoryImpl(
             yandexDictApiService = yandexDictionaryApiService,
