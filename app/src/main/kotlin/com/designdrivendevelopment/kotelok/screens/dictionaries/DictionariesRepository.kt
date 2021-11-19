@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.dictionaries
 
 import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition

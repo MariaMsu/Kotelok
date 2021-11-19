@@ -2,6 +2,7 @@ package com.designdrivendevelopment.kotelok
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionaryWordDefinitionsRepository
 
 class DictDetailsViewModelFactory(
     private val dictionaryId: Long,
