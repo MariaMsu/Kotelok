@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.designdrivendevelopment.kotelok.KotelokApplication
 import com.designdrivendevelopment.kotelok.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.R
+import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 
 class LookupWordDefinitionsFragment : Fragment() {
