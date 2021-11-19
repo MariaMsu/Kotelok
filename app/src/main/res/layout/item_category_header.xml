@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:elevation="24dp"
     android:background="@drawable/category_header_background" >
 
     <TextView
@@ -11,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="6dp"
-        android:paddingHorizontal="36dp"
+        android:paddingHorizontal="16dp"
         android:gravity="center"
         android:textSize="@dimen/title_size"
         android:textAllCaps="true"
