@@ -7,7 +7,6 @@ import com.designdrivendevelopment.kotelok.DictionariesRepositoryImpl
 import com.designdrivendevelopment.kotelok.EditWordDefRepositoryImpl
 import com.designdrivendevelopment.kotelok.PairsLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.R
-import com.designdrivendevelopment.kotelok.RecognizeFragment
 import com.designdrivendevelopment.kotelok.StatisticsRepositoryImpl
 import com.designdrivendevelopment.kotelok.WriterLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.persistence.database.KotelokDatabase
@@ -15,6 +14,7 @@ import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNaviga
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.Tab
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.DictionariesFragment
 import com.designdrivendevelopment.kotelok.screens.profile.ProfileFragment
+import com.designdrivendevelopment.kotelok.screens.recognize.RecognizeFragment
 import com.designdrivendevelopment.kotelok.yandexDictApi.RetrofitModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
