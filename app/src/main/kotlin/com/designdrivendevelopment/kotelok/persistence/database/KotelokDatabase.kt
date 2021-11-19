@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.designdrivendevelopment.kotelok.persistence.converters.DateConverter
 import com.designdrivendevelopment.kotelok.persistence.daos.CardsLearnableDefDao
@@ -22,7 +23,6 @@ import com.designdrivendevelopment.kotelok.persistence.prepopulating.AssetsRepos
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
-import com.designdrivendevelopment.kotelok.persistence.roomEntities.PartOfSpeechEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.WordDefinitionEntity
@@ -38,13 +38,12 @@ import kotlinx.coroutines.launch
     entities = [
         DictionaryEntity::class,
         ExampleEntity::class,
-        PartOfSpeechEntity::class,
         SynonymEntity::class,
         TranslationEntity::class,
         WordDefinitionEntity::class,
         DictionaryWordDefCrossRef::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(DateConverter::class)
 abstract class KotelokDatabase : RoomDatabase() {
@@ -70,11 +69,18 @@ abstract class KotelokDatabase : RoomDatabase() {
             )
                 .fallbackToDestructiveMigration()
                 .addCallback(PrepopulateCallback(applicationContext, coroutineScope))
+                .addMigrations(Migration1To2())
                 .build()
 
             database = instance
             Log.d("DATABASE", "database exists is ${database != null}")
             return instance
+        }
+
+        private class Migration1To2 : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE parts_of_speech")
+            }
         }
 
         private class PrepopulateCallback(
