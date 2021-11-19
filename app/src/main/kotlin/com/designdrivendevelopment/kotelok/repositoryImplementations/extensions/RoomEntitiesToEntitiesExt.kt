@@ -17,6 +17,6 @@ fun DictionaryEntity.toDictionary(size: Int): Dictionary {
 fun ExampleEntity.toExampleOfDefinitionUse(): ExampleOfDefinitionUse {
     return ExampleOfDefinitionUse(
         originalText = this.original,
-        translatedText = this.translation.orEmpty()
+        translatedText = this.translation
     )
 }

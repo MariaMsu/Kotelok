@@ -25,7 +25,7 @@ fun TranslationResponse.toWordDefinition(
         examples = examples?.map { exampleResponse ->
             ExampleOfDefinitionUse(
                 originalText = exampleResponse.original,
-                translatedText = exampleResponse.translations?.first()?.translation.orEmpty()
+                translatedText = exampleResponse.translations?.first()?.translation
             )
         }.orEmpty()
     )

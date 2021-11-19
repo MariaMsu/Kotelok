@@ -57,6 +57,6 @@ fun ExampleOfDefinitionUse.toExampleEntity(wordDefId: Long): ExampleEntity {
     return ExampleEntity(
         wordDefinitionId = wordDefId,
         original = originalText,
-        translation = if (translatedText.isEmpty()) null else translatedText
+        translation = translatedText
     )
 }
