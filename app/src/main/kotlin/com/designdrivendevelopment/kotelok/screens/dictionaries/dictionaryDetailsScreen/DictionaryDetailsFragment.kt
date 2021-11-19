@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -129,10 +130,12 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         adapter: WordDefinitionsAdapter,
         position: Int
     ) {
+        val displayHeight = getDisplayHeight(context)
         val layoutManager = createLayoutManager(context)
         val marginItemDecoration = MarginItemDecoration(
             marginVertical = 10,
-            marginHorizontal = 12
+            marginHorizontal = 12,
+            marginBottomInPx = displayHeight / DISPLAY_PARTS_NUMBER
         )
         wordDefinitionsList?.adapter = adapter
         wordDefinitionsList?.layoutManager = layoutManager
@@ -194,6 +197,15 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         wordDefinitionsList?.addOnScrollListener(onScrollListener)
     }
 
+    private fun getDisplayHeight(context: Context): Int {
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        return if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
+            windowManager.defaultDisplay.height
+        } else {
+            windowManager.currentWindowMetrics.bounds.height()
+        }
+    }
+
     private fun initViews(view: View) {
         addFab = view.findViewById(R.id.open_lookup_fragment_btn)
         wordDefinitionsList = view.findViewById(R.id.word_definitions_list)
@@ -205,6 +217,7 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
     }
 
     companion object {
+        private const val DISPLAY_PARTS_NUMBER = 4
         private const val STANDARD_SPEECH_RATE = 0.7f
         private const val SCROLL_START_POSITION = 0
         private const val NOT_EXIST_DICT_ID = 0L
