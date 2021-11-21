@@ -19,6 +19,7 @@ import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
+import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 
 @Suppress("TooManyFunctions")
@@ -26,6 +27,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     private var enterWritingText: EditText? = null
     private var lookupButton: Button? = null
     private var resultList: RecyclerView? = null
+    private var scrollPosition = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +45,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
+        scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
 
         val context = requireContext()
         val adapter = createAdapter(context, emptyList())
@@ -55,6 +58,11 @@ class LookupWordDefinitionsFragment : Fragment() {
         setupListeners(lookupViewModel)
 
         enterWritingText?.focusAndShowKeyboard()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(SCROLL_POS_KEY, scrollPosition)
     }
 
     override fun onDestroyView() {
@@ -115,6 +123,17 @@ class LookupWordDefinitionsFragment : Fragment() {
             lookupViewModel.lookupByWriting(writing)
             button.hideKeyboard()
         }
+        val onScrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE -> {
+                        scrollPosition = recyclerView.getScrollPosition<LinearLayoutManager>()
+                    }
+                }
+            }
+        }
+        resultList?.addOnScrollListener(onScrollListener)
     }
 
     private fun sendMessage(context: Context, message: String) {
@@ -155,6 +174,8 @@ class LookupWordDefinitionsFragment : Fragment() {
     }
 
     companion object {
+        private const val SCROLL_START_POSITION = 0
+        private const val SCROLL_POS_KEY = "position"
         private const val DISPLAY_PARTS_NUMBER = 4
 
         @JvmStatic
