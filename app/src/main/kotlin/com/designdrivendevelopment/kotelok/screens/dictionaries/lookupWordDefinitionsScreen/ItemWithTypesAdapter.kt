@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
-import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ButtonItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
@@ -67,14 +66,6 @@ class ItemWithTypesAdapter(
         }
     }
 
-    private inner class ButtonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val buttonText: TextView = view.findViewById(R.id.add_definition_button)
-
-        fun bind(button: ButtonItem) {
-            buttonText.text = button.buttonText
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
         return when (viewType) {
@@ -96,15 +87,6 @@ class ItemWithTypesAdapter(
                     )
                 )
             }
-            ItemViewTypes.ITEM_BUTTON -> {
-                ButtonViewHolder(
-                    inflater.inflate(
-                        R.layout.add_word_def_button,
-                        parent,
-                        false
-                    )
-                )
-            }
             else -> throw IllegalArgumentException("Unexpected View type")
         }
     }
@@ -117,9 +99,6 @@ class ItemWithTypesAdapter(
             }
             ItemViewTypes.ITEM_CATEGORY_HEADER -> {
                 (holder as CategoryHeaderViewHolder).bind((item as CategoryHeaderItem))
-            }
-            ItemViewTypes.ITEM_BUTTON -> {
-                (holder as ButtonViewHolder).bind((item as ButtonItem))
             }
             else -> throw IllegalArgumentException("Unexpected View type")
         }

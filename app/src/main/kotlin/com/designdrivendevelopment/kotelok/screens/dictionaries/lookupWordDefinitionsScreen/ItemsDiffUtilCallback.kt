@@ -1,7 +1,6 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen
 
 import androidx.recyclerview.widget.DiffUtil
-import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ButtonItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
@@ -37,11 +36,7 @@ class ItemsDiffUtilCallback(
                     val newHeader = (newList[newItemPosition] as CategoryHeaderItem).header
                     oldHeader == newHeader
                 }
-                ItemViewTypes.ITEM_BUTTON -> {
-                    val oldText = (oldList[oldItemPosition] as ButtonItem).buttonText
-                    val newText = (newList[newItemPosition] as ButtonItem).buttonText
-                    oldText == newText
-                } else -> false
+                else -> false
             }
         } else {
             return false

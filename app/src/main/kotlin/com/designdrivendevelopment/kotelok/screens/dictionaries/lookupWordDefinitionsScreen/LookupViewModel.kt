@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.repositoryImplementations.lookupWordDefinitionRepository.DefinitionsRequestResult
-import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ButtonItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
@@ -80,9 +79,7 @@ class LookupViewModel(
         localDefinitions: List<WordDefinition>,
         remoteDefinitions: List<WordDefinition>
     ): List<ItemWithType> {
-        val items = mutableListOf<ItemWithType>(
-            ButtonItem(buttonText = "Добавить собственное определение")
-        )
+        val items = mutableListOf<ItemWithType>()
         if (remoteDefinitions.isNotEmpty()) {
             items.add(CategoryHeaderItem(header = "Загруженные определения"))
             items.addAll(remoteDefinitions.map { WordDefinitionItem(it) })
