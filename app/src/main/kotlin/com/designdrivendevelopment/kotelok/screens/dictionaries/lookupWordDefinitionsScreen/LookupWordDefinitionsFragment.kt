@@ -3,6 +3,8 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefin
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -45,6 +47,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
+        setHasOptionsMenu(true)
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
 
         val context = requireContext()
@@ -68,6 +71,11 @@ class LookupWordDefinitionsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
     }
 
     private fun createAdapter(
