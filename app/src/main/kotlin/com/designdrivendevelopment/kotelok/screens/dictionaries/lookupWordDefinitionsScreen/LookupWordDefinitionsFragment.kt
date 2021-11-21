@@ -18,6 +18,7 @@ import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
 
 @Suppress("TooManyFunctions")
 class LookupWordDefinitionsFragment : Fragment() {
@@ -58,6 +59,7 @@ class LookupWordDefinitionsFragment : Fragment() {
                 resultList?.visibility = View.VISIBLE
             }
         }
+        enterWritingText?.focusAndShowKeyboard()
     }
 
     override fun onDestroyView() {
