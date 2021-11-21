@@ -155,6 +155,8 @@ class LookupWordDefinitionsFragment : Fragment() {
         adapter.items = newItems
     }
 
+    // Данный API (getDefaultDisplay) устарел начиная с ANDROID R, до него он является актуальным
+    @Suppress("DEPRECATION")
     private fun getDisplayHeight(context: Context): Int {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         return if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
