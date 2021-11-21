@@ -4,10 +4,16 @@ import android.content.Context
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 fun View.hideKeyboard() {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(windowToken, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+}
+
+inline fun <reified T : LinearLayoutManager> RecyclerView.getScrollPosition(): Int {
+    return (layoutManager as T).findFirstVisibleItemPosition()
 }
 
 // Спасибо Square
@@ -43,6 +49,7 @@ fun View.focusAndShowKeyboard() {
                         viewTreeObserver.removeOnWindowFocusChangeListener(this)
                     }
                 }
-            })
+            }
+        )
     }
 }
