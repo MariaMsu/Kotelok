@@ -130,6 +130,9 @@ class LookupWordDefinitionsFragment : Fragment() {
                     RecyclerView.SCROLL_STATE_IDLE -> {
                         scrollPosition = recyclerView.getScrollPosition<LinearLayoutManager>()
                     }
+                    RecyclerView.SCROLL_STATE_DRAGGING -> {
+                        recyclerView.hideKeyboard()
+                    }
                 }
             }
         }
