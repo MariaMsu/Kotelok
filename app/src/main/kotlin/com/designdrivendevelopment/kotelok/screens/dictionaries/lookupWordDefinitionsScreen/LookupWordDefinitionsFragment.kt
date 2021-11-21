@@ -19,6 +19,7 @@ import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
+import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 
 @Suppress("TooManyFunctions")
 class LookupWordDefinitionsFragment : Fragment() {
@@ -51,14 +52,8 @@ class LookupWordDefinitionsFragment : Fragment() {
         )
         val lookupViewModel = setupFragmentViewModel(context, this, factory, adapter)
         setupWordDefinitionsList(resultList, context, adapter)
+        setupListeners(lookupViewModel)
 
-        lookupButton?.setOnClickListener {
-            val writing = enterWritingText?.text?.toString() ?: throw NullPointerException()
-            lookupViewModel.lookupByWriting(writing)
-            if (resultList?.visibility != View.VISIBLE) {
-                resultList?.visibility = View.VISIBLE
-            }
-        }
         enterWritingText?.focusAndShowKeyboard()
     }
 
@@ -111,6 +106,17 @@ class LookupWordDefinitionsFragment : Fragment() {
                     notifyToEventIsHandled(event)
                 }
             }
+        }
+    }
+
+    private fun setupListeners(lookupViewModel: LookupViewModel) {
+        lookupButton?.setOnClickListener { button ->
+            val writing = enterWritingText?.text?.toString() ?: throw NullPointerException()
+            lookupViewModel.lookupByWriting(writing)
+            if (resultList?.visibility != View.VISIBLE) {
+                resultList?.visibility = View.VISIBLE
+            }
+            button.hideKeyboard()
         }
     }
 
