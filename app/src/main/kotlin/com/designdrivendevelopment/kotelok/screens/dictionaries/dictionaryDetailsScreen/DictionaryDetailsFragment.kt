@@ -22,6 +22,7 @@ import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Locale
 
@@ -188,9 +189,14 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    scrollPosition = (recyclerView.layoutManager as LinearLayoutManager)
-                        .findFirstVisibleItemPosition()
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE -> {
+                        scrollPosition = (recyclerView.layoutManager as LinearLayoutManager)
+                            .findFirstVisibleItemPosition()
+                    }
+                    RecyclerView.SCROLL_STATE_DRAGGING -> {
+                        recyclerView.hideKeyboard()
+                    }
                 }
             }
         }
