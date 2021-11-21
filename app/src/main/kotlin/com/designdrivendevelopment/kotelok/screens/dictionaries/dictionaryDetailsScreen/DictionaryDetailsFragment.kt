@@ -22,6 +22,7 @@ import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Locale
@@ -191,8 +192,7 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
                 super.onScrollStateChanged(recyclerView, newState)
                 when (newState) {
                     RecyclerView.SCROLL_STATE_IDLE -> {
-                        scrollPosition = (recyclerView.layoutManager as LinearLayoutManager)
-                            .findFirstVisibleItemPosition()
+                        scrollPosition = recyclerView.getScrollPosition<LinearLayoutManager>()
                     }
                     RecyclerView.SCROLL_STATE_DRAGGING -> {
                         recyclerView.hideKeyboard()
