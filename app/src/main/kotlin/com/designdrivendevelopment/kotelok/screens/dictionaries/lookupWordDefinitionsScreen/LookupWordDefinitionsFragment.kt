@@ -113,9 +113,6 @@ class LookupWordDefinitionsFragment : Fragment() {
         lookupButton?.setOnClickListener { button ->
             val writing = enterWritingText?.text?.toString() ?: throw NullPointerException()
             lookupViewModel.lookupByWriting(writing)
-            if (resultList?.visibility != View.VISIBLE) {
-                resultList?.visibility = View.VISIBLE
-            }
             button.hideKeyboard()
         }
     }
