@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
@@ -23,6 +22,7 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecora
 import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
+import com.google.android.material.snackbar.Snackbar
 
 @Suppress("TooManyFunctions")
 class LookupWordDefinitionsFragment : Fragment() {
@@ -56,7 +56,13 @@ class LookupWordDefinitionsFragment : Fragment() {
             (requireActivity().application as KotelokApplication)
                 .appComponent.lookupWordDefRepository
         )
-        val lookupViewModel = setupFragmentViewModel(context, this, factory, adapter)
+
+        val lookupViewModel = setupFragmentViewModel(
+            rootView = view,
+            fragment = this,
+            factory = factory,
+            adapter = adapter
+        )
         setupWordDefinitionsList(resultList, context, adapter)
         setupListeners(lookupViewModel)
 
@@ -107,7 +113,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     }
 
     private fun setupFragmentViewModel(
-        context: Context,
+        rootView: View,
         fragment: Fragment,
         factory: LookupViewModelFactory,
         adapter: ItemWithTypesAdapter
@@ -118,7 +124,7 @@ class LookupWordDefinitionsFragment : Fragment() {
             }
             events.observe(fragment) { event ->
                 if (!event.isHandled) {
-                    sendMessage(context, event.message)
+                    sendMessage(rootView, event.message)
                     notifyToEventIsHandled(event)
                 }
             }
@@ -147,8 +153,8 @@ class LookupWordDefinitionsFragment : Fragment() {
         resultList?.addOnScrollListener(onScrollListener)
     }
 
-    private fun sendMessage(context: Context, message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    private fun sendMessage(rootView: View, message: String) {
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun onItemsListChanged(
