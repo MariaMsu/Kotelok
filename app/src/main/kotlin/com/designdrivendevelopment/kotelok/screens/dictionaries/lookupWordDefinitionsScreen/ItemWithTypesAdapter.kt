@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
+import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.stringKey
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
@@ -16,7 +19,7 @@ class ItemWithTypesAdapter(
     private val context: Context,
     var items: List<ItemWithType>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private inner class WordDefinitionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class WordDefinitionViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         private val writingText: TextView = view.findViewById(R.id.writing_text)
         private val translationText: TextView = view.findViewById(R.id.translation_text)
         private val originalExampleText: TextView = view.findViewById(R.id.original_example_text)
@@ -56,10 +59,34 @@ class ItemWithTypesAdapter(
                 translationExampleText.visibility = View.GONE
             }
         }
+
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> {
+            return object : ItemDetailsLookup.ItemDetails<String>() {
+                override fun getPosition(): Int {
+                    return adapterPosition
+                }
+
+                override fun getSelectionKey(): String {
+                    return items[adapterPosition].stringKey
+                }
+            }
+        }
     }
 
-    private inner class CategoryHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val categoryHeaderText: TextView = view.findViewById(R.id.category_header_text)
+    inner class CategoryHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val categoryHeaderText: TextView = view.findViewById(R.id.category_header_text)
+
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> {
+            return object : ItemDetailsLookup.ItemDetails<String>() {
+                override fun getPosition(): Int {
+                    return adapterPosition
+                }
+
+                override fun getSelectionKey(): String {
+                    return items[adapterPosition].stringKey
+                }
+            }
+        }
 
         fun bind(categoryHeader: CategoryHeaderItem) {
             categoryHeaderText.text = categoryHeader.header
