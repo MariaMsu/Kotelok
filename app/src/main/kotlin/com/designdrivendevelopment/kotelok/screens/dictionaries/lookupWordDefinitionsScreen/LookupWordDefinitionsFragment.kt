@@ -80,6 +80,14 @@ class LookupWordDefinitionsFragment : Fragment() {
         ).build()
         tracker?.onRestoreInstanceState(savedInstanceState)
 
+        tracker?.addObserver(
+            object : SelectionTracker.SelectionObserver<String>() {
+                override fun onItemStateChanged(key: String, selected: Boolean) {
+                    lookupViewModel.onItemSelectionChanged(key, selected)
+                }
+            }
+        )
+
         enterWritingText?.focusAndShowKeyboard()
     }
 

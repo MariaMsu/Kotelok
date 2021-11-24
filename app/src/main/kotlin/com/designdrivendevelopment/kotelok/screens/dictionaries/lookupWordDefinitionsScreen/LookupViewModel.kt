@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.repositoryImplementations.lookupWordDefinitionRepository.DefinitionsRequestResult
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.stringKey
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
@@ -20,6 +21,7 @@ class LookupViewModel(
 ) : ViewModel() {
     private val _foundDefinitions = MutableLiveData<List<ItemWithType>>(emptyList())
     private val _events = MutableLiveData<UiEvent<Any?>>()
+    private var currentItems: List<ItemWithType> = emptyList()
     val foundDefinitions: LiveData<List<ItemWithType>> = _foundDefinitions
     val events: LiveData<UiEvent<Any?>> = _events
 
@@ -66,6 +68,7 @@ class LookupViewModel(
                         createItemsList(localDefinitions, remoteDefinitions)
                     }
                 }
+                currentItems = items
                 _foundDefinitions.postValue(items)
             }
         }
@@ -73,6 +76,17 @@ class LookupViewModel(
 
     fun notifyToEventIsHandled(event: UiEvent<*>) {
         _events.value = event.copy(isHandled = true)
+    }
+
+    fun onItemSelectionChanged(itemKey: String, selected: Boolean) {
+        currentItems = currentItems.map { item ->
+            if (item.stringKey == itemKey && item is WordDefinitionItem) {
+                item.apply { isSelected = selected }
+            } else {
+                item
+            }
+        }
+        _foundDefinitions.postValue(currentItems)
     }
 
     private fun createItemsList(
