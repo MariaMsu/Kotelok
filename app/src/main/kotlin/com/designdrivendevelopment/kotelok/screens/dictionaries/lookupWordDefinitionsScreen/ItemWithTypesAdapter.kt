@@ -131,6 +131,11 @@ class ItemWithTypesAdapter(
         }
     }
 
+//    Под сомнением
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     override fun getItemCount(): Int {
         return items.size
     }
