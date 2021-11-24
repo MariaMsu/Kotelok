@@ -27,9 +27,9 @@ class ItemsDiffUtilCallback(
             val viewType = newList[newItemPosition].viewType
             return when (viewType) {
                 ItemViewTypes.ITEM_WORD_DEFINITION -> {
-                    val oldDefinition = (oldList[oldItemPosition] as WordDefinitionItem).data
-                    val newDefinition = (newList[newItemPosition] as WordDefinitionItem).data
-                    oldDefinition == newDefinition
+                    val oldDefinitionItem = (oldList[oldItemPosition] as WordDefinitionItem)
+                    val newDefinitionItem = (newList[newItemPosition] as WordDefinitionItem)
+                    oldDefinitionItem == newDefinitionItem
                 }
                 ItemViewTypes.ITEM_CATEGORY_HEADER -> {
                     val oldHeader = (oldList[oldItemPosition] as CategoryHeaderItem).header
