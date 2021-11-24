@@ -12,11 +12,15 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.DefinitionsKeyProvider
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.ItemWithTypeDetailsLookup
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
@@ -30,6 +34,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     private var lookupButton: Button? = null
     private var resultList: RecyclerView? = null
     private var scrollPosition = 0
+    private var tracker: SelectionTracker<String>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,16 +71,27 @@ class LookupWordDefinitionsFragment : Fragment() {
         setupWordDefinitionsList(resultList, context, adapter)
         setupListeners(lookupViewModel)
 
+        tracker = SelectionTracker.Builder(
+            DEFINITIONS_SELECTION_ID,
+            resultList!!,
+            DefinitionsKeyProvider(adapter),
+            ItemWithTypeDetailsLookup(resultList!!),
+            StorageStrategy.createStringStorage()
+        ).build()
+        tracker?.onRestoreInstanceState(savedInstanceState)
+
         enterWritingText?.focusAndShowKeyboard()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(SCROLL_POS_KEY, scrollPosition)
+        tracker?.onSaveInstanceState(outState)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        tracker = null
         clearViews()
     }
 
@@ -88,7 +104,7 @@ class LookupWordDefinitionsFragment : Fragment() {
         context: Context,
         items: List<ItemWithType>
     ): ItemWithTypesAdapter {
-        return ItemWithTypesAdapter(context, items)
+        return ItemWithTypesAdapter(context, items).apply { setHasStableIds(true) }
     }
 
     private fun createLayoutManager(context: Context): LinearLayoutManager {
@@ -193,6 +209,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     }
 
     companion object {
+        private const val DEFINITIONS_SELECTION_ID = "definitions_selection"
         private const val SCROLL_START_POSITION = 0
         private const val SCROLL_POS_KEY = "position"
         private const val DISPLAY_PARTS_NUMBER = 4
