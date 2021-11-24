@@ -6,7 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="12dp"
-    android:background="@drawable/shape_word_def_background" >
+    android:clickable="true"
+    android:foreground="@drawable/ripple_for_item_shape"
+    android:background="@drawable/shape_word_def_background"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_border"
