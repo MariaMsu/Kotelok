@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 class TrainFlashcardsFragment : Fragment() {
-    var viewModel: TrainFlashcardsViewModel? = null
+    lateinit var viewModel: TrainFlashcardsViewModel
 
     private var yesButton: ImageButton? = null
     private var noButton: ImageButton? = null
@@ -21,54 +21,48 @@ class TrainFlashcardsFragment : Fragment() {
     private var textCompleted: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewModel?.currentWord?.observe(
-            viewLifecycleOwner,
-            Observer {
-                newWord ->
-                updateFlashcard()
-            }
-        )
-        viewModel?.state?.observe(
-            viewLifecycleOwner,
-            Observer {
-                newState ->
-                if (viewModel?.state?.value != State.NOT_GUESSED) {
-                    updateButtonVisibility(true)
-                } else {
-                    updateButtonVisibility(false)
-                }
-            }
-        )
-        return inflater.inflate(R.layout.fragment_train_flashcards, container, false)
-    }
+        val binding = inflater.inflate(R.layout.fragment_train_flashcards, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        word = binding.findViewById(R.id.Word)
+        textCompleted = binding.findViewById(R.id.textCompleted)
+        flashcardButton = binding.findViewById(R.id.FlashcardButton)
+        flashcardButton?.setOnClickListener(listener)
+        yesButton = binding.findViewById(R.id.YesButton)
+        yesButton?.setOnClickListener(listener)
+        noButton = binding.findViewById(R.id.NoButton)
+        noButton?.setOnClickListener(listener)
+
         val dictionaryId = arguments?.getLong("id") ?: 1
-
         val factory = TrainFlashcardsViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)
                 .appComponent.cardsLearnDefRepository
         )
         viewModel = ViewModelProvider(this, factory).get(TrainFlashcardsViewModel::class.java)
-
-        word = view.findViewById(R.id.Word)
-        textCompleted = view.findViewById(R.id.textCompleted)
-        flashcardButton = view.findViewById(R.id.FlashcardButton)
-        flashcardButton?.setOnClickListener(listener)
-        yesButton = view.findViewById(R.id.YesButton)
-        yesButton?.setOnClickListener(listener)
-        noButton = view.findViewById(R.id.NoButton)
-        noButton?.setOnClickListener(listener)
-
-        // UpdateFlashcard()
+        viewModel.viewState.observe(
+            viewLifecycleOwner,
+            {
+            updateFlashcard()
+            if (viewModel.viewState.value != State.NOT_GUESSED) {
+                    updateButtonVisibility(true)
+                } else {
+                    updateButtonVisibility(false)
+                }
+            }
+        )
+        viewModel.currentWord.observe(
+            viewLifecycleOwner,
+            {
+                updateFlashcard()
+            }
+        )
+        return binding
     }
 
     private val listener = View.OnClickListener { view ->
         when (view.id) {
             R.id.FlashcardButton -> {
-                pressFlashcard()
+                viewModel.onCardPressed(viewModel.viewState.value!!)
             }
             R.id.YesButton -> {
                 pressGuessButton(true)
@@ -86,34 +80,18 @@ class TrainFlashcardsFragment : Fragment() {
         noButton?.isClickable = isActive
     }
 
-    private fun pressFlashcard() {
-        viewModel?.state?.value = when (viewModel?.state?.value) {
-            State.NOT_GUESSED -> State.GUESSED_TRANSLATION
-            State.GUESSED_TRANSLATION -> State.GUESSED_WORD
-            State.GUESSED_WORD -> State.GUESSED_TRANSLATION
-            else -> State.NOT_GUESSED
-        }
-        // if (viewModel?.state?.value != State.NOT_GUESSED) {
-        //    updateButtonVisibility(true)
-        // }
-        // UpdateFlashcard()
-    }
-
     private fun updateFlashcard() {
-        word?.text = when (viewModel?.state?.value) {
-            State.NOT_GUESSED -> viewModel?.currentWord?.value?.writing
-            State.GUESSED_TRANSLATION -> viewModel?.currentWord?.value?.mainTranslation
-            State.GUESSED_WORD -> viewModel?.currentWord?.value?.writing
+        word?.text = when (viewModel.viewState.value) {
+            State.NOT_GUESSED -> viewModel.currentWord.value?.writing
+            State.GUESSED_TRANSLATION -> viewModel.currentWord.value?.mainTranslation
+            State.GUESSED_WORD -> viewModel.currentWord.value?.writing
             else -> "Error"
         }
     }
 
     private fun pressGuessButton(guess: Boolean) {
-        viewModel?.state?.value = State.NOT_GUESSED
-        // updateButtonVisibility(false)
-        viewModel?.trainerCards?.checkUserInput(guess)
-        if (!viewModel?.trainerCards?.isDone!!) {
-            viewModel?.currentWord?.value = viewModel?.trainerCards?.getNext()
+        viewModel.onGuessPressed(guess)
+        if (!viewModel.trainerCards.isDone) {
             updateFlashcard()
         } else {
             textCompleted?.isVisible = true
