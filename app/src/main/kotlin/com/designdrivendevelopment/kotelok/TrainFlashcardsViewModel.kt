@@ -18,10 +18,21 @@ class TrainFlashcardsViewModel(
     val viewState: LiveData<TrainFlashcardsFragment.State> = _viewState
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
     val currentWord: LiveData<LearnableDefinition> = _currentWord
+    private var dictId: Long = 0
 
     init {
+        dictId = dictionaryId
         viewModelScope.launch(Dispatchers.IO) {
             trainerCards.loadDictionary(dictionaryId, onlyNotLearned = true)
+            val learnableDefinition = trainerCards.getNext()
+            _currentWord.postValue(learnableDefinition)
+        }
+    }
+
+    fun restartDict() {
+        _viewState.postValue(TrainFlashcardsFragment.State.NOT_GUESSED)
+        viewModelScope.launch(Dispatchers.IO) {
+            trainerCards.loadDictionary(dictId, onlyNotLearned = true)
             val learnableDefinition = trainerCards.getNext()
             _currentWord.postValue(learnableDefinition)
         }

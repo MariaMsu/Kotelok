@@ -8,7 +8,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 class TrainFlashcardsFragment : Fragment() {
@@ -19,18 +18,21 @@ class TrainFlashcardsFragment : Fragment() {
     private var flashcardButton: ImageButton? = null
     private var word: TextView? = null
     private var textCompleted: TextView? = null
+    private var repeatDict: ImageButton? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = inflater.inflate(R.layout.fragment_train_flashcards, container, false)
 
-        word = binding.findViewById(R.id.Word)
+        word = binding.findViewById(R.id.word)
         textCompleted = binding.findViewById(R.id.textCompleted)
-        flashcardButton = binding.findViewById(R.id.FlashcardButton)
+        flashcardButton = binding.findViewById(R.id.flashcardButton)
         flashcardButton?.setOnClickListener(listener)
-        yesButton = binding.findViewById(R.id.YesButton)
+        yesButton = binding.findViewById(R.id.yesButton)
         yesButton?.setOnClickListener(listener)
-        noButton = binding.findViewById(R.id.NoButton)
+        noButton = binding.findViewById(R.id.noButton)
         noButton?.setOnClickListener(listener)
+        repeatDict = binding.findViewById(R.id.repeatDict)
+        repeatDict?.setOnClickListener(listener)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainFlashcardsViewModelFactory(
@@ -61,14 +63,18 @@ class TrainFlashcardsFragment : Fragment() {
 
     private val listener = View.OnClickListener { view ->
         when (view.id) {
-            R.id.FlashcardButton -> {
+            R.id.flashcardButton -> {
                 viewModel.onCardPressed(viewModel.viewState.value!!)
             }
-            R.id.YesButton -> {
+            R.id.yesButton -> {
                 pressGuessButton(true)
             }
-            R.id.NoButton -> {
+            R.id.noButton -> {
                 pressGuessButton(false)
+            }
+            R.id.repeatDict -> {
+                completedVisibility(false)
+                viewModel.restartDict()
             }
         }
     }
@@ -78,6 +84,13 @@ class TrainFlashcardsFragment : Fragment() {
         yesButton?.isClickable = isActive
         noButton?.isVisible = isActive
         noButton?.isClickable = isActive
+    }
+
+    private fun completedVisibility(isCompleted: Boolean){
+        textCompleted?.isVisible = isCompleted
+        flashcardButton?.isClickable = !isCompleted
+        repeatDict?.isVisible = isCompleted
+        repeatDict?.isClickable = isCompleted
     }
 
     private fun updateFlashcard() {
@@ -94,10 +107,10 @@ class TrainFlashcardsFragment : Fragment() {
         if (!viewModel.trainerCards.isDone) {
             updateFlashcard()
         } else {
-            textCompleted?.isVisible = true
-            flashcardButton?.isClickable = false
+            completedVisibility(true)
         }
     }
+
 
     enum class State {
         NOT_GUESSED, GUESSED_TRANSLATION, GUESSED_WORD
