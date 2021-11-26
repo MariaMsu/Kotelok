@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DiffUtil
@@ -27,6 +28,8 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyb
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
 class LookupWordDefinitionsFragment : Fragment() {
@@ -79,11 +82,19 @@ class LookupWordDefinitionsFragment : Fragment() {
             StorageStrategy.createStringStorage()
         ).build()
         tracker?.onRestoreInstanceState(savedInstanceState)
-
         tracker?.addObserver(
             object : SelectionTracker.SelectionObserver<String>() {
                 override fun onItemStateChanged(key: String, selected: Boolean) {
-                    lookupViewModel.onItemSelectionChanged(key, selected)
+                    if (key.contains(DefinitionsKeyProvider.HEADER_KEY_SUBSTRING)) {
+//                        Костыль, который позволяется избежать крэша из-за того,
+//                        что deselect выполнится во время touchEvent`a
+                        lifecycleScope.launch {
+                            delay(HEADER_DESELECTION_DELAY)
+                            tracker?.deselect(key)
+                        }
+                    } else {
+                        lookupViewModel.onItemSelectionChanged(key, selected)
+                    }
                 }
             }
         )
@@ -157,6 +168,7 @@ class LookupWordDefinitionsFragment : Fragment() {
 
     private fun setupListeners(lookupViewModel: LookupViewModel) {
         lookupButton?.setOnClickListener { button ->
+            tracker?.clearSelection()
             val writing = enterWritingText?.text?.toString() ?: throw NullPointerException()
             lookupViewModel.lookupByWriting(writing)
             button.hideKeyboard()
@@ -217,6 +229,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     }
 
     companion object {
+        private const val HEADER_DESELECTION_DELAY = 100L
         private const val DEFINITIONS_SELECTION_ID = "definitions_selection"
         private const val SCROLL_START_POSITION = 0
         private const val SCROLL_POS_KEY = "position"
