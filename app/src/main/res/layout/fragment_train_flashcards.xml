@@ -11,6 +11,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_flashcard_blank"
+        android:id="@+id/flashcardButtonBack"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="56dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_flashcard_blank"
         android:id="@+id/flashcardButton"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="56dp"
@@ -21,7 +32,7 @@
         android:text="@string/default_word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/word"
+        android:id="@+id/frontWord"
         app:layout_constraintTop_toTopOf="@+id/flashcardButton"
         app:layout_constraintBottom_toBottomOf="@+id/flashcardButton"
         app:layout_constraintEnd_toEndOf="@+id/flashcardButton"
@@ -29,6 +40,21 @@
         android:textSize="25sp"
         android:textColor="@color/black"
         android:textStyle="bold" />
+
+    <TextView
+        android:text="@string/default_word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/backWord"
+        app:layout_constraintTop_toTopOf="@+id/flashcardButton"
+        app:layout_constraintBottom_toBottomOf="@+id/flashcardButton"
+        app:layout_constraintEnd_toEndOf="@+id/flashcardButton"
+        app:layout_constraintStart_toStartOf="@+id/flashcardButton"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        android:textStyle="bold" />
+
 
     <ImageButton
         android:layout_width="79dp"

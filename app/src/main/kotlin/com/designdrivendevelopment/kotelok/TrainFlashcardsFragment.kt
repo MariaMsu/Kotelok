@@ -1,11 +1,14 @@
 package com.designdrivendevelopment.kotelok
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,14 +19,19 @@ class TrainFlashcardsFragment : Fragment() {
     private var yesButton: ImageButton? = null
     private var noButton: ImageButton? = null
     private var flashcardButton: ImageButton? = null
-    private var word: TextView? = null
+    private var flashcardButtonBack: ImageButton? = null
+    private var frontWord: TextView? = null
+    private var backWord: TextView? = null
     private var textCompleted: TextView? = null
     private var repeatDict: ImageButton? = null
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = inflater.inflate(R.layout.fragment_train_flashcards, container, false)
 
-        word = binding.findViewById(R.id.word)
+        frontWord = binding.findViewById(R.id.frontWord)
+        backWord = binding.findViewById(R.id.backWord)
         textCompleted = binding.findViewById(R.id.textCompleted)
         flashcardButton = binding.findViewById(R.id.flashcardButton)
         flashcardButton?.setOnClickListener(listener)
@@ -33,6 +41,8 @@ class TrainFlashcardsFragment : Fragment() {
         noButton?.setOnClickListener(listener)
         repeatDict = binding.findViewById(R.id.repeatDict)
         repeatDict?.setOnClickListener(listener)
+        flashcardButtonBack = binding.findViewById(R.id.flashcardButtonBack)
+
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainFlashcardsViewModelFactory(
@@ -61,9 +71,40 @@ class TrainFlashcardsFragment : Fragment() {
         return binding
     }
 
+    private fun animateFlip(forwardFlip: ImageButton, backFlip: ImageButton, forwardWord: TextView, backWord: TextView) {
+        //backFlip.isVisible = true
+        //backWord.isVisible = true
+
+        val front_animation = AnimatorInflater.loadAnimator(activity?.applicationContext, R.animator.flip_in) as AnimatorSet
+        val back_animation = AnimatorInflater.loadAnimator(activity?.applicationContext, R.animator.flip_out) as AnimatorSet
+        val front_text_animation = AnimatorInflater.loadAnimator(activity?.applicationContext, R.animator.flip_in) as AnimatorSet
+        val back_text_animation = AnimatorInflater.loadAnimator(activity?.applicationContext, R.animator.flip_out) as AnimatorSet
+
+        front_animation.setTarget(forwardFlip)
+        back_animation.setTarget(backFlip)
+        front_text_animation.setTarget(forwardWord)
+        back_text_animation.setTarget(backWord)
+
+//        front_animation.doOnEnd {
+//            forwardFlip.isVisible = false
+//        }
+//        front_text_animation.doOnEnd {
+//            forwardWord.isVisible = false
+//        }
+
+        val allAnimatorSet = AnimatorSet()
+        allAnimatorSet.playTogether(front_animation, back_animation, front_text_animation, back_text_animation)
+        allAnimatorSet.start()
+    }
+
     private val listener = View.OnClickListener { view ->
         when (view.id) {
             R.id.flashcardButton -> {
+                if (viewModel.viewState.value == State.GUESSED_TRANSLATION) {
+                    animateFlip(flashcardButtonBack!!, flashcardButton!!, backWord!!, frontWord!!)
+                } else {
+                    animateFlip(flashcardButton!!, flashcardButtonBack!!, frontWord!!, backWord!!)
+                }
                 viewModel.onCardPressed(viewModel.viewState.value!!)
             }
             R.id.yesButton -> {
@@ -94,7 +135,7 @@ class TrainFlashcardsFragment : Fragment() {
     }
 
     private fun updateFlashcard() {
-        word?.text = when (viewModel.viewState.value) {
+        frontWord?.text = when (viewModel.viewState.value) {
             State.NOT_GUESSED -> viewModel.currentWord.value?.writing
             State.GUESSED_TRANSLATION -> viewModel.currentWord.value?.mainTranslation
             State.GUESSED_WORD -> viewModel.currentWord.value?.writing
