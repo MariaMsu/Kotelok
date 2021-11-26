@@ -15,23 +15,24 @@ class TrainFlashcardsFragment : Fragment() {
 
     private var yesButton: ImageButton? = null
     private var noButton: ImageButton? = null
-    private var flashcardButton: ImageButton? = null
-    private var word: TextView? = null
+    private var flashcardButton: TextView? = null
     private var textCompleted: TextView? = null
     private var repeatDict: ImageButton? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = inflater.inflate(R.layout.fragment_train_flashcards, container, false)
+        return inflater.inflate(R.layout.fragment_train_flashcards, container, false)
+    }
 
-        word = binding.findViewById(R.id.word)
-        textCompleted = binding.findViewById(R.id.textCompleted)
-        flashcardButton = binding.findViewById(R.id.flashcardButton)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        textCompleted = view.findViewById(R.id.textCompleted)
+        flashcardButton = view.findViewById(R.id.flashcardButton)
         flashcardButton?.setOnClickListener(listener)
-        yesButton = binding.findViewById(R.id.yesButton)
+        yesButton = view.findViewById(R.id.yesButton)
         yesButton?.setOnClickListener(listener)
-        noButton = binding.findViewById(R.id.noButton)
+        noButton = view.findViewById(R.id.noButton)
         noButton?.setOnClickListener(listener)
-        repeatDict = binding.findViewById(R.id.repeatDict)
+        repeatDict = view.findViewById(R.id.repeatDict)
         repeatDict?.setOnClickListener(listener)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
@@ -44,8 +45,8 @@ class TrainFlashcardsFragment : Fragment() {
         viewModel.viewState.observe(
             viewLifecycleOwner,
             {
-            updateFlashcard()
-            if (viewModel.viewState.value != State.NOT_GUESSED) {
+                updateFlashcard()
+                if (viewModel.viewState.value != State.NOT_GUESSED) {
                     updateButtonVisibility(true)
                 } else {
                     updateButtonVisibility(false)
@@ -58,7 +59,6 @@ class TrainFlashcardsFragment : Fragment() {
                 updateFlashcard()
             }
         )
-        return binding
     }
 
     private val listener = View.OnClickListener { view ->
@@ -94,7 +94,7 @@ class TrainFlashcardsFragment : Fragment() {
     }
 
     private fun updateFlashcard() {
-        word?.text = when (viewModel.viewState.value) {
+        flashcardButton?.text = when (viewModel.viewState.value) {
             State.NOT_GUESSED -> viewModel.currentWord.value?.writing
             State.GUESSED_TRANSLATION -> viewModel.currentWord.value?.mainTranslation
             State.GUESSED_WORD -> viewModel.currentWord.value?.writing
