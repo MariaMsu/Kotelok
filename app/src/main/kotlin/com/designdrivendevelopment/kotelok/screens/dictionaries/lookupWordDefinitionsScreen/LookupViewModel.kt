@@ -22,6 +22,8 @@ class LookupViewModel(
     private val _foundDefinitions = MutableLiveData<List<ItemWithType>>(emptyList())
     private val _events = MutableLiveData<UiEvent<Any?>>()
     private var currentItems: List<ItemWithType> = emptyList()
+    private val selectedDefinitions: MutableList<WordDefinition> = mutableListOf()
+    private var isSelectionActive: Boolean = false
     val foundDefinitions: LiveData<List<ItemWithType>> = _foundDefinitions
     val events: LiveData<UiEvent<Any?>> = _events
 
@@ -79,14 +81,64 @@ class LookupViewModel(
     }
 
     fun onItemSelectionChanged(itemKey: String, selected: Boolean) {
-        currentItems = currentItems.map { item ->
-            if (item.stringKey == itemKey && item is WordDefinitionItem) {
-                item.apply { isSelected = selected }
+        fun handleWhenSelectionActive(
+            currentItems: List<ItemWithType>,
+            selectedItem: WordDefinitionItem,
+            selected: Boolean
+        ): List<ItemWithType> {
+            if (selected) {
+                selectedDefinitions.add(selectedItem.data)
+            } else {
+                selectedDefinitions.remove(selectedItem.data)
+                if (selectedDefinitions.isEmpty()) {
+                    isSelectionActive = false
+                    return setPartOfSelectionForList(currentItems,false)
+                }
+            }
+            return currentItems
+        }
+
+        val selectedItem = currentItems.find { item -> item.stringKey == itemKey }
+        when (selectedItem) {
+            is WordDefinitionItem -> {
+                if (selectedItem.isSelected == selected) {
+                    return
+                }
+                currentItems = currentItems.toMutableList().apply {
+                    set(
+                        index = currentItems.indexOf(selectedItem),
+                        element = selectedItem.copy(isSelected = selected)
+                    )
+                }.toList()
+
+                if (isSelectionActive) {
+                    currentItems = handleWhenSelectionActive(currentItems, selectedItem, selected)
+                } else {
+                    if (selected) {
+                        selectedDefinitions.add(selectedItem.data)
+                        isSelectionActive = true
+                        currentItems = setPartOfSelectionForList(currentItems,true)
+                    } else {
+                        return
+                    }
+                }
+
+                _foundDefinitions.value = currentItems
+            }
+        }
+    }
+
+    private fun setPartOfSelectionForList(
+        items: List<ItemWithType>,
+        isPartOfSelection: Boolean
+    ): List<ItemWithType> {
+        return items.map { item ->
+            if (item is WordDefinitionItem) {
+                item.copy(isPartOfSelection = isPartOfSelection)
             } else {
                 item
             }
         }
-        _foundDefinitions.postValue(currentItems)
     }
 
     private fun createItemsList(
