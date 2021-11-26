@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:elevation="12dp"
     android:clickable="true"
-    android:foreground="@drawable/ripple_for_item_shape"
-    android:background="@drawable/shape_word_def_background"
+    android:background="@drawable/ripple_background_definition_item"
     android:focusable="true">
 
     <androidx.constraintlayout.widget.Guideline
