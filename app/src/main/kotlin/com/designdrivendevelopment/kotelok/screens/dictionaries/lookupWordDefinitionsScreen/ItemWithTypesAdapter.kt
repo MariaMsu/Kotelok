@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.selection.ItemDetailsLookup
@@ -19,12 +21,15 @@ class ItemWithTypesAdapter(
     private val context: Context,
     var items: List<ItemWithType>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    inner class WordDefinitionViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    inner class WordDefinitionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val selectionMarker: CheckBox = view.findViewById(R.id.selection_checkbox)
         private val writingText: TextView = view.findViewById(R.id.writing_text)
         private val translationText: TextView = view.findViewById(R.id.translation_text)
         private val originalExampleText: TextView = view.findViewById(R.id.original_example_text)
         private val translationExampleText: TextView =
             view.findViewById(R.id.translation_example_text)
+        private val playSpeechBtn: Button =
+            view.findViewById(R.id.play_speech_btn)
 
         private fun String.capitalize(): String {
             return this.replaceFirstChar { firstChar ->
@@ -32,8 +37,18 @@ class ItemWithTypesAdapter(
             }
         }
 
+        init {
+            selectionMarker.isClickable = false
+            selectionMarker.isFocusable = false
+        }
+
         fun bind(definitionItem: WordDefinitionItem) {
             val definition = definitionItem.data
+            itemView.isActivated = definitionItem.isSelected
+            selectionMarker.isChecked = definitionItem.isSelected
+            selectionMarker.isVisible = definitionItem.isPartOfSelection
+            playSpeechBtn.isVisible = !definitionItem.isPartOfSelection
+
             writingText.text = definition.writing.capitalize()
             if (definition.partOfSpeech != null) {
                 translationText.text = context.resources.getString(
@@ -48,6 +63,7 @@ class ItemWithTypesAdapter(
                 val mainExample = definition.examples.first()
                 originalExampleText.visibility = View.VISIBLE
                 originalExampleText.text = mainExample.originalText.capitalize()
+
                 if (mainExample.translatedText != null) {
                     translationExampleText.visibility = View.VISIBLE
                     translationExampleText.text = mainExample.translatedText.capitalize()
