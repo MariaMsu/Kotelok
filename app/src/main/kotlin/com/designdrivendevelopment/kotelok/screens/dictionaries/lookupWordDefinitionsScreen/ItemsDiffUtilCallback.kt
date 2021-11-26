@@ -42,4 +42,18 @@ class ItemsDiffUtilCallback(
             return false
         }
     }
+//
+//    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+//        return when ((newList[newItemPosition] as? SelectableItem)?.isPartOfSelection) {
+//            true -> {
+//                Log.d("SELECTION", "hide button")
+//                Animations.ANIMATION_BUTTON_TO_CHECKBOX
+//            }
+//            false -> {
+//                Log.d("SELECTION", "show button")
+//                Animations.ANIMATION_CHECKBOX_TO_BUTTON
+//            }
+//            else -> super.getChangePayload(oldItemPosition, newItemPosition)
+//        }
+//    }
 }

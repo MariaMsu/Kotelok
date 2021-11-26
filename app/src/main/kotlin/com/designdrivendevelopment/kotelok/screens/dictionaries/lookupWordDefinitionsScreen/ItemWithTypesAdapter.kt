@@ -60,6 +60,10 @@ class ItemWithTypesAdapter(
             }
         }
 
+//        fun isSelectionShowed(): Boolean {
+//            return selectionMarker.isVisible
+//        }
+
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> {
             return object : ItemDetailsLookup.ItemDetails<String>() {
                 override fun getPosition(): Int {
@@ -71,6 +75,51 @@ class ItemWithTypesAdapter(
                 }
             }
         }
+
+//        fun replaceOnCheckbox(onAnimationEnd: (() -> Unit)? = null): ObjectAnimator {
+//            isAnimated = true
+//            val hideButton = hideViewAnimation(playSpeechBtn, duration = 100)
+//            val showCheckBox = showViewAnimation(selectionMarker, duration = 100)
+//            showCheckBox.addListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator?) {
+//                    onAnimationEnd?.invoke()
+//                }
+//            })
+//            hideButton.addListener(
+//                object : AnimatorListenerAdapter() {
+//                    override fun onAnimationEnd(animation: Animator?) {
+//                        playSpeechBtn.isVisible = false
+//                        selectionMarker.isClickable = false
+//                        selectionMarker.alpha = 0f
+//                        selectionMarker.isVisible = true
+//                        showCheckBox.start()
+//                    }
+//                }
+//            )
+//            return hideButton
+//        }
+
+//        fun replaceOnButton(onAnimationEnd: (() -> Unit)? = null): ObjectAnimator {
+//            isAnimated = true
+//            val hideCheckBox = hideViewAnimation(selectionMarker, duration = 100)
+//            val showButton = showViewAnimation(playSpeechBtn, duration = 100)
+//            showButton.addListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator?) {
+//                    onAnimationEnd?.invoke()
+//                }
+//            })
+//            hideCheckBox.addListener(
+//                object : AnimatorListenerAdapter() {
+//                    override fun onAnimationEnd(animation: Animator?) {
+//                        selectionMarker.isVisible = false
+//                        playSpeechBtn.alpha = 0f
+//                        playSpeechBtn.isVisible = true
+//                        showButton.start()
+//                    }
+//                }
+//            )
+//            return hideCheckBox
+//        }
     }
 
     inner class CategoryHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
