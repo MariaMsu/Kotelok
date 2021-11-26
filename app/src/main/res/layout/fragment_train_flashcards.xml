@@ -7,28 +7,23 @@
     android:background="@color/light_gray_background_main"
     tools:context=".TrainFlashcardsFragment">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:background="@drawable/ic_flashcard_blank"
         android:id="@+id/flashcardButton"
+        android:gravity="center"
+        android:text="@string/default_word"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:clickable="true"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="56dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:text="@string/default_word"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/word"
-        app:layout_constraintTop_toTopOf="@+id/flashcardButton"
-        app:layout_constraintBottom_toBottomOf="@+id/flashcardButton"
-        app:layout_constraintEnd_toEndOf="@+id/flashcardButton"
-        app:layout_constraintStart_toStartOf="@+id/flashcardButton"
-        android:textSize="25sp"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
+        app:layout_constraintDimensionRatio = "5:3"
+        android:layout_marginHorizontal="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:focusable="true" />
 
     <ImageButton
         android:layout_width="79dp"
