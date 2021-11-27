@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
@@ -124,7 +123,9 @@ class LookupWordDefinitionsFragment : Fragment() {
             }
         )
 
-        enterWritingTextField?.editText?.focusAndShowKeyboard()
+        if (savedInstanceState == null) {
+            enterWritingTextField?.editText?.focusAndShowKeyboard()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
