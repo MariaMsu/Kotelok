@@ -59,6 +59,8 @@ class LookupWordDefinitionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
+
         initViews(view)
         setHasOptionsMenu(true)
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
@@ -268,8 +270,14 @@ class LookupWordDefinitionsFragment : Fragment() {
         private const val SCROLL_START_POSITION = 0
         private const val SCROLL_POS_KEY = "position"
         private const val DISPLAY_PARTS_NUMBER = 4
+        private const val DEFAULT_DICT_ID = 1L
+        const val DICT_ID_KEY = "dictionary_id"
 
         @JvmStatic
-        fun newInstance() = LookupWordDefinitionsFragment()
+        fun newInstance(dictionaryId: Long) = LookupWordDefinitionsFragment().apply {
+            arguments = Bundle().apply {
+                putLong(DICT_ID_KEY, dictionaryId)
+            }
+        }
     }
 }
