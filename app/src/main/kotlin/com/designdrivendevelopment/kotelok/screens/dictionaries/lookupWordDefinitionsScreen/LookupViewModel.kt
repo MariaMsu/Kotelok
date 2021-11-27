@@ -21,11 +21,21 @@ class LookupViewModel(
 ) : ViewModel() {
     private val _foundDefinitions = MutableLiveData<List<ItemWithType>>(emptyList())
     private val _events = MutableLiveData<UiEvent<Any?>>()
+    private val _selectionStates = MutableLiveData(false)
+    private val _selectionSize = MutableLiveData(0)
     private var currentItems: List<ItemWithType> = emptyList()
     private val selectedDefinitions: MutableList<WordDefinition> = mutableListOf()
     private var isSelectionActive: Boolean = false
+        set(value) {
+            if (value != field) {
+                _selectionStates.value = value
+            }
+            field = value
+        }
     val foundDefinitions: LiveData<List<ItemWithType>> = _foundDefinitions
     val events: LiveData<UiEvent<Any?>> = _events
+    val selectionStates: LiveData<Boolean> = _selectionStates
+    val selectionSize: LiveData<Int> = _selectionSize
 
     fun lookupByWriting(writing: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -80,6 +90,22 @@ class LookupViewModel(
         _events.value = event.copy(isHandled = true)
     }
 
+    fun onSelectionCleared() {
+        isSelectionActive = false
+        currentItems = currentItems.map { item ->
+            if (item is WordDefinitionItem) {
+                item.copy(isSelected = false, isPartOfSelection = false)
+            } else {
+                item
+            }
+        }
+        _foundDefinitions.value = currentItems
+    }
+
+    fun onSelectionSizeChanged(size: Int) {
+        _selectionSize.value = size
+    }
+
     fun onItemSelectionChanged(itemKey: String, selected: Boolean) {
         fun handleWhenSelectionActive(
             currentItems: List<ItemWithType>,
@@ -92,7 +118,7 @@ class LookupViewModel(
                 selectedDefinitions.remove(selectedItem.data)
                 if (selectedDefinitions.isEmpty()) {
                     isSelectionActive = false
-                    return setPartOfSelectionForList(currentItems,false)
+                    return setPartOfSelectionForList(currentItems, false)
                 }
             }
             return currentItems
@@ -117,7 +143,7 @@ class LookupViewModel(
                     if (selected) {
                         selectedDefinitions.add(selectedItem.data)
                         isSelectionActive = true
-                        currentItems = setPartOfSelectionForList(currentItems,true)
+                        currentItems = setPartOfSelectionForList(currentItems, true)
                     } else {
                         return
                     }
@@ -126,6 +152,10 @@ class LookupViewModel(
                 _foundDefinitions.value = currentItems
             }
         }
+    }
+
+    fun saveSelectedDefinitions() {
+
     }
 
     private fun setPartOfSelectionForList(

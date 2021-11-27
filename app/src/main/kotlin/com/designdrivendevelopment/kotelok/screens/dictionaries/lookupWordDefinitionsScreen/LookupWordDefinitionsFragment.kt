@@ -2,6 +2,7 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefin
 
 import android.content.Context
 import android.os.Bundle
+import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -22,11 +23,13 @@ import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.DefinitionsKeyProvider
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.ItemWithTypeDetailsLookup
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.selectionActionMode.SelectionModeCallBack
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -37,7 +40,9 @@ class LookupWordDefinitionsFragment : Fragment() {
     private var lookupButton: Button? = null
     private var resultList: RecyclerView? = null
     private var scrollPosition = 0
+    private var addFab: ExtendedFloatingActionButton? = null
     private var tracker: SelectionTracker<String>? = null
+    private var actionMode: ActionMode? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,6 +100,17 @@ class LookupWordDefinitionsFragment : Fragment() {
                     } else {
                         lookupViewModel.onItemSelectionChanged(key, selected)
                     }
+                }
+
+                override fun onSelectionChanged() {
+                    val selectionSize = tracker?.selection?.size()
+                    if (selectionSize != null) {
+                        lookupViewModel.onSelectionSizeChanged(selectionSize)
+                    }
+                }
+
+                override fun onSelectionCleared() {
+                    lookupViewModel.onSelectionCleared()
                 }
             }
         )
@@ -163,6 +179,22 @@ class LookupWordDefinitionsFragment : Fragment() {
                     notifyToEventIsHandled(event)
                 }
             }
+            selectionStates.observe(fragment) { isSelectionActive ->
+                if (isSelectionActive) {
+                    actionMode = view?.startActionMode(
+                            SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
+                        )
+                } else {
+                    actionMode = view?.startActionMode(
+                            SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
+                        )
+                    actionMode?.finish()
+                    actionMode = null
+                }
+            }
+            selectionSize.observe(fragment) { size ->
+                actionMode?.title = "Выбрано $size"
+            }
         }
     }
 
@@ -217,12 +249,14 @@ class LookupWordDefinitionsFragment : Fragment() {
     }
 
     private fun initViews(view: View) {
+        addFab = view.findViewById(R.id.add_new_definition_fab)
         enterWritingText = view.findViewById(R.id.enter_writing_text)
         lookupButton = view.findViewById(R.id.lookup_button)
         resultList = view.findViewById(R.id.lookup_word_results_list)
     }
 
     private fun clearViews() {
+        addFab = null
         enterWritingText = null
         lookupButton = null
         resultList = null
