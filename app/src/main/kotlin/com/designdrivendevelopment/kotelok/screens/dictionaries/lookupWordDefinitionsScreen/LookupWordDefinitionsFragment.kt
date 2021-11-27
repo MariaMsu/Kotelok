@@ -69,7 +69,12 @@ class LookupWordDefinitionsFragment : Fragment() {
         val adapter = createAdapter(context, emptyList())
         val factory = LookupViewModelFactory(
             (requireActivity().application as KotelokApplication)
-                .appComponent.lookupWordDefRepository
+                .appComponent.lookupWordDefRepository,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.editWordDefinitionsRepository,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.dictionariesRepository,
+            dictionaryId
         )
 
         val lookupViewModel = setupFragmentViewModel(
@@ -184,12 +189,12 @@ class LookupWordDefinitionsFragment : Fragment() {
             selectionStates.observe(fragment) { isSelectionActive ->
                 if (isSelectionActive) {
                     actionMode = view?.startActionMode(
-                            SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
-                        )
+                        SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
+                    )
                 } else {
                     actionMode = view?.startActionMode(
-                            SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
-                        )
+                        SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
+                    )
                     actionMode?.finish()
                     actionMode = null
                 }

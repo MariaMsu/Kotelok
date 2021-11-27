@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.repositoryImplementations.lookupWordDefinitionRepository.DefinitionsRequestResult
+import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionariesRepository
+import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.stringKey
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
@@ -17,7 +19,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class LookupViewModel(
-    private val lookupWordDefRepository: LookupWordDefinitionsRepository
+    private val lookupWordDefRepository: LookupWordDefinitionsRepository,
+    private val editWordDefinitionsRepository: EditWordDefinitionsRepository,
+    private val dictionariesRepository: DictionariesRepository,
+    private val dictionaryId: Long
 ) : ViewModel() {
     private val _foundDefinitions = MutableLiveData<List<ItemWithType>>(emptyList())
     private val _events = MutableLiveData<UiEvent<Any?>>()
@@ -155,7 +160,17 @@ class LookupViewModel(
     }
 
     fun saveSelectedDefinitions() {
-
+        val definitions = selectedDefinitions.toList()
+        viewModelScope.launch(Dispatchers.IO) {
+            if (definitions.isNotEmpty()) {
+                val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
+                editWordDefinitionsRepository
+                    .addDefinitionsToDictionary(definitions, dictionary)
+                _events.postValue(
+                    UiEvent(message = "Определения добавлены в \"${dictionary.label}\"")
+                )
+            }
+        }
     }
 
     private fun setPartOfSelectionForList(
