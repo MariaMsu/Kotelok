@@ -16,5 +16,7 @@
         <item name="titleColor">@color/black</item>
         <item name="subheadingColor">@color/gray</item>
         <item name="headlineColor">@color/white</item>
+        <item name="actionModeBackground">@color/light_purple_main</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_close</item>
     </style>
 </resources>
