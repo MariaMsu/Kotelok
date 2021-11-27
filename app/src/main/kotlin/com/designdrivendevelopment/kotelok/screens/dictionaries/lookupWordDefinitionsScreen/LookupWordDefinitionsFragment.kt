@@ -32,12 +32,13 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPositio
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
 class LookupWordDefinitionsFragment : Fragment() {
-    private var enterWritingText: EditText? = null
+    private var enterWritingTextField: TextInputLayout? = null
     private var lookupButton: Button? = null
     private var resultList: RecyclerView? = null
     private var scrollPosition = 0
@@ -123,7 +124,7 @@ class LookupWordDefinitionsFragment : Fragment() {
             }
         )
 
-        enterWritingText?.focusAndShowKeyboard()
+        enterWritingTextField?.editText?.focusAndShowKeyboard()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -205,10 +206,15 @@ class LookupWordDefinitionsFragment : Fragment() {
 
     private fun setupListeners(lookupViewModel: LookupViewModel) {
         lookupButton?.setOnClickListener { button ->
+            enterWritingTextField?.error = null
             tracker?.clearSelection()
-            val writing = enterWritingText?.text?.toString() ?: throw NullPointerException()
-            lookupViewModel.lookupByWriting(writing)
-            button.hideKeyboard()
+            val writing = enterWritingTextField?.editText?.text?.toString()
+            if (writing.isNullOrEmpty()) {
+                enterWritingTextField?.error = getString(R.string.lookup_def_input_error)
+            } else {
+                lookupViewModel.lookupByWriting(writing)
+                button.hideKeyboard()
+            }
         }
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -255,14 +261,14 @@ class LookupWordDefinitionsFragment : Fragment() {
 
     private fun initViews(view: View) {
         addFab = view.findViewById(R.id.add_new_definition_fab)
-        enterWritingText = view.findViewById(R.id.enter_writing_text)
+        enterWritingTextField = view.findViewById(R.id.enter_writing_text)
         lookupButton = view.findViewById(R.id.lookup_button)
         resultList = view.findViewById(R.id.lookup_word_results_list)
     }
 
     private fun clearViews() {
         addFab = null
-        enterWritingText = null
+        enterWritingTextField = null
         lookupButton = null
         resultList = null
     }

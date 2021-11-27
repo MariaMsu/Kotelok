@@ -19,4 +19,8 @@
         <item name="actionModeBackground">@color/light_purple_main</item>
         <item name="actionModeCloseDrawable">@drawable/ic_close</item>
     </style>
+
+    <style name="FieldText">
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>
