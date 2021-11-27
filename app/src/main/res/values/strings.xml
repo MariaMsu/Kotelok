@@ -12,4 +12,5 @@
     <string name="lookup_word_button_text">Найти определения</string>
     <string name="add_custom_definition_button">Добавить собственное определение</string>
     <string name="add_custom_definition_text">Добавить</string>
+    <string name="save_definitions">Сохранить определения</string>
 </resources>
