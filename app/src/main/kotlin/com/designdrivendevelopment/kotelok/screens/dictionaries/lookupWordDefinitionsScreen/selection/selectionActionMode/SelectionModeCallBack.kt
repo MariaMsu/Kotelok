@@ -1,8 +1,8 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.selectionActionMode
 
-import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.selection.SelectionTracker
 import com.designdrivendevelopment.kotelok.R
 

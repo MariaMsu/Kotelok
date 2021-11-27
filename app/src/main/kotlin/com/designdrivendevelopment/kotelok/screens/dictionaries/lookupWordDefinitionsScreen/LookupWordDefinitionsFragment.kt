@@ -2,7 +2,6 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefin
 
 import android.content.Context
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,6 +10,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -188,13 +189,10 @@ class LookupWordDefinitionsFragment : Fragment() {
             }
             selectionStates.observe(fragment) { isSelectionActive ->
                 if (isSelectionActive) {
-                    actionMode = view?.startActionMode(
+                    actionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(
                         SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
                     )
                 } else {
-                    actionMode = view?.startActionMode(
-                        SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
-                    )
                     actionMode?.finish()
                     actionMode = null
                 }
