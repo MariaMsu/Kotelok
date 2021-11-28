@@ -40,7 +40,7 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
 
     fun handleAnswer(word: LearnableDefinition, scoreEF: Int): Boolean {
         word.changeEFBasedOnNewGrade(scoreEF, trainerWeight)
-        val isRight = scoreEF >= LearnableDefinition.GRADE_FOUR
+        val isRight = scoreEF >= LearnableDefinition.PASSING_GRADE
         if (!isRight) {
             repeatWordsSet.add(word)
         }
