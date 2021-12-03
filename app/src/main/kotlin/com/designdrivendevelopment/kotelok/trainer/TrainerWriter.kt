@@ -11,7 +11,7 @@ typealias WordChangeArray = Array<Pair<Char, StrChange>>
 
 const val WRITE_WEIGHT = 0.15f
 
-class WriteCoreTrainer(
+class TrainerWriter(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
 ) :
     IteratorTrainerSingle<String>(learnableDefinitionsRepository, WRITE_WEIGHT) {
