@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.trainers
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.designdrivendevelopment.kotelok.R
+import com.designdrivendevelopment.kotelok.application.KotelokApplication
 
 class TrainFlashcardsFragment : Fragment() {
     lateinit var viewModel: TrainFlashcardsViewModel

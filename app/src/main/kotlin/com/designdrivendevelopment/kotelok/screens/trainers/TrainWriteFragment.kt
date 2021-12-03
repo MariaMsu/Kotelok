@@ -1,10 +1,11 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.trainers
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.designdrivendevelopment.kotelok.R
 import com.google.android.material.textfield.TextInputLayout
 
 class TrainWriteFragment : Fragment() {
