@@ -4,7 +4,6 @@ import com.designdrivendevelopment.kotelok.trainer.utils.StrChange
 import com.designdrivendevelopment.kotelok.trainer.utils.WordChangeArray
 import com.designdrivendevelopment.kotelok.trainer.utils.levenshteinDifference
 import junit.framework.TestCase.assertEquals
-import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 
 data class LevenshteinTestCase(
@@ -15,18 +14,58 @@ data class LevenshteinTestCase(
 )
 
 class LevenshteinTest {
+    private val tests = arrayOf(
+        LevenshteinTestCase(
+            expectedStr = "dog",
+            userStr = "dog",
+            levenshteinDistance = 0,
+            levenshteinDifference = arrayOf(
+                Pair('d', StrChange.KEEP),
+                Pair('o', StrChange.KEEP),
+                Pair('g', StrChange.KEEP)
+            )
+        ),
+        LevenshteinTestCase(
+            expectedStr = "dog",
+            userStr = "",
+            levenshteinDistance = 3,
+            levenshteinDifference = arrayOf(
+                Pair('d', StrChange.INSERT),
+                Pair('o', StrChange.INSERT),
+                Pair('g', StrChange.INSERT)
+            )
+        ),
+        LevenshteinTestCase(
+            expectedStr = "o",
+            userStr = "dog",
+            levenshteinDistance = 2,
+            levenshteinDifference = arrayOf(
+                Pair('d', StrChange.DELETE),
+                Pair('o', StrChange.KEEP),
+                Pair('g', StrChange.DELETE)
+            )
+        ),
+        LevenshteinTestCase(
+            expectedStr = "deceptive",
+            userStr = "dcepltiv",
+            levenshteinDistance = 3,
+            levenshteinDifference = arrayOf(
+                Pair('d', StrChange.KEEP),
+                Pair('e', StrChange.INSERT),
+                Pair('c', StrChange.KEEP),
+                Pair('e', StrChange.KEEP),
+                Pair('p', StrChange.KEEP),
+                Pair('l', StrChange.DELETE),
+                Pair('t', StrChange.KEEP),
+                Pair('i', StrChange.KEEP),
+                Pair('v', StrChange.KEEP),
+                Pair('e', StrChange.INSERT),
+            ),
+        )
+    )
+
     @Test
     fun levenshteinTest() {
-        val tests = arrayOf(
-            LevenshteinTestCase(expectedStr = "dog",
-                userStr = "dog",
-                levenshteinDistance = 0,
-                levenshteinDifference = arrayOf(
-                    Pair('d', StrChange.KEEP),
-                    Pair('o', StrChange.KEEP),
-                    Pair('g', StrChange.KEEP))
-            )
-        )
 
         for (testCase in tests) {
             val (levDistance, levDifference) = levenshteinDifference(
@@ -35,7 +74,7 @@ class LevenshteinTest {
             )
             assertEquals(testCase.levenshteinDistance, levDistance)
             assertEquals(testCase.levenshteinDifference.size, levDifference.size)
-            for (i in testCase.levenshteinDifference.indices){
+            for (i in testCase.levenshteinDifference.indices) {
                 assertEquals(testCase.levenshteinDifference[i], levDifference[i])
             }
         }

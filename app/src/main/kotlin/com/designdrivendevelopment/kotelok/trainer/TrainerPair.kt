@@ -6,7 +6,7 @@ import com.designdrivendevelopment.kotelok.trainer.utils.PairCheckInput
 
 const val PAIR_WEIGHT = 0.1f
 
-class TrainerPair (
+class TrainerPair(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
     private val setSize: Int = 5,
 ) :

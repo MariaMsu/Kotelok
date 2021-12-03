@@ -1,11 +1,9 @@
 package com.designdrivendevelopment.kotelok.trainer
 
-import java.util.Date
-
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
-import java.time.LocalDate
+import java.util.Date
 
 class MockLDR : LearnableDefinitionsRepository {
     val data = listOf(
@@ -46,7 +44,7 @@ class MockLDR : LearnableDefinitionsRepository {
             eFactor = LearnableDefinition.EF_INITIAL_VALUE
         ),
 
-        )
+    )
 
     override suspend fun getAll(): List<LearnableDefinition> {
         return data

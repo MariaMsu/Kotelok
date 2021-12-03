@@ -10,13 +10,13 @@ class TeTest {
     private val mockLDR = MockLDR()
 
     @Test
-    fun cardsTest() = runBlocking{
+    fun cardsTest() = runBlocking {
         val data = mockLDR.getAll()
-        val trainer = TrainerCards(learnableDefinitionsRepository=mockLDR)
+        val trainer = TrainerCards(learnableDefinitionsRepository = mockLDR)
         trainer.loadDictionary(dictionaryId = 69, onlyNotLearned = false)
         assertEquals(data.size, trainer.size)
-        while (!trainer.isDone){
-            val learnableDefinition : LearnableDefinition = trainer.getNext()
+        while (!trainer.isDone) {
+            val learnableDefinition: LearnableDefinition = trainer.getNext()
             val correctUserInput = true
             assertTrue(trainer.checkUserInput(correctUserInput))
         }
