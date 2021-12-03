@@ -63,15 +63,21 @@ class TrainWriteFragment : Fragment() {
     }
 
     private fun onStateChanged(state: State?) {
-        if (state == State.NOT_GUESSED) {
-            checkedVisibility(false)
-        } else {
-            checkedVisibility(true)
-            if (state == State.GUESSED_CORRECT) {
-                correctWord?.text = "Верно!"
+        if (!viewModel.trainerWriter.isDone) {
+            if (state == State.NOT_GUESSED) {
+                inputText?.editText?.text?.clear()
+                checkedVisibility(false)
             } else {
-                correctWord?.text = viewModel.currentWord.value?.writing
+                checkedVisibility(true)
+                if (state == State.GUESSED_CORRECT) {
+                    correctWord?.text = getString(R.string.correct_guess)
+                } else {
+                    correctWord?.text =
+                        String.format(getString(R.string.incorrect_guess), viewModel.currentWord.value?.writing)
+                }
             }
+        } else {
+            completedVisibility(true)
         }
     }
 
@@ -93,6 +99,16 @@ class TrainWriteFragment : Fragment() {
         correctWord?.isVisible = isChecked
         nextWordButton?.isVisible = isChecked
         nextWordButton?.isClickable = isChecked
+    }
+
+    private fun completedVisibility(isCompleted: Boolean) {
+        inputText?.isEnabled = !isCompleted
+        checkButton?.isVisible = !isCompleted
+        checkButton?.isClickable = !isCompleted
+        correctWord?.isVisible = !isCompleted
+        nextWordButton?.isVisible = !isCompleted
+        nextWordButton?.isClickable = !isCompleted
+        textCompleted?.isVisible = isCompleted
     }
 
     companion object {

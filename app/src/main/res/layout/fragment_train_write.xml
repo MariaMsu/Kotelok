@@ -56,14 +56,14 @@
 
     <TextView
         android:text="@string/default_word"
-        android:layout_width="345dp"
-        android:layout_height="40dp"
+        android:layout_width="340dp"
+        android:layout_height="93dp"
         android:id="@+id/correct_word"
         app:layout_constraintStart_toStartOf="@+id/flashcard"
         app:layout_constraintTop_toBottomOf="@+id/input_word"
         android:layout_marginTop="20dp"
         android:textSize="25sp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:visibility="invisible" />
 
     <TextView
@@ -76,8 +76,8 @@
         android:textSize="24sp"
         android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@+id/correct_word"
-        app:layout_constraintStart_toStartOf="@+id/correct_word"
-        app:layout_constraintEnd_toEndOf="@+id/correct_word"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
     <Button
