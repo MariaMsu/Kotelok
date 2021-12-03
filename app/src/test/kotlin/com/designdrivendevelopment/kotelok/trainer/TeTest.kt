@@ -14,7 +14,8 @@ class TeTest {
     fun cardsTest() = runBlocking{
         val data = mockLDR.getAll()
         val trainer = TrainerCards(learnableDefinitionsRepository=mockLDR)
-//        assertEquals(data.size, trainer.size)
+        trainer.loadDictionary(dictionaryId = 69, onlyNotLearned = false)
+        assertEquals(data.size, trainer.size)
         while (!trainer.isDone){
             val learnableDefinition : LearnableDefinition = trainer.getNext()
             val correctUserInput = true
