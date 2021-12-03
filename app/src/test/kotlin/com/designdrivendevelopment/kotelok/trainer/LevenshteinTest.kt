@@ -1,7 +1,10 @@
 package com.designdrivendevelopment.kotelok.trainer
 
+import com.designdrivendevelopment.kotelok.trainer.utils.StrChange
+import com.designdrivendevelopment.kotelok.trainer.utils.WordChangeArray
 import com.designdrivendevelopment.kotelok.trainer.utils.levenshteinDifference
 import junit.framework.TestCase.assertEquals
+import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 
 data class LevenshteinTestCase(
@@ -18,7 +21,10 @@ class LevenshteinTest {
             LevenshteinTestCase(expectedStr = "dog",
                 userStr = "dog",
                 levenshteinDistance = 0,
-                levenshteinDifference = emptyArray()
+                levenshteinDifference = arrayOf(
+                    Pair('d', StrChange.KEEP),
+                    Pair('o', StrChange.KEEP),
+                    Pair('g', StrChange.KEEP))
             )
         )
 
@@ -28,7 +34,10 @@ class LevenshteinTest {
                 userStr = testCase.userStr
             )
             assertEquals(testCase.levenshteinDistance, levDistance)
-//            assertEquals(testCase.levenshteinDifference, levDifference)
+            assertEquals(testCase.levenshteinDifference.size, levDifference.size)
+            for (i in testCase.levenshteinDifference.indices){
+                assertEquals(testCase.levenshteinDifference[i], levDifference[i])
+            }
         }
     }
 }

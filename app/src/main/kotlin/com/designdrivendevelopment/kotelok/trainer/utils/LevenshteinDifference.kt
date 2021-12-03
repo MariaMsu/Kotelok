@@ -1,7 +1,9 @@
 package com.designdrivendevelopment.kotelok.trainer.utils
 
-import com.designdrivendevelopment.kotelok.trainer.StrChange
-import com.designdrivendevelopment.kotelok.trainer.WordChangeArray
+enum class StrChange {
+    KEEP, INSERT, REPLACE, DELETE
+}
+typealias WordChangeArray = Array<Pair<Char, StrChange>>
 
 fun levenshteinDifference(expectedStr: String, userStr: String):
     Pair<Int, WordChangeArray> {
@@ -58,12 +60,12 @@ fun levenshteinDifference(expectedStr: String, userStr: String):
 
         when (minOf(costInsert, costDelete, costReplace)) {
             costDelete -> {
-                wordChange += Pair(userStr[i - 2], com.designdrivendevelopment.kotelok.trainer.StrChange.DELETE)
+                wordChange += Pair(userStr[i - 2], StrChange.DELETE)
                 i -= 1
             }
 
             costInsert -> {
-                wordChange += Pair(expectedStr[j - 2], com.designdrivendevelopment.kotelok.trainer.StrChange.INSERT)
+                wordChange += Pair(expectedStr[j - 2], StrChange.INSERT)
                 j -= 1
             }
 
