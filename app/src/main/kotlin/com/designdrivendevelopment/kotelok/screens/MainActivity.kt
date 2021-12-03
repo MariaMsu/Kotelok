@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             item?.isChecked = true
             bottomNavigator.setDefaultTab(bottomNavigator.getTabByName(DICTIONARIES_TAB))
         }
+        addFragment(TrainWriteFragment.newInstance(0))
     }
 
     override fun onDestroy() {
