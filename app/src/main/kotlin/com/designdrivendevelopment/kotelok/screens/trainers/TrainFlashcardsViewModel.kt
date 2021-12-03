@@ -1,10 +1,11 @@
-package com.designdrivendevelopment.kotelok
+package com.designdrivendevelopment.kotelok.screens.trainers
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
+import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.CardsLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.trainer.TrainerCards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

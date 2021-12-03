@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray_background_main"
-    tools:context=".TrainWriteFragment">
+    tools:context=".screens.trainers.TrainWriteFragment">
 
     <TextView
         android:layout_width="match_parent"
