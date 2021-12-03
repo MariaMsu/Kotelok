@@ -7,17 +7,6 @@ import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
 import java.time.LocalDate
 
-//    val definitionId: Long,
-//    val writing: String,
-//    val partOfSpeech: String?,
-//    val mainTranslation: String,
-//    val otherTranslations: List<String>,
-//    val examples: List<ExampleOfDefinitionUse>,
-//    nextRepeatDate: Date,
-//    repetitionNum: Int,
-//    lastInterval: Int,
-//    eFactor: Float = EF_INITIAL_VALUE,
-
 class MockLDR : LearnableDefinitionsRepository {
     val data = listOf(
         LearnableDefinition(

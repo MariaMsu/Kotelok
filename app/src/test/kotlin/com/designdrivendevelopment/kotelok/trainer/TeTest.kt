@@ -9,7 +9,6 @@ import org.junit.Test
 class TeTest {
     private val mockLDR = MockLDR()
 
-
     @Test
     fun cardsTest() = runBlocking{
         val data = mockLDR.getAll()
