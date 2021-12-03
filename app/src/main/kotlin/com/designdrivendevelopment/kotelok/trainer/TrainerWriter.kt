@@ -2,13 +2,9 @@ package com.designdrivendevelopment.kotelok.trainer
 
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.trainer.utils.WordChangeArray
 import com.designdrivendevelopment.kotelok.trainer.utils.levenshteinDifference
 import kotlin.math.roundToInt
-
-enum class StrChange {
-    KEEP, INSERT, REPLACE, DELETE
-}
-typealias WordChangeArray = Array<Pair<Char, StrChange>>
 
 const val WRITE_WEIGHT = 0.15f
 
