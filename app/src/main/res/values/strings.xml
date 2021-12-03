@@ -15,4 +15,6 @@
     <string name="enter_word">введите слово</string>
     <string name="next_word">следущее слово</string>
     <string name="check_button_text">проверить</string>
+    <string name="correct_guess">Верно!</string>
+    <string name="incorrect_guess">Неверно!\nВерный ответ: %1$s</string>
 </resources>
