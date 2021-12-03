@@ -33,7 +33,7 @@ class TrainerWriter(
         // levenshteinDistance ∈ [0, max(expectedStr.length, userStr.length)]
         val errorRate = levenshteinDistance.toDouble() / expectedWord.writing.length
         val correctRate = (1 - minOf(1.0, errorRate)) // ∈ [0, 1]
-        val normalizedCorrectRate = correctRate * LearnableDefinition.GRADE_ARRAY.size
+        val normalizedCorrectRate = correctRate * (LearnableDefinition.GRADE_ARRAY.size - 1)
 
         return LearnableDefinition.GRADE_ARRAY[normalizedCorrectRate.roundToInt()]
     }
