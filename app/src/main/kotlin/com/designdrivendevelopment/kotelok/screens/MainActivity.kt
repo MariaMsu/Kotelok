@@ -9,6 +9,7 @@ import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
+import com.designdrivendevelopment.kotelok.screens.trainers.TrainWriteFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             item?.isChecked = true
             bottomNavigator.setDefaultTab(bottomNavigator.getTabByName(DICTIONARIES_TAB))
         }
-        addFragment(TrainWriteFragment.newInstance(0))
+        addFragment(TrainWriteFragment.newInstance(1))
     }
 
     override fun onDestroy() {

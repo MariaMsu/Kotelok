@@ -14,4 +14,5 @@
     <string name="dict_completed">Тренировка завершена!</string>
     <string name="enter_word">введите слово</string>
     <string name="next_word">следущее слово</string>
+    <string name="check_button_text">проверить</string>
 </resources>

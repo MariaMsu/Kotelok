@@ -16,6 +16,7 @@ class TrainWriteViewModel(
 ) : ViewModel() {
     private var dictId: Long = 0
     private val _viewState = MutableLiveData(TrainWriteFragment.State.NOT_GUESSED)
+    val viewState: LiveData<TrainWriteFragment.State> = _viewState
     val trainerWriter: TrainerWriter = TrainerWriter(cardsLearnDefRepository)
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
     val currentWord: LiveData<LearnableDefinition> = _currentWord
@@ -29,14 +30,16 @@ class TrainWriteViewModel(
         }
     }
 
-
-
-    fun onGuessPressed(guess: Boolean) {
+    fun onPressNext() {
         _viewState.value = TrainWriteFragment.State.NOT_GUESSED
-        TrainerWriter.checkUserInput(guess)
-        if (!TrainerWriter.isDone) {
-            _currentWord.value = TrainerWriter.getNext()
+        if (!trainerWriter.isDone) {
+            _currentWord.value = trainerWriter.getNext()
         }
+    }
+
+    fun onGuess(guess: String) {
+        val res = trainerWriter.checkUserInput(guess)
+        _viewState.value = if (res) TrainWriteFragment.State.GUESSED_CORRECT else TrainWriteFragment.State.GUESSED_INCORRECT
     }
 
 }
