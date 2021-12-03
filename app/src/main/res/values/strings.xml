@@ -10,6 +10,8 @@
     <string name="add_word_fab_description">Довить значение слова</string>
     <string name="default_word">Слово</string>
     <string name="dict_completed">Тренировка завершена!</string>
+    <string name="enter_word">введите слово</string>
+    <string name="next_word">следущее слово</string>
     <string name="dict_completed">Поздравляем, вы завершили тренировку по данному словарю</string>
     <string name="enter_writing_hint">Введите слово</string>
     <string name="lookup_word_button_text">Найти определения</string>
