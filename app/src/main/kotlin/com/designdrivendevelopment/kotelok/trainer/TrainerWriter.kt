@@ -2,6 +2,7 @@ package com.designdrivendevelopment.kotelok.trainer
 
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitionsRepository
+import kotlin.math.roundToInt
 
 enum class StrChange {
     KEEP, INSERT, REPLACE, DELETE
@@ -30,18 +31,11 @@ class WriteCoreTrainer(
         )
         curWordChange = path
         // levenshteinDistance ∈ [0, max(expectedStr.length, userStr.length)]
-        val errorRate = levenshteinDistance / expectedWord.writing.length
-        val correctRate = (1 - minOf(1, errorRate))
-        val passingStep = 1.0 / LearnableDefinition.GRADE_FIVE
+        val errorRate = levenshteinDistance.toDouble() / expectedWord.writing.length
+        val correctRate = (1 - minOf(1.0, errorRate)) // ∈ [0, 1]
+        val normalizedCorrectRate = correctRate * LearnableDefinition.GRADE_ARRAY.size
 
-        return when {
-            correctRate < 1 * passingStep -> LearnableDefinition.GRADE_ZERO
-            correctRate < 2 * passingStep -> LearnableDefinition.GRADE_ONE
-            correctRate < 3 * passingStep -> LearnableDefinition.GRADE_TWO
-            correctRate < 4 * passingStep -> LearnableDefinition.GRADE_THREE
-            correctRate < 5 * passingStep -> LearnableDefinition.GRADE_FOUR
-            else -> LearnableDefinition.GRADE_FIVE
-        }
+        return LearnableDefinition.GRADE_ARRAY[normalizedCorrectRate.roundToInt()]
     }
 
     private fun levenshteinDifference(expectedStr: String, userStr: String):
@@ -55,7 +49,7 @@ class WriteCoreTrainer(
            E [m 3 * * * d]], where
          m = userStr.length + expectedStr.length
          'm' is necessary to compute wordChange in more easy way
-         d = levenshteinDistance
+         'd' = levenshteinDistance
         */
             val maxCost = userStr.length + expectedStr.length // unreal big cost
             val expectedLen = expectedStr.length + 2
