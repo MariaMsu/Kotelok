@@ -31,12 +31,12 @@ class TrainWriteViewModel(
 
     
 
-    fun onGuessPressed(guess: Boolean) {
-        _viewState.value = TrainWriteFragment.State.NOT_GUESSED
-        TrainerWriter.checkUserInput(guess)
-        if (!TrainerWriter.isDone) {
-            _currentWord.value = TrainerWriter.getNext()
-        }
-    }
+//    fun onGuessPressed(guess: Boolean) {
+//        _viewState.value = TrainWriteFragment.State.NOT_GUESSED
+//        TrainerWriter.checkUserInput(guess)
+//        if (!TrainerWriter.isDone) {
+//            _currentWord.value = TrainerWriter.getNext()
+//        }
+//    }
 
 }
