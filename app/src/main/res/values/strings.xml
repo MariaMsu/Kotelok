@@ -16,4 +16,5 @@
     <string name="lookup_def_input_error">Ошибка: Вы должны ввести слово</string>
     <string name="yandex_dict_api_hyper"><a href="http://api.yandex.ru/dictionary/">Реализовано с помощью сервиса \n«API Яндекс.Словарь»</a></string>
     <string name="add_def_screen_title">Добавить определение</string>
+    <string name="landscape_input_warning">Чтобы ввести слово, поверните телефон вертикально</string>
 </resources>

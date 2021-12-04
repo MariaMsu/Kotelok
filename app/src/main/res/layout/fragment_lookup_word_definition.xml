@@ -44,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
+            android:paddingBottom="6dp"
             android:background="@drawable/lookup_word_enter_section_background"
             android:elevation="4dp"
             android:orientation="vertical">
@@ -78,7 +79,6 @@
                 android:id="@+id/lookup_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
                 android:text="@string/lookup_word_button_text"/>
         </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.text.method.LinkMovementMethod
@@ -146,6 +147,17 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
 
         if (savedInstanceState == null) {
             enterWritingTextField?.editText?.focusAndShowKeyboard()
+        }
+
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            enterWritingTextField?.isVisible = true
+            lookupButton?.isVisible = true
+        } else {
+            if (adapter.items.isEmpty()) {
+                sendMessage(view, getString(R.string.landscape_input_warning))
+            }
+            enterWritingTextField?.isVisible = false
+            lookupButton?.isVisible = false
         }
     }
 
