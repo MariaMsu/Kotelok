@@ -2,7 +2,9 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefin
 
 import android.content.Context
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -28,6 +30,8 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefini
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.selectionActionMode.SelectionModeCallBack
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
+import com.designdrivendevelopment.kotelok.screens.screensUtils.TtsPrefs
 import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
@@ -38,13 +42,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
-class LookupWordDefinitionsFragment : Fragment() {
+class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, TextToSpeech.OnInitListener {
     private var yandexDictHyperlink: TextView? = null
     private var enterWritingTextField: TextInputLayout? = null
     private var lookupButton: Button? = null
     private var resultList: RecyclerView? = null
     private var scrollPosition = 0
     private var addFab: ExtendedFloatingActionButton? = null
+    private var textToSpeech: TextToSpeech? = null
     private var tracker: SelectionTracker<String>? = null
     private var actionMode: ActionMode? = null
 
@@ -66,6 +71,7 @@ class LookupWordDefinitionsFragment : Fragment() {
         val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
 
         initViews(view)
+        textToSpeech = TextToSpeech(context, this)
         setHasOptionsMenu(true)
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
 
@@ -144,6 +150,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         tracker = null
+        textToSpeech = null
         clearViews()
     }
 
@@ -152,11 +159,30 @@ class LookupWordDefinitionsFragment : Fragment() {
         menu.clear()
     }
 
+    override fun onPlayBtnClick(text: String) {
+        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, text)
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = textToSpeech?.setLanguage(TtsPrefs.locale)
+            textToSpeech?.setPitch(TtsPrefs.STANDARD_PITCH)
+            textToSpeech?.setSpeechRate(TtsPrefs.STANDARD_SPEECH_RATE)
+            if (result == TextToSpeech.LANG_MISSING_DATA ||
+                result == TextToSpeech.LANG_NOT_SUPPORTED
+            ) {
+                Log.d("TTS", "Lang is not available")
+            }
+        } else {
+            Log.d("TTS", "TTS init error")
+        }
+    }
+
     private fun createAdapter(
         context: Context,
         items: List<ItemWithType>
     ): ItemWithTypesAdapter {
-        return ItemWithTypesAdapter(context, items).apply { setHasStableIds(true) }
+        return ItemWithTypesAdapter(items, context, this).apply { setHasStableIds(true) }
     }
 
     private fun createLayoutManager(context: Context): LinearLayoutManager {

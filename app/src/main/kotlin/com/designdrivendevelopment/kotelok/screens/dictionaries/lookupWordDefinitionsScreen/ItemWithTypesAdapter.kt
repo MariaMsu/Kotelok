@@ -16,10 +16,12 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefini
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
+import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
 
 class ItemWithTypesAdapter(
+    var items: List<ItemWithType>,
     private val context: Context,
-    var items: List<ItemWithType>
+    private val playSoundBtnClickListener: PlaySoundBtnClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class WordDefinitionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val selectionMarker: CheckBox = view.findViewById(R.id.selection_checkbox)
@@ -188,6 +190,11 @@ class ItemWithTypesAdapter(
         when (item.viewType) {
             ItemViewTypes.ITEM_WORD_DEFINITION -> {
                 (holder as WordDefinitionViewHolder).bind((item as WordDefinitionItem))
+                val playSoundBtn: Button = holder.itemView.findViewById(R.id.play_speech_btn)
+                val text = item.data.writing
+                playSoundBtn.setOnClickListener {
+                    playSoundBtnClickListener.onPlayBtnClick(text)
+                }
             }
             ItemViewTypes.ITEM_CATEGORY_HEADER -> {
                 (holder as CategoryHeaderViewHolder).bind((item as CategoryHeaderItem))
