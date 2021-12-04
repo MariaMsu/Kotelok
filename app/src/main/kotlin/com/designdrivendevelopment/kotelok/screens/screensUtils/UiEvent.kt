@@ -1,7 +1,11 @@
 package com.designdrivendevelopment.kotelok.screens.screensUtils
 
-data class UiEvent<out T : Any?>(
-    val message: String,
-    val data: T? = null,
-    val isHandled: Boolean = false
-)
+sealed class UiEvent(var isHandled: Boolean) {
+    class ShowMessage(val message: String, isHandled: Boolean = false) : UiEvent(isHandled)
+
+    sealed class Loading(isHandled: Boolean) : UiEvent(isHandled) {
+        class ShowLoading(isHandled: Boolean = false) : Loading(isHandled)
+
+        class HideLoading(isHandled: Boolean = false) : Loading(isHandled)
+    }
+}
