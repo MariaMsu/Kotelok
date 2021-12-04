@@ -217,7 +217,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
             foundDefinitions.observe(fragment) { newItems ->
                 onItemsListChanged(newItems, adapter)
             }
-            events.observe(fragment) { event ->
+            messageEvents.observe(fragment) { event ->
                 if (!event.isHandled) {
                     sendMessage(rootView, event.message)
                     notifyToEventIsHandled(event)

@@ -25,7 +25,7 @@ class LookupViewModel(
     private val dictionaryId: Long
 ) : ViewModel() {
     private val _foundDefinitions = MutableLiveData<List<ItemWithType>>(emptyList())
-    private val _events = MutableLiveData<UiEvent<Any?>>()
+    private val _messageEvents = MutableLiveData<UiEvent.ShowMessage>()
     private val _selectionStates = MutableLiveData(false)
     private val _selectionSize = MutableLiveData(0)
     private var currentItems: List<ItemWithType> = emptyList()
@@ -38,7 +38,7 @@ class LookupViewModel(
             field = value
         }
     val foundDefinitions: LiveData<List<ItemWithType>> = _foundDefinitions
-    val events: LiveData<UiEvent<Any?>> = _events
+    val messageEvents: LiveData<UiEvent.ShowMessage> = _messageEvents
     val selectionStates: LiveData<Boolean> = _selectionStates
     val selectionSize: LiveData<Int> = _selectionSize
 
@@ -52,47 +52,48 @@ class LookupViewModel(
             }.collect { pair ->
                 val networkResult = pair.first
                 val localDefinitions = pair.second
-                val items: List<ItemWithType> = when (networkResult) {
+                val remoteDefinitions: List<WordDefinition> = when (networkResult) {
                     is DefinitionsRequestResult.Failure.Error -> {
-                        _events.postValue(
-                            UiEvent(
+                        _messageEvents.postValue(
+                            UiEvent.ShowMessage(
                                 message = "Обнаружены проблемы с интернет соединением." +
                                     "Попробуйте повторить попытку"
                             )
                         )
-                        createItemsList(localDefinitions, emptyList())
+                        emptyList()
                     }
 
                     is DefinitionsRequestResult.Failure.HttpError -> {
-                        _events.postValue(
-                            UiEvent(
+                        _messageEvents.postValue(
+                            UiEvent.ShowMessage(
                                 message = "Упс, что-то пошло не так" +
                                     "Попробуйте повторить попытку"
                             )
                         )
-                        createItemsList(localDefinitions, emptyList())
+                        emptyList()
                     }
 
                     is DefinitionsRequestResult.Success -> {
                         val remoteDefinitions = networkResult.definitions
                         if (remoteDefinitions.isEmpty()) {
-                            _events.postValue(
-                                UiEvent(
+                            _messageEvents.postValue(
+                                UiEvent.ShowMessage(
                                     message = "В словаре не найдены определения для данного слова"
                                 )
                             )
                         }
-                        createItemsList(localDefinitions, remoteDefinitions)
+                        remoteDefinitions
                     }
                 }
-                currentItems = items
-                _foundDefinitions.postValue(items)
+
+                currentItems = createItemsList(localDefinitions, remoteDefinitions)
+                _foundDefinitions.postValue(currentItems)
             }
         }
     }
 
-    fun notifyToEventIsHandled(event: UiEvent<*>) {
-        _events.value = event.copy(isHandled = true)
+    fun notifyToEventIsHandled(event: UiEvent) {
+        event.isHandled = true
     }
 
     fun onSelectionCleared() {
@@ -166,8 +167,8 @@ class LookupViewModel(
                 val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
                 editWordDefinitionsRepository
                     .addDefinitionsToDictionary(definitions, dictionary)
-                _events.postValue(
-                    UiEvent(message = "Определения добавлены в \"${dictionary.label}\"")
+                _messageEvents.postValue(
+                    UiEvent.ShowMessage(message = "Определения добавлены в \"${dictionary.label}\"")
                 )
             }
         }
