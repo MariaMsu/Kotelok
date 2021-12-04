@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
             android:paddingBottom="6dp"
-            android:background="@drawable/lookup_word_enter_section_background"
+            android:background="@drawable/background_with_underline"
             android:elevation="4dp"
             android:orientation="vertical">
 
