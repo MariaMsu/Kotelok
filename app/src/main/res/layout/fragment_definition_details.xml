@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimaryBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="6dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="12dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="12dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/writing_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:hint="@string/field_hint_writing"
+            android:enabled="false"
+            app:layout_constraintTop_toBottomOf="@id/top_border"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:helperTextEnabled="true"
+            app:helperText="Обязательно"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/translation_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:hint="@string/field_hint_translation"
+            android:enabled="false"
+            app:layout_constraintTop_toBottomOf="@id/writing_text"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:endIconMode="clear_text"
+            app:helperTextEnabled="true"
+            app:helperText="Обязательно"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/transcription_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="12dp"
+            android:hint="@string/field_hint_transcription"
+            android:enabled="false"
+            app:layout_constraintTop_toBottomOf="@id/translation_text"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/part_of_speech_text"
+            app:layout_constraintHorizontal_weight="3"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:endIconMode="clear_text" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/part_of_speech_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="12dp"
+            android:hint="@string/field_hint_pos"
+            android:enabled="false"
+            app:layout_constraintTop_toBottomOf="@id/translation_text"
+            app:layout_constraintStart_toEndOf="@id/transcription_text"
+            app:layout_constraintEnd_toStartOf="@id/end_border"
+            app:layout_constraintHorizontal_weight="2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:endIconMode="clear_text" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/pos_and_ts_barrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="transcription_text, part_of_speech_text" />
+
+        <TextView
+            android:id="@+id/other_translations_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/text_header_other_translations"
+            android:textColor="?attr/subheadingColor"
+            android:textSize="@dimen/subheading_size"
+            android:background="@drawable/background_with_underline" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/other_translations"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/add_translation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_add_other_translation"
+            android:textSize="12sp"
+            android:padding="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintHorizontal_bias="0"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/other_translations_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            app:flow_wrapMode="chain"
+            app:flow_verticalGap="6dp"
+            app:flow_firstVerticalStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@id/pos_and_ts_barrier"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border"
+            app:constraint_referenced_ids="other_translations_text, other_translations, add_translation_button" />
+
+        <TextView
+            android:id="@+id/synonyms_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/text_header_synonyms"
+            android:textColor="?attr/subheadingColor"
+            android:textSize="@dimen/subheading_size"
+            android:background="@drawable/background_with_underline" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/synonyms"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/add_synonym_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/btn_add_synonym"
+            android:textSize="12sp"
+            android:padding="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintHorizontal_bias="0"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/synonyms_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            app:flow_wrapMode="chain"
+            app:flow_verticalGap="6dp"
+            app:flow_firstVerticalStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@id/other_translations_group"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border"
+            app:constraint_referenced_ids="synonyms_text, synonyms, add_synonym_button" />
+
+
+        <TextView
+            android:id="@+id/examples_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/text_header_other_examples"
+            android:textColor="?attr/subheadingColor"
+            android:textSize="@dimen/subheading_size"
+            android:background="@drawable/background_with_underline" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/examples"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/add_example_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/btn_add_example"
+            android:textSize="12sp"
+            android:padding="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintHorizontal_bias="0"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/examples_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            app:flow_wrapMode="chain"
+            app:flow_verticalGap="6dp"
+            app:flow_firstVerticalStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@id/synonyms_group"
+            app:layout_constraintBottom_toTopOf="@id/bottom_border"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border"
+            app:constraint_referenced_ids="examples_text, examples, add_example_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -17,4 +17,14 @@
     <string name="yandex_dict_api_hyper"><a href="http://api.yandex.ru/dictionary/">Реализовано с помощью сервиса \n«API Яндекс.Словарь»</a></string>
     <string name="add_def_screen_title">Добавить определение</string>
     <string name="landscape_input_warning">Чтобы ввести слово, поверните телефон вертикально</string>
+    <string name="field_hint_writing">Написание</string>
+    <string name="field_hint_translation">Перевод</string>
+    <string name="field_hint_pos">Часть речи</string>
+    <string name="field_hint_transcription">Транскрипция</string>
+    <string name="text_header_other_translations">Другие варианты перевода:</string>
+    <string name="text_header_synonyms">Синонимы:</string>
+    <string name="text_header_other_examples">Примеры:</string>
+    <string name="btn_add_other_translation">Добавить вариант</string>
+    <string name="btn_add_synonym">Добавить синоним</string>
+    <string name="btn_add_example">Добавить пример</string>
 </resources>
