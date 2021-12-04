@@ -6,6 +6,7 @@ data class Tab(
     val name: String,
     private val hostFragmentInstantiation: () -> Fragment
 ) {
-    val hostFragment: Fragment by lazy { hostFragmentInstantiation.invoke() }
+    val hostFragment: Fragment
+        get() = hostFragmentInstantiation.invoke()
     val tag = "OPEN_" + name.uppercase()
 }
