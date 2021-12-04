@@ -70,6 +70,8 @@ class LookupWordDefinitionsFragment : Fragment() {
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
 
         val activity = requireActivity() as AppCompatActivity
+        activity.title = getString(R.string.add_def_screen_title)
+
         val context = requireContext()
         val adapter = createAdapter(context, emptyList())
         val factory = LookupViewModelFactory(
