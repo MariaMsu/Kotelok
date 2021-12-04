@@ -28,23 +28,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
             android:background="@drawable/lookup_word_enter_section_background"
             android:elevation="4dp"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/yandex_dict_api_hyperlink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textSize="20sp"
+                android:textColorLink="?attr/titleColor"
+                android:text="@string/yandex_dict_api_hyper"
+                />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/enter_writing_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:layout_marginHorizontal="12dp"
                 android:hint="@string/enter_writing_hint"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:textAppearance="@style/FieldText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -54,8 +63,7 @@
                 android:id="@+id/lookup_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:text="@string/lookup_word_button_text"/>
         </LinearLayout>
 

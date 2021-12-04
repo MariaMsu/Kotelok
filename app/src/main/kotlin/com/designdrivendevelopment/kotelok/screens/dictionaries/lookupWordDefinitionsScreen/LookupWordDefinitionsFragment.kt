@@ -2,6 +2,7 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefin
 
 import android.content.Context
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
@@ -37,6 +39,7 @@ import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
 class LookupWordDefinitionsFragment : Fragment() {
+    private var yandexDictHyperlink: TextView? = null
     private var enterWritingTextField: TextInputLayout? = null
     private var lookupButton: Button? = null
     private var resultList: RecyclerView? = null
@@ -261,6 +264,8 @@ class LookupWordDefinitionsFragment : Fragment() {
     }
 
     private fun initViews(view: View) {
+        yandexDictHyperlink = view.findViewById(R.id.yandex_dict_api_hyperlink)
+        yandexDictHyperlink?.movementMethod = LinkMovementMethod.getInstance()
         addFab = view.findViewById(R.id.add_new_definition_fab)
         enterWritingTextField = view.findViewById(R.id.enter_writing_text)
         lookupButton = view.findViewById(R.id.lookup_button)
@@ -268,6 +273,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     }
 
     private fun clearViews() {
+        yandexDictHyperlink = null
         addFab = null
         enterWritingTextField = null
         lookupButton = null
