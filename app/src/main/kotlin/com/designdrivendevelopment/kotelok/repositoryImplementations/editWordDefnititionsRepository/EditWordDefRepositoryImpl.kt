@@ -13,6 +13,8 @@ import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toTranslationEntity
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toWordDefinitionEntity
 import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class EditWordDefRepositoryImpl(
     private val wordDefinitionsDao: WordDefinitionsDao,
@@ -37,6 +39,19 @@ class EditWordDefRepositoryImpl(
             addNewWordDefinition(wordDefinition, dictionaries)
         } else {
             updateWordDefinition(wordDefinition, dictionaries)
+        }
+    }
+
+    override suspend fun addDefinitionsToDictionary(
+        definitions: List<WordDefinition>,
+        dictionary: Dictionary
+    ) = withContext(Dispatchers.IO) {
+        val savedDefinitions = definitions.filter { it.id != NEW_WORD_ID }
+        val loadedDefinitions = definitions.filter { it.id == NEW_WORD_ID }
+
+        addCrossRefs(savedDefinitions, dictionary.id)
+        loadedDefinitions.forEach { definition ->
+            addNewWordDefinition(definition, listOf(dictionary))
         }
     }
 
@@ -116,6 +131,16 @@ class EditWordDefRepositoryImpl(
                 wordDefinitionId = wordDefinition.id
             )
         }
+    }
+
+    private suspend fun addCrossRefs(definitions: List<WordDefinition>, dictionaryId: Long) {
+        val crossRefs = definitions.map { definition ->
+            DictionaryWordDefCrossRef(
+                dictionaryId = dictionaryId,
+                wordDefinitionId = definition.id
+            )
+        }
+        dictWordDefCrossRefDao.insert(crossRefs)
     }
 
     private suspend fun addCrossRefs(definitionId: Long, dictionaries: List<Dictionary>) {

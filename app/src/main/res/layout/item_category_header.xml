@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="24dp"
+    android:elevation="12dp"
     android:background="@drawable/category_header_background" >
 
     <TextView

@@ -1,7 +1,6 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen
 
 import androidx.recyclerview.widget.DiffUtil
-import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ButtonItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.CategoryHeaderItem
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemViewTypes
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
@@ -28,23 +27,33 @@ class ItemsDiffUtilCallback(
             val viewType = newList[newItemPosition].viewType
             return when (viewType) {
                 ItemViewTypes.ITEM_WORD_DEFINITION -> {
-                    val oldDefinition = (oldList[oldItemPosition] as WordDefinitionItem).data
-                    val newDefinition = (newList[newItemPosition] as WordDefinitionItem).data
-                    oldDefinition == newDefinition
+                    val oldDefinitionItem = (oldList[oldItemPosition] as WordDefinitionItem)
+                    val newDefinitionItem = (newList[newItemPosition] as WordDefinitionItem)
+                    oldDefinitionItem == newDefinitionItem
                 }
                 ItemViewTypes.ITEM_CATEGORY_HEADER -> {
                     val oldHeader = (oldList[oldItemPosition] as CategoryHeaderItem).header
                     val newHeader = (newList[newItemPosition] as CategoryHeaderItem).header
                     oldHeader == newHeader
                 }
-                ItemViewTypes.ITEM_BUTTON -> {
-                    val oldText = (oldList[oldItemPosition] as ButtonItem).buttonText
-                    val newText = (newList[newItemPosition] as ButtonItem).buttonText
-                    oldText == newText
-                } else -> false
+                else -> false
             }
         } else {
             return false
         }
     }
+//
+//    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+//        return when ((newList[newItemPosition] as? SelectableItem)?.isPartOfSelection) {
+//            true -> {
+//                Log.d("SELECTION", "hide button")
+//                Animations.ANIMATION_BUTTON_TO_CHECKBOX
+//            }
+//            false -> {
+//                Log.d("SELECTION", "show button")
+//                Animations.ANIMATION_CHECKBOX_TO_BUTTON
+//            }
+//            else -> super.getChangePayload(oldItemPosition, newItemPosition)
+//        }
+//    }
 }

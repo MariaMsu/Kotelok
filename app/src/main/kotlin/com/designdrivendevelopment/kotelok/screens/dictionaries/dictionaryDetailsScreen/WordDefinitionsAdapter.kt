@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
 
 class WordDefinitionsAdapter(
     private val context: Context,

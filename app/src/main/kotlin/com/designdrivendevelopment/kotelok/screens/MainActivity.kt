@@ -7,6 +7,7 @@ import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
+import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -52,9 +53,10 @@ class MainActivity : AppCompatActivity() {
             setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
                 this@MainActivity
-            ) { _, _ ->
+            ) { _, bundle ->
+                val dictionaryId = bundle.getLong(DictionaryDetailsFragment.RESULT_DATA_KEY)
                 addFragment(
-                    fragment = LookupWordDefinitionsFragment.newInstance(),
+                    fragment = LookupWordDefinitionsFragment.newInstance(dictionaryId),
                     tag = "Lookup_word_def_fragment",
                     transactionName = "open_lookup_word_def_fragment"
                 )

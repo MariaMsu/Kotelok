@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lookup_def_input_error">Ошибка: Вы должны ввести слово</string>
+</resources>
