@@ -69,20 +69,22 @@ class LookupWordDefinitionsFragment : Fragment() {
         setHasOptionsMenu(true)
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
 
+        val activity = requireActivity() as AppCompatActivity
         val context = requireContext()
         val adapter = createAdapter(context, emptyList())
         val factory = LookupViewModelFactory(
-            (requireActivity().application as KotelokApplication)
+            (activity.application as KotelokApplication)
                 .appComponent.lookupWordDefRepository,
-            (requireActivity().application as KotelokApplication)
+            (activity.application as KotelokApplication)
                 .appComponent.editWordDefinitionsRepository,
-            (requireActivity().application as KotelokApplication)
+            (activity.application as KotelokApplication)
                 .appComponent.dictionariesRepository,
             dictionaryId
         )
 
         val lookupViewModel = setupFragmentViewModel(
             rootView = view,
+            activity = activity,
             fragment = this,
             factory = factory,
             adapter = adapter
@@ -179,6 +181,7 @@ class LookupWordDefinitionsFragment : Fragment() {
     private fun setupFragmentViewModel(
         rootView: View,
         fragment: Fragment,
+        activity: AppCompatActivity,
         factory: LookupViewModelFactory,
         adapter: ItemWithTypesAdapter
     ): LookupViewModel {
@@ -194,7 +197,7 @@ class LookupWordDefinitionsFragment : Fragment() {
             }
             selectionStates.observe(fragment) { isSelectionActive ->
                 if (isSelectionActive) {
-                    actionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(
+                    actionMode = activity.startSupportActionMode(
                         SelectionModeCallBack(tracker, this::saveSelectedDefinitions)
                     )
                 } else {
