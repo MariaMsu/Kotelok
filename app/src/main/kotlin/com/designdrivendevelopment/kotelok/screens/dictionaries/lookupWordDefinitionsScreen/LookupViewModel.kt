@@ -14,6 +14,7 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefini
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
 import com.designdrivendevelopment.kotelok.screens.screensUtils.UiEvent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -24,10 +25,17 @@ class LookupViewModel(
     private val dictionariesRepository: DictionariesRepository,
     private val dictionaryId: Long
 ) : ViewModel() {
+    companion object {
+        private const val HIDE_LOADING_DELAY = 500L
+    }
+
     private val _foundDefinitions = MutableLiveData<List<ItemWithType>>(emptyList())
     private val _messageEvents = MutableLiveData<UiEvent.ShowMessage>()
     private val _selectionStates = MutableLiveData(false)
     private val _selectionSize = MutableLiveData(0)
+    private val _dataLoadingEvents = MutableLiveData<UiEvent.Loading>(
+        UiEvent.Loading.HideLoading(isHandled = true)
+    )
     private var currentItems: List<ItemWithType> = emptyList()
     private val selectedDefinitions: MutableList<WordDefinition> = mutableListOf()
     private var isSelectionActive: Boolean = false
@@ -41,8 +49,10 @@ class LookupViewModel(
     val messageEvents: LiveData<UiEvent.ShowMessage> = _messageEvents
     val selectionStates: LiveData<Boolean> = _selectionStates
     val selectionSize: LiveData<Int> = _selectionSize
+    val dataLoadingEvents: LiveData<UiEvent.Loading> = _dataLoadingEvents
 
     fun lookupByWriting(writing: String) {
+        _dataLoadingEvents.value = UiEvent.Loading.ShowLoading()
         viewModelScope.launch(Dispatchers.IO) {
             val flowFromRemote = lookupWordDefRepository.loadDefinitionsByWriting(writing)
             val flowFromLocal = lookupWordDefRepository.getSavedDefinitionsByWriting(writing)
@@ -88,6 +98,8 @@ class LookupViewModel(
 
                 currentItems = createItemsList(localDefinitions, remoteDefinitions)
                 _foundDefinitions.postValue(currentItems)
+                delay(HIDE_LOADING_DELAY)
+                _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
             }
         }
     }

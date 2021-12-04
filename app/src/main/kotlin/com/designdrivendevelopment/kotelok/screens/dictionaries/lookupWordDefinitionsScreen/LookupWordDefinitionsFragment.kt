@@ -12,9 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.core.animation.addListener
+import androidx.core.animation.doOnEnd
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -32,9 +36,12 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefini
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
 import com.designdrivendevelopment.kotelok.screens.screensUtils.TtsPrefs
+import com.designdrivendevelopment.kotelok.screens.screensUtils.UiEvent
+import com.designdrivendevelopment.kotelok.screens.screensUtils.dpToPx
 import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
+import com.designdrivendevelopment.kotelok.screens.screensUtils.objectAnimation
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -43,6 +50,7 @@ import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
 class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, TextToSpeech.OnInitListener {
+    private var loadingProgressBar: ProgressBar? = null
     private var yandexDictHyperlink: TextView? = null
     private var enterWritingTextField: TextInputLayout? = null
     private var lookupButton: Button? = null
@@ -217,6 +225,20 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
             foundDefinitions.observe(fragment) { newItems ->
                 onItemsListChanged(newItems, adapter)
             }
+            dataLoadingEvents.observe(fragment) { loadingEvent ->
+                if (!loadingEvent.isHandled) {
+                    when (loadingEvent) {
+                        is UiEvent.Loading.ShowLoading -> {
+                            showLoading()
+                        }
+
+                        is UiEvent.Loading.HideLoading -> {
+                            hideLoading()
+                        }
+                    }
+                    notifyToEventIsHandled(loadingEvent)
+                }
+            }
             messageEvents.observe(fragment) { event ->
                 if (!event.isHandled) {
                     sendMessage(rootView, event.message)
@@ -241,6 +263,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
 
     private fun setupListeners(lookupViewModel: LookupViewModel) {
         lookupButton?.setOnClickListener { button ->
+            loadingProgressBar?.isVisible = true
             enterWritingTextField?.error = null
             tracker?.clearSelection()
             val writing = enterWritingTextField?.editText?.text?.toString()
@@ -265,6 +288,31 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
             }
         }
         resultList?.addOnScrollListener(onScrollListener)
+    }
+
+    private fun showLoading() {
+        loadingProgressBar?.isVisible = true
+        objectAnimation(
+            target = loadingProgressBar!!,
+            property = View.TRANSLATION_Y,
+            endValue = dpToPx(SHOWN_LOADING_Y_POS),
+            animationDuration = SPINNER_TRANSLATION_DURATION
+        ).start()
+    }
+
+    private fun hideLoading() {
+        objectAnimation(
+            target = loadingProgressBar!!,
+            property = View.TRANSLATION_Y,
+            endValue = dpToPx(HIDDEN_LOADING_Y_POS),
+            animationDuration = SPINNER_TRANSLATION_DURATION
+        ).apply {
+            addListener {
+                doOnEnd {
+                    loadingProgressBar?.isVisible = false
+                }
+            }
+        }.start()
     }
 
     private fun sendMessage(rootView: View, message: String) {
@@ -295,6 +343,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
     }
 
     private fun initViews(view: View) {
+        loadingProgressBar = view.findViewById(R.id.loading_circle)
         yandexDictHyperlink = view.findViewById(R.id.yandex_dict_api_hyperlink)
         yandexDictHyperlink?.movementMethod = LinkMovementMethod.getInstance()
         addFab = view.findViewById(R.id.add_new_definition_fab)
@@ -304,6 +353,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
     }
 
     private fun clearViews() {
+        loadingProgressBar = null
         yandexDictHyperlink = null
         addFab = null
         enterWritingTextField = null
@@ -312,6 +362,9 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
     }
 
     companion object {
+        private const val SPINNER_TRANSLATION_DURATION = 250L
+        private const val SHOWN_LOADING_Y_POS = 12
+        private const val HIDDEN_LOADING_Y_POS = -52
         private const val HEADER_DESELECTION_DELAY = 100L
         private const val DEFINITIONS_SELECTION_ID = "definitions_selection"
         private const val SCROLL_START_POSITION = 0
