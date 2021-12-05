@@ -145,17 +145,25 @@
             android:text="@string/text_header_other_translations"
             android:textColor="?attr/subheadingColor"
             android:textSize="@dimen/subheading_size"
-            android:background="@drawable/background_with_underline" />
+            android:background="@drawable/background_with_underline"
+            app:layout_constraintTop_toBottomOf="@id/pos_and_ts_barrier"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/other_translations"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            app:layout_constraintTop_toBottomOf="@id/other_translations_text"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border" />
 
         <Button
             android:id="@+id/add_translation_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:text="@string/btn_add_other_translation"
             android:textSize="12sp"
             android:padding="0dp"
@@ -164,21 +172,9 @@
             app:layout_constraintHorizontal_bias="0"
             app:icon="@drawable/ic_add"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            />
-
-        <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/other_translations_group"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            app:flow_wrapMode="chain"
-            app:flow_verticalGap="6dp"
-            app:flow_firstVerticalStyle="spread_inside"
-            app:layout_constraintTop_toBottomOf="@id/pos_and_ts_barrier"
+            app:layout_constraintTop_toBottomOf="@id/other_translations"
             app:layout_constraintStart_toEndOf="@id/start_border"
-            app:layout_constraintEnd_toStartOf="@id/end_border"
-            app:constraint_referenced_ids="other_translations_text, other_translations, add_translation_button" />
+            app:layout_constraintEnd_toStartOf="@id/end_border" />
 
         <TextView
             android:id="@+id/synonyms_text"
@@ -188,12 +184,19 @@
             android:text="@string/text_header_synonyms"
             android:textColor="?attr/subheadingColor"
             android:textSize="@dimen/subheading_size"
-            android:background="@drawable/background_with_underline" />
+            android:background="@drawable/background_with_underline"
+            app:layout_constraintTop_toBottomOf="@id/add_translation_button"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/synonyms"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            app:layout_constraintTop_toBottomOf="@id/synonyms_text"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border" />
 
         <Button
             android:id="@+id/add_synonym_button"
@@ -208,22 +211,9 @@
             app:layout_constraintHorizontal_bias="0"
             app:icon="@drawable/ic_add"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            />
-
-        <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/synonyms_group"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            app:flow_wrapMode="chain"
-            app:flow_verticalGap="6dp"
-            app:flow_firstVerticalStyle="spread_inside"
-            app:layout_constraintTop_toBottomOf="@id/other_translations_group"
+            app:layout_constraintTop_toBottomOf="@id/synonyms"
             app:layout_constraintStart_toEndOf="@id/start_border"
-            app:layout_constraintEnd_toStartOf="@id/end_border"
-            app:constraint_referenced_ids="synonyms_text, synonyms, add_synonym_button" />
-
+            app:layout_constraintEnd_toStartOf="@id/end_border" />
 
         <TextView
             android:id="@+id/examples_text"
@@ -233,12 +223,18 @@
             android:text="@string/text_header_other_examples"
             android:textColor="?attr/subheadingColor"
             android:textSize="@dimen/subheading_size"
-            android:background="@drawable/background_with_underline" />
+            android:background="@drawable/background_with_underline"
+            app:layout_constraintTop_toBottomOf="@id/add_synonym_button"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/examples"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/examples_text"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border" />
 
         <Button
             android:id="@+id/add_example_button"
@@ -253,22 +249,27 @@
             app:layout_constraintHorizontal_bias="0"
             app:icon="@drawable/ic_add"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            />
+            app:layout_constraintTop_toBottomOf="@id/examples"
+            app:layout_constraintStart_toEndOf="@id/start_border"
+            app:layout_constraintEnd_toStartOf="@id/end_border" />
 
-        <androidx.constraintlayout.helper.widget.Flow
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/translations_group"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:constraint_referenced_ids="other_translations_text, other_translations, add_translation_button" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/synonyms_group"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:constraint_referenced_ids="synonyms, synonyms_text, add_synonym_button" />
+
+        <androidx.constraintlayout.widget.Group
             android:id="@+id/examples_group"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            app:flow_wrapMode="chain"
-            app:flow_verticalGap="6dp"
-            app:flow_firstVerticalStyle="spread_inside"
-            app:layout_constraintTop_toBottomOf="@id/synonyms_group"
-            app:layout_constraintBottom_toTopOf="@id/bottom_border"
-            app:layout_constraintStart_toEndOf="@id/start_border"
-            app:layout_constraintEnd_toStartOf="@id/end_border"
-            app:constraint_referenced_ids="examples_text, examples, add_example_button" />
+            android:layout_height="0dp"
+            app:constraint_referenced_ids="examples, examples_text, add_example_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
