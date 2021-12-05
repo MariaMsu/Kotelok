@@ -18,7 +18,11 @@ import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.google.android.material.textfield.TextInputLayout
 
-class DefinitionDetailsFragment : Fragment(), DeleteTranslationListener {
+class DefinitionDetailsFragment :
+    Fragment(),
+    DeleteTranslationListener,
+    DeleteSynonymListener {
+
     private var writingField: TextInputLayout? = null
     private var translationField: TextInputLayout? = null
     private var transcriptionField: TextInputLayout? = null
@@ -62,11 +66,13 @@ class DefinitionDetailsFragment : Fragment(), DeleteTranslationListener {
                 .appComponent.sharedWordDefProvider
         )
 
-        val adapter = TranslationsAdapter(context, this, emptyList())
-        setupTranslations(adapter)
+        val translationsAdapter = TranslationsAdapter(context, this, emptyList())
+        val synonymsAdapter = SynonymsAdapter(context, this, emptyList())
+        setupTranslations(translationsAdapter)
+        setupSynonyms(synonymsAdapter)
 
         viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
-        setupViewModel(viewModel, adapter)
+        setupViewModel(viewModel, translationsAdapter, synonymsAdapter)
         setupListeners(viewModel)
     }
 
@@ -79,13 +85,23 @@ class DefinitionDetailsFragment : Fragment(), DeleteTranslationListener {
         viewModel?.deleteTranslation(translation)
     }
 
-    private fun setupViewModel(viewModel: DefDetailsViewModel?, adapter: TranslationsAdapter) {
+    override fun onDeleteSynonym(synonym: String) {
+        viewModel?.deleteSynonym(synonym)
+    }
+
+    private fun setupViewModel(
+        viewModel: DefDetailsViewModel?,
+        translationsAdapter: TranslationsAdapter,
+        synonymsAdapter: SynonymsAdapter
+    ) {
         viewModel?.displayedDefinition?.observe(this) { wordDefinition ->
             if (wordDefinition != null) {
                 showDefinitions(wordDefinition)
-                onTranslationsChanged(wordDefinition.allTranslations, adapter)
+                onTranslationsChanged(wordDefinition.allTranslations, translationsAdapter)
+                onSynonymsChanged(wordDefinition.synonyms, synonymsAdapter)
             }
-            addTranslationBtn?.isVisible = adapter.translations.size < MAX_LISTS_SIZE
+            addTranslationBtn?.isVisible = translationsAdapter.translations.size < MAX_LISTS_SIZE
+            addSynonymBtn?.isVisible = synonymsAdapter.synonyms.size < MAX_LISTS_SIZE
         }
     }
 
@@ -104,9 +120,27 @@ class DefinitionDetailsFragment : Fragment(), DeleteTranslationListener {
         }
     }
 
+    private fun setupSynonyms(adapter: SynonymsAdapter) {
+        synonymsList
+            ?.addItemDecoration(MarginItemDecoration(marginVertical = 12, marginHorizontal = 0))
+        synonymsList?.adapter = adapter
+        synonymsList?.layoutManager = object : LinearLayoutManager(context, VERTICAL, false) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+
+            override fun supportsPredictiveItemAnimations(): Boolean {
+                return false
+            }
+        }
+    }
+
     private fun setupListeners(viewModel: DefDetailsViewModel?) {
         addTranslationBtn?.setOnClickListener {
             viewModel?.addTranslationField()
+        }
+        addSynonymBtn?.setOnClickListener {
+            viewModel?.addSynonymField()
         }
     }
 
@@ -117,6 +151,15 @@ class DefinitionDetailsFragment : Fragment(), DeleteTranslationListener {
         )
         DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
         adapter.translations = newList
+    }
+
+    private fun onSynonymsChanged(newList: List<String>, adapter: SynonymsAdapter) {
+        val diffCallback = StringsDiffCallback(
+            newList = newList,
+            oldList = adapter.synonyms
+        )
+        DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
+        adapter.synonyms = newList
     }
 
     private fun showDefinitions(wordDefinition: WordDefinition) {
