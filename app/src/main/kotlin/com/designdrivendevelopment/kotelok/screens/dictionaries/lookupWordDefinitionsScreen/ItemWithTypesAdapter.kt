@@ -21,7 +21,8 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClic
 class ItemWithTypesAdapter(
     var items: List<ItemWithType>,
     private val context: Context,
-    private val playSoundBtnClickListener: PlaySoundBtnClickListener
+    private val playSoundBtnClickListener: PlaySoundBtnClickListener,
+    private val definitionClickListener: DefinitionClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class WordDefinitionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val selectionMarker: CheckBox = view.findViewById(R.id.selection_checkbox)
@@ -191,9 +192,13 @@ class ItemWithTypesAdapter(
             ItemViewTypes.ITEM_WORD_DEFINITION -> {
                 (holder as WordDefinitionViewHolder).bind((item as WordDefinitionItem))
                 val playSoundBtn: Button = holder.itemView.findViewById(R.id.play_speech_btn)
-                val text = item.data.writing
+                val definition = item.data
+                val text = definition.writing
                 playSoundBtn.setOnClickListener {
                     playSoundBtnClickListener.onPlayBtnClick(text)
+                }
+                holder.itemView.setOnClickListener {
+                    definitionClickListener.onClickToDefinition(definition)
                 }
             }
             ItemViewTypes.ITEM_CATEGORY_HEADER -> {

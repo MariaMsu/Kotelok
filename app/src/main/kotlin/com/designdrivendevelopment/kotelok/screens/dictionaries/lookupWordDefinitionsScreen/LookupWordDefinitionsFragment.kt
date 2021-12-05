@@ -54,7 +54,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
-class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, TextToSpeech.OnInitListener {
+class LookupWordDefinitionsFragment :
+    Fragment(),
+    PlaySoundBtnClickListener,
+    TextToSpeech.OnInitListener,
+    DefinitionClickListener {
+
     private var loadingProgressBar: ProgressBar? = null
     private var yandexDictHyperlink: TextView? = null
     private var enterWritingTextField: TextInputLayout? = null
@@ -207,11 +212,20 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
         }
     }
 
+    override fun onClickToDefinition(wordDefinition: WordDefinition) {
+        openDefinitionDetails(wordDefinition)
+    }
+
     private fun createAdapter(
         context: Context,
         items: List<ItemWithType>
     ): ItemWithTypesAdapter {
-        return ItemWithTypesAdapter(items, context, this).apply { setHasStableIds(true) }
+        return ItemWithTypesAdapter(
+            items,
+            context,
+            playSoundBtnClickListener = this,
+            definitionClickListener = this
+        ).apply { setHasStableIds(true) }
     }
 
     private fun createLayoutManager(context: Context): LinearLayoutManager {
