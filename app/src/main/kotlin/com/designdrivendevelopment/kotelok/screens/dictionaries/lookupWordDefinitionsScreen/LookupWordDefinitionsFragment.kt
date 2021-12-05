@@ -61,6 +61,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
     private var textToSpeech: TextToSpeech? = null
     private var tracker: SelectionTracker<String>? = null
     private var actionMode: ActionMode? = null
+    private var lookupViewModel: LookupViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,7 +102,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
             dictionaryId
         )
 
-        val lookupViewModel = setupFragmentViewModel(
+        lookupViewModel = setupFragmentViewModel(
             rootView = view,
             activity = activity,
             fragment = this,
@@ -130,19 +131,19 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
                             tracker?.deselect(key)
                         }
                     } else {
-                        lookupViewModel.onItemSelectionChanged(key, selected)
+                        lookupViewModel?.onItemSelectionChanged(key, selected)
                     }
                 }
 
                 override fun onSelectionChanged() {
                     val selectionSize = tracker?.selection?.size()
                     if (selectionSize != null) {
-                        lookupViewModel.onSelectionSizeChanged(selectionSize)
+                        lookupViewModel?.onSelectionSizeChanged(selectionSize)
                     }
                 }
 
                 override fun onSelectionCleared() {
-                    lookupViewModel.onSelectionCleared()
+                    lookupViewModel?.onSelectionCleared()
                 }
             }
         )
@@ -275,7 +276,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
         }
     }
 
-    private fun setupListeners(lookupViewModel: LookupViewModel) {
+    private fun setupListeners(lookupViewModel: LookupViewModel?) {
         lookupButton?.setOnClickListener { button ->
             loadingProgressBar?.isVisible = true
             enterWritingTextField?.error = null
@@ -284,7 +285,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
             if (writing.isNullOrEmpty()) {
                 enterWritingTextField?.error = getString(R.string.lookup_def_input_error)
             } else {
-                lookupViewModel.lookupByWriting(writing)
+                lookupViewModel?.lookupByWriting(writing)
                 button.hideKeyboard()
             }
         }
