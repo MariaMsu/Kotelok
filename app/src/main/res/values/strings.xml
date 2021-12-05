@@ -27,4 +27,7 @@
     <string name="btn_add_other_translation">Добавить вариант</string>
     <string name="btn_add_synonym">Добавить синоним</string>
     <string name="btn_add_example">Добавить пример</string>
+    <string name="field_hint_synonym">Синоним</string>
+    <string name="field_hint_example">Пример</string>
+    <string name="field_hint_example_translation">Перевод примера</string>
 </resources>
