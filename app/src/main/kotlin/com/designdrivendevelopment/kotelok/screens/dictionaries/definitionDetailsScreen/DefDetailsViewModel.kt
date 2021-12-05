@@ -105,4 +105,14 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
     }
+
+    fun deleteExample(example: ExampleOfDefinitionUse) {
+        val definition = displayedDefinition.value
+        val extendedDefinition = definition?.copy(
+            examples = definition.examples.toMutableList().apply {
+                remove(example)
+            }
+        )
+        _displayedDefinition.value = extendedDefinition
+    }
 }
