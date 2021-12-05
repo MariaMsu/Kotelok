@@ -239,7 +239,7 @@
         <Button
             android:id="@+id/add_example_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="6dp"
             android:text="@string/btn_add_example"
             android:textSize="12sp"
@@ -251,25 +251,9 @@
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             app:layout_constraintTop_toBottomOf="@id/examples"
             app:layout_constraintStart_toEndOf="@id/start_border"
-            app:layout_constraintEnd_toStartOf="@id/end_border" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/translations_group"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:constraint_referenced_ids="other_translations_text, other_translations, add_translation_button" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/synonyms_group"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:constraint_referenced_ids="synonyms, synonyms_text, add_synonym_button" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/examples_group"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:constraint_referenced_ids="examples, examples_text, add_example_button" />
+            app:layout_constraintEnd_toStartOf="@id/end_border"
+            app:layout_constraintBottom_toTopOf="@id/bottom_border"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -33,9 +33,6 @@ class DefinitionDetailsFragment :
     private var addTranslationBtn: Button? = null
     private var addSynonymBtn: Button? = null
     private var addExampleBtn: Button? = null
-    private var translationsGroup: Group? = null
-    private var synonymsGroup: Group? = null
-    private var examplesGroup: Group? = null
     private var viewModel: DefDetailsViewModel? = null
 
     override fun onCreateView(
@@ -180,9 +177,6 @@ class DefinitionDetailsFragment :
         addTranslationBtn = view.findViewById(R.id.add_translation_button)
         addSynonymBtn = view.findViewById(R.id.add_synonym_button)
         addExampleBtn = view.findViewById(R.id.add_example_button)
-        translationsGroup = view.findViewById(R.id.translations_group)
-        synonymsGroup = view.findViewById(R.id.synonyms_group)
-        examplesGroup = view.findViewById(R.id.examples_group)
     }
 
     private fun clearViews() {
@@ -196,9 +190,6 @@ class DefinitionDetailsFragment :
         addTranslationBtn = null
         addSynonymBtn = null
         addExampleBtn = null
-        translationsGroup = null
-        synonymsGroup = null
-        examplesGroup = null
     }
 
     companion object {
