@@ -30,4 +30,5 @@
     <string name="field_hint_synonym">Синоним</string>
     <string name="field_hint_example">Пример</string>
     <string name="field_hint_example_translation">Перевод примера</string>
+    <string name="delete_translation_btn">Удалить вариант перевода</string>
 </resources>
