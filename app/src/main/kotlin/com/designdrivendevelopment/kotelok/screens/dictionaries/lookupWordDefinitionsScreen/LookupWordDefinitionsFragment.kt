@@ -96,6 +96,8 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
                 .appComponent.editWordDefinitionsRepository,
             (activity.application as KotelokApplication)
                 .appComponent.dictionariesRepository,
+            (activity.application as KotelokApplication)
+                .appComponent.sharedWordDefProvider,
             dictionaryId
         )
 
