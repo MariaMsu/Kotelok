@@ -1,11 +1,11 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,14 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.dpToPx
 import com.google.android.material.textfield.TextInputLayout
 
+@Suppress("TooManyFunctions")
 class DefinitionDetailsFragment :
     Fragment(),
     DeleteTranslationListener,
-    DeleteSynonymListener {
+    DeleteSynonymListener,
+    DeleteExampleClickListener {
 
     private var writingField: TextInputLayout? = null
     private var translationField: TextInputLayout? = null
@@ -65,11 +69,13 @@ class DefinitionDetailsFragment :
 
         val translationsAdapter = TranslationsAdapter(context, this, emptyList())
         val synonymsAdapter = SynonymsAdapter(context, this, emptyList())
+        val examplesAdapter = ExamplesAdapter(context, this, emptyList())
         setupTranslations(translationsAdapter)
         setupSynonyms(synonymsAdapter)
+        setupExamples(examplesAdapter)
 
         viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
-        setupViewModel(viewModel, translationsAdapter, synonymsAdapter)
+        setupViewModel(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter)
         setupListeners(viewModel)
     }
 
@@ -86,19 +92,27 @@ class DefinitionDetailsFragment :
         viewModel?.deleteSynonym(synonym)
     }
 
+    override fun onDeleteExample(example: ExampleOfDefinitionUse) {
+        viewModel?.deleteExample(example)
+    }
+
     private fun setupViewModel(
         viewModel: DefDetailsViewModel?,
         translationsAdapter: TranslationsAdapter,
-        synonymsAdapter: SynonymsAdapter
+        synonymsAdapter: SynonymsAdapter,
+        examplesAdapter: ExamplesAdapter
     ) {
         viewModel?.displayedDefinition?.observe(this) { wordDefinition ->
             if (wordDefinition != null) {
                 showDefinitions(wordDefinition)
                 onTranslationsChanged(wordDefinition.allTranslations, translationsAdapter)
                 onSynonymsChanged(wordDefinition.synonyms, synonymsAdapter)
+                onExamplesChanged(wordDefinition.examples, examplesAdapter)
+
+                addTranslationBtn?.isVisible = wordDefinition.allTranslations.size < MAX_LISTS_SIZE
+                addSynonymBtn?.isVisible = wordDefinition.synonyms.size < MAX_LISTS_SIZE
+                addExampleBtn?.isVisible = wordDefinition.examples.size < MAX_EXAMPLES_SIZE
             }
-            addTranslationBtn?.isVisible = translationsAdapter.translations.size < MAX_LISTS_SIZE
-            addSynonymBtn?.isVisible = synonymsAdapter.synonyms.size < MAX_LISTS_SIZE
         }
     }
 
@@ -108,7 +122,7 @@ class DefinitionDetailsFragment :
         translationsList?.adapter = adapter
         translationsList?.layoutManager = object : LinearLayoutManager(context, VERTICAL, false) {
             override fun canScrollVertically(): Boolean {
-                return false
+                return resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT
             }
 
             override fun supportsPredictiveItemAnimations(): Boolean {
@@ -123,7 +137,27 @@ class DefinitionDetailsFragment :
         synonymsList?.adapter = adapter
         synonymsList?.layoutManager = object : LinearLayoutManager(context, VERTICAL, false) {
             override fun canScrollVertically(): Boolean {
+                return resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT
+            }
+
+            override fun supportsPredictiveItemAnimations(): Boolean {
                 return false
+            }
+        }
+    }
+
+    private fun setupExamples(adapter: ExamplesAdapter) {
+        examplesList?.addItemDecoration(
+            MarginItemDecoration(
+                marginVertical = 24,
+                marginHorizontal = 0,
+                marginBottomInPx = dpToPx(12).toInt()
+            )
+        )
+        examplesList?.adapter = adapter
+        examplesList?.layoutManager = object : LinearLayoutManager(context, VERTICAL, false) {
+            override fun canScrollVertically(): Boolean {
+                return resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT
             }
 
             override fun supportsPredictiveItemAnimations(): Boolean {
@@ -138,6 +172,9 @@ class DefinitionDetailsFragment :
         }
         addSynonymBtn?.setOnClickListener {
             viewModel?.addSynonymField()
+        }
+        addExampleBtn?.setOnClickListener {
+            viewModel?.addExampleField()
         }
     }
 
@@ -157,6 +194,18 @@ class DefinitionDetailsFragment :
         )
         DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
         adapter.synonyms = newList
+    }
+
+    private fun onExamplesChanged(
+        newExamples: List<ExampleOfDefinitionUse>,
+        adapter: ExamplesAdapter
+    ) {
+        val diffCallback = ExamplesDiffCallback(
+            oldExamples = adapter.examples,
+            newExamples = newExamples
+        )
+        DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
+        adapter.examples = newExamples
     }
 
     private fun showDefinitions(wordDefinition: WordDefinition) {
@@ -197,6 +246,7 @@ class DefinitionDetailsFragment :
         private const val SAVE_MODE_KEY = "save_mode_key"
         private const val DEFAULT_DICT_ID = 1L
         private const val MAX_LISTS_SIZE = 5
+        private const val MAX_EXAMPLES_SIZE = 3
         const val READ_ONLY = 1
         const val WRITE_AND_READ = 2
         const val SAVE_MODE_UPDATE = 1
