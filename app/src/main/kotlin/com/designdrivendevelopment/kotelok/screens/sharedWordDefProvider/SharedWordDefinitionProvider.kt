@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.screens
+package com.designdrivendevelopment.kotelok.screens.sharedWordDefProvider
 
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 
