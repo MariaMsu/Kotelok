@@ -15,4 +15,9 @@ class DefinitionDetailsFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_definition_details, container, false)
     }
+
+    companion object {
+        const val READ_ONLY = 1
+        const val WRITE_AND_READ = 2
+    }
 }
