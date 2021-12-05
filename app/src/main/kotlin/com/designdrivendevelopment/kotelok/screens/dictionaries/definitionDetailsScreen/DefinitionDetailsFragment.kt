@@ -247,8 +247,6 @@ class DefinitionDetailsFragment :
         private const val DEFAULT_DICT_ID = 1L
         private const val MAX_LISTS_SIZE = 5
         private const val MAX_EXAMPLES_SIZE = 3
-        const val READ_ONLY = 1
-        const val WRITE_AND_READ = 2
         const val SAVE_MODE_UPDATE = 1
         const val SAVE_MODE_COPY = 2
 

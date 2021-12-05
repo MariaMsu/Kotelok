@@ -21,19 +21,19 @@ class DefDetailsViewModel(
 ) : ViewModel() {
     private val _displayedDefinition: MutableLiveData<WordDefinition?> =
         MutableLiveData(sharedWordDefProvider.sharedWordDefinition)
-    private val _displayMode: MutableLiveData<Int> = MutableLiveData(DefinitionDetailsFragment.READ_ONLY)
+    private val _isEditable: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val displayedDefinition: LiveData<WordDefinition?>
         get() = _displayedDefinition
-    val displayMode: LiveData<Int>
-        get() = _displayMode
+    val isEditable: LiveData<Boolean>
+        get() = _isEditable
 
-    fun setWriteAndReadMode() {
-        _displayMode.value = DefinitionDetailsFragment.WRITE_AND_READ
+    fun enableEditableMode() {
+        _isEditable.value = true
     }
 
-    fun setReadOnlyMode() {
-        _displayMode.value = DefinitionDetailsFragment.READ_ONLY
+    fun disableEditableMode() {
+        _isEditable.value = false
     }
 
     fun saveChanges(definition: WordDefinition) {
