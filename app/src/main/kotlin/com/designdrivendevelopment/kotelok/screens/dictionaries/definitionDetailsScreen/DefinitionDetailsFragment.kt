@@ -1,11 +1,15 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.animation.addListener
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -39,6 +43,7 @@ class DefinitionDetailsFragment :
     private var addSynonymBtn: Button? = null
     private var addExampleBtn: Button? = null
     private var editDefinitionFab: FloatingActionButton? = null
+    private var saveDefinitionFab: FloatingActionButton? = null
     private var viewModel: DefDetailsViewModel? = null
     private var isEditable = false
 
@@ -114,12 +119,12 @@ class DefinitionDetailsFragment :
             }
         }
         viewModel?.isEditable?.observe(this) { isEditable ->
-            addTranslationBtn?.isVisible = (translationsAdapter.translations.size < MAX_LISTS_SIZE)
-                && isEditable
-            addSynonymBtn?.isVisible = (synonymsAdapter.synonyms.size < MAX_LISTS_SIZE)
-                && isEditable
-            addExampleBtn?.isVisible = (examplesAdapter.examples.size < MAX_EXAMPLES_SIZE)
-                && isEditable
+            addTranslationBtn?.isVisible = (translationsAdapter.translations.size < MAX_LISTS_SIZE) &&
+                isEditable
+            addSynonymBtn?.isVisible = (synonymsAdapter.synonyms.size < MAX_LISTS_SIZE) &&
+                isEditable
+            addExampleBtn?.isVisible = (examplesAdapter.examples.size < MAX_EXAMPLES_SIZE) &&
+                isEditable
             translationsAdapter.isEditable = isEditable
             changeEnableStateForFields(isEditable)
         }
@@ -203,6 +208,40 @@ class DefinitionDetailsFragment :
         }
         editDefinitionFab?.setOnClickListener {
             viewModel?.enableEditableMode()
+            animateEditableTransition(it, saveDefinitionFab!!)
+        }
+        saveDefinitionFab?.setOnClickListener {
+            viewModel?.disableEditableMode()
+            animateEditableTransition(it, editDefinitionFab!!)
+        }
+    }
+
+    private fun animateEditableTransition(hiddenView: View, shownView: View) {
+        val showAnimation = ObjectAnimator.ofFloat(
+            shownView,
+            View.ROTATION,
+            ROTATION_TRANSITION_ANGLE,
+            ROTATION_END_ANGLE
+        ).apply {
+            duration = ROTATION_ANIMATION_DURATION
+        }
+        ObjectAnimator.ofFloat(
+            hiddenView,
+            View.ROTATION,
+            ROTATION_START_ANGLE,
+            ROTATION_TRANSITION_ANGLE
+        ).apply {
+            duration = ROTATION_ANIMATION_DURATION
+            addListener(
+                object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        hiddenView.isVisible = false
+                        shownView.isVisible = true
+                        showAnimation.start()
+                    }
+                }
+            )
+            start()
         }
     }
 
@@ -255,6 +294,7 @@ class DefinitionDetailsFragment :
         addSynonymBtn = view.findViewById(R.id.add_synonym_button)
         addExampleBtn = view.findViewById(R.id.add_example_button)
         editDefinitionFab = view.findViewById(R.id.edit_definition_fab)
+        saveDefinitionFab = view.findViewById(R.id.save_definition_fab)
     }
 
     private fun clearViews() {
@@ -269,9 +309,14 @@ class DefinitionDetailsFragment :
         addSynonymBtn = null
         addExampleBtn = null
         editDefinitionFab = null
+        saveDefinitionFab = null
     }
 
     companion object {
+        private const val ROTATION_START_ANGLE = 0f
+        private const val ROTATION_TRANSITION_ANGLE = 180f
+        private const val ROTATION_END_ANGLE = 360f
+        private const val ROTATION_ANIMATION_DURATION = 125L
         private const val DICT_ID_KEY = "dictionary_id_key"
         private const val SAVE_MODE_KEY = "save_mode_key"
         private const val DEFAULT_DICT_ID = 1L
