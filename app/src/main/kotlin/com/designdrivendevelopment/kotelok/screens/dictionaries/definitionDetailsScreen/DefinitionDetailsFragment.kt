@@ -18,6 +18,7 @@ import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.dpToPx
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 
 @Suppress("TooManyFunctions")
@@ -37,6 +38,7 @@ class DefinitionDetailsFragment :
     private var addTranslationBtn: Button? = null
     private var addSynonymBtn: Button? = null
     private var addExampleBtn: Button? = null
+    private var editDefinitionFab: FloatingActionButton? = null
     private var viewModel: DefDetailsViewModel? = null
     private var isEditable = false
 
@@ -109,19 +111,17 @@ class DefinitionDetailsFragment :
                 onTranslationsChanged(wordDefinition.allTranslations, translationsAdapter)
                 onSynonymsChanged(wordDefinition.synonyms, synonymsAdapter)
                 onExamplesChanged(wordDefinition.examples, examplesAdapter)
-
-                addTranslationBtn?.isVisible = (wordDefinition.allTranslations.size < MAX_LISTS_SIZE)
-                    && isEditable
-                addSynonymBtn?.isVisible = (wordDefinition.synonyms.size < MAX_LISTS_SIZE)
-                    && isEditable
-                addExampleBtn?.isVisible = (wordDefinition.examples.size < MAX_EXAMPLES_SIZE)
-                    && isEditable
             }
         }
-        viewModel?.isEditable?.observe(this) { newState ->
-            isEditable = newState
-            translationsAdapter.isEditable = newState
-            changeEnableStateForFields(newState)
+        viewModel?.isEditable?.observe(this) { isEditable ->
+            addTranslationBtn?.isVisible = (translationsAdapter.translations.size < MAX_LISTS_SIZE)
+                && isEditable
+            addSynonymBtn?.isVisible = (synonymsAdapter.synonyms.size < MAX_LISTS_SIZE)
+                && isEditable
+            addExampleBtn?.isVisible = (examplesAdapter.examples.size < MAX_EXAMPLES_SIZE)
+                && isEditable
+            translationsAdapter.isEditable = isEditable
+            changeEnableStateForFields(isEditable)
         }
     }
 
@@ -201,6 +201,9 @@ class DefinitionDetailsFragment :
         addExampleBtn?.setOnClickListener {
             viewModel?.addExampleField()
         }
+        editDefinitionFab?.setOnClickListener {
+            viewModel?.enableEditableMode()
+        }
     }
 
     private fun onTranslationsChanged(newList: List<String>, adapter: TranslationsAdapter) {
@@ -251,6 +254,7 @@ class DefinitionDetailsFragment :
         addTranslationBtn = view.findViewById(R.id.add_translation_button)
         addSynonymBtn = view.findViewById(R.id.add_synonym_button)
         addExampleBtn = view.findViewById(R.id.add_example_button)
+        editDefinitionFab = view.findViewById(R.id.edit_definition_fab)
     }
 
     private fun clearViews() {
@@ -264,6 +268,7 @@ class DefinitionDetailsFragment :
         addTranslationBtn = null
         addSynonymBtn = null
         addExampleBtn = null
+        editDefinitionFab = null
     }
 
     companion object {
