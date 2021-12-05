@@ -6,8 +6,9 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/synonym_field"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="20"
         android:hint="@string/field_hint_synonym"
         android:enabled="false"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -19,4 +20,17 @@
             android:textColor="?attr/titleColor" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/delete_synonym_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:tint="?attr/colorPrimary"
+        app:srcCompat="@drawable/ic_close"
+        android:contentDescription="@string/button_delete_synonym"/>
+
 </LinearLayout>
