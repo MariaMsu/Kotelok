@@ -21,17 +21,15 @@
         tools:visibility="visible"
         />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_new_definition_fab"
         android:layout_gravity="bottom|end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:contentDescription="@string/add_custom_definition_button"
-        android:text="@string/add_custom_definition_text"
-        android:textColor="?attr/colorPrimaryBackground"
-        app:iconTint="?attr/colorPrimaryBackground"
-        app:icon="@drawable/ic_add" />
+        app:tint="?attr/colorPrimaryBackground"
+        app:srcCompat="@drawable/ic_add" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -43,7 +43,7 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyb
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.designdrivendevelopment.kotelok.screens.screensUtils.objectAnimation
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.delay
@@ -57,7 +57,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
     private var lookupButton: Button? = null
     private var resultList: RecyclerView? = null
     private var scrollPosition = 0
-    private var addFab: ExtendedFloatingActionButton? = null
+    private var addFab: FloatingActionButton? = null
     private var textToSpeech: TextToSpeech? = null
     private var tracker: SelectionTracker<String>? = null
     private var actionMode: ActionMode? = null
