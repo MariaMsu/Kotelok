@@ -95,4 +95,14 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
     }
+
+    fun deleteSynonym(synonym: String) {
+        val definition = displayedDefinition.value
+        val extendedDefinition = definition?.copy(
+            synonyms = definition.synonyms.toMutableList().apply {
+                remove(synonym)
+            }
+        )
+        _displayedDefinition.value = extendedDefinition
+    }
 }
