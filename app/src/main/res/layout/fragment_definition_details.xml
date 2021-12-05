@@ -41,7 +41,7 @@
             app:layout_constraintGuide_end="12dp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/writing_text"
+            android:id="@+id/writing_text_field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -63,13 +63,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/translation_text"
+            android:id="@+id/translation_text_field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:hint="@string/field_hint_translation"
             android:enabled="false"
-            app:layout_constraintTop_toBottomOf="@id/writing_text"
+            app:layout_constraintTop_toBottomOf="@id/writing_text_field"
             app:layout_constraintStart_toEndOf="@id/start_border"
             app:layout_constraintEnd_toStartOf="@id/end_border"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -85,16 +85,16 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/transcription_text"
+            android:id="@+id/transcription_text_field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="12dp"
             android:hint="@string/field_hint_transcription"
             android:enabled="false"
-            app:layout_constraintTop_toBottomOf="@id/translation_text"
+            app:layout_constraintTop_toBottomOf="@id/translation_text_field"
             app:layout_constraintStart_toEndOf="@id/start_border"
-            app:layout_constraintEnd_toStartOf="@id/part_of_speech_text"
+            app:layout_constraintEnd_toStartOf="@id/part_of_speech_text_field"
             app:layout_constraintHorizontal_weight="3"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:endIconMode="clear_text" >
@@ -106,15 +106,15 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/part_of_speech_text"
+            android:id="@+id/part_of_speech_text_field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginStart="12dp"
             android:hint="@string/field_hint_pos"
             android:enabled="false"
-            app:layout_constraintTop_toBottomOf="@id/translation_text"
-            app:layout_constraintStart_toEndOf="@id/transcription_text"
+            app:layout_constraintTop_toBottomOf="@id/translation_text_field"
+            app:layout_constraintStart_toEndOf="@id/transcription_text_field"
             app:layout_constraintEnd_toStartOf="@id/end_border"
             app:layout_constraintHorizontal_weight="2"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -131,7 +131,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="transcription_text, part_of_speech_text" />
+            app:constraint_referenced_ids="transcription_text_field, part_of_speech_text_field" />
 
         <TextView
             android:id="@+id/other_translations_text"
