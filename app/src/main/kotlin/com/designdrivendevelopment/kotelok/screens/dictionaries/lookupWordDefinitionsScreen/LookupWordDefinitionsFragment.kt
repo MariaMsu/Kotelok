@@ -21,6 +21,7 @@ import androidx.core.animation.addListener
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.SelectionTracker
@@ -30,10 +31,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.DefinitionsKeyProvider
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.ItemWithTypeDetailsLookup
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.selectionActionMode.SelectionModeCallBack
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
+import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
 import com.designdrivendevelopment.kotelok.screens.screensUtils.TtsPrefs
@@ -62,6 +66,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
     private var tracker: SelectionTracker<String>? = null
     private var actionMode: ActionMode? = null
     private var lookupViewModel: LookupViewModel? = null
+    private var dictId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,6 +84,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
+        dictId = dictionaryId
 
         initViews(view)
         textToSpeech = TextToSpeech(context, this)
@@ -303,6 +309,21 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
             }
         }
         resultList?.addOnScrollListener(onScrollListener)
+        addFab?.setOnClickListener {
+            openDefinitionDetails()
+        }
+    }
+
+    private fun openDefinitionDetails(definition: WordDefinition? = null) {
+        lookupViewModel?.setDisplayedDefinition(definition)
+        val bundle = Bundle().apply {
+            putLong(FragmentResult.DictionariesTab.RESULT_DICT_ID_KEY, dictId!!)
+            putInt(
+                FragmentResult.DictionariesTab.RESULT_SAVE_MODE_KEY,
+                DefinitionDetailsFragment.SAVE_MODE_COPY
+            )
+        }
+        setFragmentResult(FragmentResult.DictionariesTab.OPEN_DEF_DETAILS_FRAGMENT_KEY, bundle)
     }
 
     private fun showLoading() {

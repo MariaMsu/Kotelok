@@ -106,6 +106,10 @@ class LookupViewModel(
         }
     }
 
+    fun setDisplayedDefinition(definition: WordDefinition?) {
+        sharedWordDefinitionProvider.sharedWordDefinition = definition
+    }
+
     fun notifyToEventIsHandled(event: UiEvent) {
         event.isHandled = true
     }
