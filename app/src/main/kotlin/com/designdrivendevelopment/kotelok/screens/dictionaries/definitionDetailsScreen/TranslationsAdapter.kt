@@ -14,9 +14,15 @@ class TranslationsAdapter(
     private val deleteClickListener: DeleteTranslationListener,
     var translations: List<String>
 ) : RecyclerView.Adapter<TranslationsAdapter.ViewHolder>() {
+    var isEditable: Boolean = false
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val translationField: TextInputLayout = view.findViewById(R.id.translation_field)
         val deleteBtn: ImageButton = view.findViewById(R.id.delete_translation_btn)
+
+        init {
+            translationField.isEnabled = isEditable
+        }
 
         fun onBind(translation: String) {
             translationField.editText?.setText(translation)

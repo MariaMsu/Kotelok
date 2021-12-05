@@ -38,6 +38,7 @@ class DefinitionDetailsFragment :
     private var addSynonymBtn: Button? = null
     private var addExampleBtn: Button? = null
     private var viewModel: DefDetailsViewModel? = null
+    private var isEditable = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -109,10 +110,34 @@ class DefinitionDetailsFragment :
                 onSynonymsChanged(wordDefinition.synonyms, synonymsAdapter)
                 onExamplesChanged(wordDefinition.examples, examplesAdapter)
 
-                addTranslationBtn?.isVisible = wordDefinition.allTranslations.size < MAX_LISTS_SIZE
-                addSynonymBtn?.isVisible = wordDefinition.synonyms.size < MAX_LISTS_SIZE
-                addExampleBtn?.isVisible = wordDefinition.examples.size < MAX_EXAMPLES_SIZE
+                addTranslationBtn?.isVisible = (wordDefinition.allTranslations.size < MAX_LISTS_SIZE)
+                    && isEditable
+                addSynonymBtn?.isVisible = (wordDefinition.synonyms.size < MAX_LISTS_SIZE)
+                    && isEditable
+                addExampleBtn?.isVisible = (wordDefinition.examples.size < MAX_EXAMPLES_SIZE)
+                    && isEditable
             }
+        }
+        viewModel?.isEditable?.observe(this) { newState ->
+            isEditable = newState
+            translationsAdapter.isEditable = newState
+            changeEnableStateForFields(newState)
+        }
+    }
+
+    private fun changeEnableStateForFields(newState: Boolean) {
+        writingField?.isEnabled = newState
+        translationField?.isEnabled = newState
+        transcriptionField?.isEnabled = newState
+        partOfSpeechField?.isEnabled = newState
+
+        val translationsListSize = translationsList?.adapter?.itemCount ?: 0
+        for (i in 0 until translationsListSize) {
+            translationsList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.translation_field)
+                ?.isEnabled = newState
         }
     }
 
