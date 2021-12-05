@@ -85,4 +85,14 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
     }
+
+    fun deleteTranslation(translation: String) {
+        val definition = displayedDefinition.value
+        val extendedDefinition = definition?.copy(
+            allTranslations = definition.allTranslations.toMutableList().apply {
+                remove(translation)
+            }
+        )
+        _displayedDefinition.value = extendedDefinition
+    }
 }
