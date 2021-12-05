@@ -17,7 +17,21 @@ class DefinitionDetailsFragment : Fragment() {
     }
 
     companion object {
+        private const val DICT_ID_KEY = "dictionary_id_key"
+        private const val SAVE_MODE_KEY = "save_mode_key"
         const val READ_ONLY = 1
         const val WRITE_AND_READ = 2
+        const val SAVE_MODE_UPDATE = 1
+        const val SAVE_MODE_COPY = 2
+
+        fun newInstance(
+            dictionaryId: Long,
+            saveMode: Int
+        ) = DefinitionDetailsFragment().apply {
+            arguments = Bundle().apply {
+                putLong(DICT_ID_KEY, dictionaryId)
+                putInt(SAVE_MODE_KEY, saveMode)
+            }
+        }
     }
 }
