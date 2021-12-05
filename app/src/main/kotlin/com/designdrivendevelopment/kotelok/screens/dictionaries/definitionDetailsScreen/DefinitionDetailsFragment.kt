@@ -5,15 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.constraintlayout.helper.widget.Flow
+import androidx.constraintlayout.widget.Group
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.google.android.material.textfield.TextInputLayout
 
-class DefinitionDetailsFragment : Fragment() {
+class DefinitionDetailsFragment : Fragment(), DeleteTranslationListener {
     private var writingField: TextInputLayout? = null
     private var translationField: TextInputLayout? = null
     private var transcriptionField: TextInputLayout? = null
@@ -24,9 +29,10 @@ class DefinitionDetailsFragment : Fragment() {
     private var addTranslationBtn: Button? = null
     private var addSynonymBtn: Button? = null
     private var addExampleBtn: Button? = null
-    private var translationsGroup: Flow? = null
-    private var synonymsGroup: Flow? = null
-    private var examplesGroup: Flow? = null
+    private var translationsGroup: Group? = null
+    private var synonymsGroup: Group? = null
+    private var examplesGroup: Group? = null
+    private var viewModel: DefDetailsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,11 +45,12 @@ class DefinitionDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViews(view)
         val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
         val saveMode = arguments?.getInt(SAVE_MODE_KEY) ?: SAVE_MODE_COPY
+        initViews(view)
 
         val activity = requireActivity()
+        val context = requireContext()
         val factory = DefDetailsViewModelFactory(
             saveMode,
             dictionaryId,
@@ -54,12 +61,69 @@ class DefinitionDetailsFragment : Fragment() {
             (activity.application as KotelokApplication)
                 .appComponent.sharedWordDefProvider
         )
-        val viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
+
+        val adapter = TranslationsAdapter(context, this, emptyList())
+        setupTranslations(adapter)
+
+        viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
+        setupViewModel(viewModel, adapter)
+        setupListeners(viewModel)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
+    }
+
+    override fun onDeleteTranslation(translation: String) {
+        viewModel?.deleteTranslation(translation)
+    }
+
+    private fun setupViewModel(viewModel: DefDetailsViewModel?, adapter: TranslationsAdapter) {
+        viewModel?.displayedDefinition?.observe(this) { wordDefinition ->
+            if (wordDefinition != null) {
+                showDefinitions(wordDefinition)
+                onTranslationsChanged(wordDefinition.allTranslations, adapter)
+            }
+            addTranslationBtn?.isVisible = adapter.translations.size < MAX_LISTS_SIZE
+        }
+    }
+
+    private fun setupTranslations(adapter: TranslationsAdapter) {
+        translationsList
+            ?.addItemDecoration(MarginItemDecoration(marginVertical = 12, marginHorizontal = 0))
+        translationsList?.adapter = adapter
+        translationsList?.layoutManager = object : LinearLayoutManager(context, VERTICAL, false) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+
+            override fun supportsPredictiveItemAnimations(): Boolean {
+                return false
+            }
+        }
+    }
+
+    private fun setupListeners(viewModel: DefDetailsViewModel?) {
+        addTranslationBtn?.setOnClickListener {
+            viewModel?.addTranslationField()
+        }
+    }
+
+    private fun onTranslationsChanged(newList: List<String>, adapter: TranslationsAdapter) {
+        val diffCallback = StringsDiffCallback(
+            newList = newList,
+            oldList = adapter.translations
+        )
+        DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
+        adapter.translations = newList
+    }
+
+    private fun showDefinitions(wordDefinition: WordDefinition) {
+        writingField?.editText?.setText(wordDefinition.writing)
+        translationField?.editText?.setText(wordDefinition.mainTranslation)
+        transcriptionField?.editText?.setText(wordDefinition.transcription.orEmpty())
+        partOfSpeechField?.editText?.setText(wordDefinition.partOfSpeech.orEmpty())
     }
 
     private fun initViews(view: View) {
@@ -73,7 +137,7 @@ class DefinitionDetailsFragment : Fragment() {
         addTranslationBtn = view.findViewById(R.id.add_translation_button)
         addSynonymBtn = view.findViewById(R.id.add_synonym_button)
         addExampleBtn = view.findViewById(R.id.add_example_button)
-        translationsGroup = view.findViewById(R.id.other_translations_group)
+        translationsGroup = view.findViewById(R.id.translations_group)
         synonymsGroup = view.findViewById(R.id.synonyms_group)
         examplesGroup = view.findViewById(R.id.examples_group)
     }
@@ -98,6 +162,7 @@ class DefinitionDetailsFragment : Fragment() {
         private const val DICT_ID_KEY = "dictionary_id_key"
         private const val SAVE_MODE_KEY = "save_mode_key"
         private const val DEFAULT_DICT_ID = 1L
+        private const val MAX_LISTS_SIZE = 5
         const val READ_ONLY = 1
         const val WRITE_AND_READ = 2
         const val SAVE_MODE_UPDATE = 1
