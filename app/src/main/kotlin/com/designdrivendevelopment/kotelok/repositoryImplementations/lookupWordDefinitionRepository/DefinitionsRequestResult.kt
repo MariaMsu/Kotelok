@@ -10,4 +10,6 @@ sealed class DefinitionsRequestResult {
 
         class Error(message: String) : Failure(message)
     }
+
+    object Loading : DefinitionsRequestResult()
 }
