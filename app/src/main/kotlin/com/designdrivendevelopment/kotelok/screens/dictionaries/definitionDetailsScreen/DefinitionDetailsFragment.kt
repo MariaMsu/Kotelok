@@ -125,6 +125,8 @@ class DefinitionDetailsFragment :
             addExampleBtn?.isVisible = (examplesAdapter.examples.size < MAX_EXAMPLES_SIZE) &&
                 isEditable
             translationsAdapter.isEditable = isEditable
+            synonymsAdapter.isEditable = isEditable
+            examplesAdapter.isEditable = isEditable
             changeEditableStateForFields(isEditable)
         }
     }
