@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.dictionaries.DefinitionClickListener
 import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.DefinitionsKeyProvider
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.ItemWithTypeDetailsLookup
