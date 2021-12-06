@@ -72,6 +72,8 @@ class LookupViewModel(
                                     "Попробуйте повторить попытку"
                             )
                         )
+                        delay(HIDE_LOADING_DELAY)
+                        _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
                         emptyList()
                     }
 
@@ -82,6 +84,8 @@ class LookupViewModel(
                                     "Попробуйте повторить попытку"
                             )
                         )
+                        delay(HIDE_LOADING_DELAY)
+                        _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
                         emptyList()
                     }
 
@@ -94,14 +98,20 @@ class LookupViewModel(
                                 )
                             )
                         }
+                        delay(HIDE_LOADING_DELAY)
+                        _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
                         remoteDefinitions
+                    }
+
+                    is DefinitionsRequestResult.Loading -> {
+                        emptyList()
                     }
                 }
 
                 currentItems = createItemsList(localDefinitions, remoteDefinitions)
                 _foundDefinitions.postValue(currentItems)
-                delay(HIDE_LOADING_DELAY)
-                _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
+//                delay(HIDE_LOADING_DELAY)
+//                _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
             }
         }
     }
