@@ -20,7 +20,6 @@ import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
-import com.designdrivendevelopment.kotelok.screens.screensUtils.dpToPx
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 
@@ -118,16 +117,19 @@ class DefinitionDetailsFragment :
             }
         }
         viewModel?.isEditable?.observe(this) { isEditable ->
-            addTranslationBtn?.isVisible = (translationsAdapter.translations.size < MAX_LISTS_SIZE) &&
-                isEditable
-            addSynonymBtn?.isVisible = (synonymsAdapter.synonyms.size < MAX_LISTS_SIZE) &&
-                isEditable
-            addExampleBtn?.isVisible = (examplesAdapter.examples.size < MAX_EXAMPLES_SIZE) &&
-                isEditable
             translationsAdapter.isEditable = isEditable
             synonymsAdapter.isEditable = isEditable
             examplesAdapter.isEditable = isEditable
             changeEditableStateForFields(isEditable)
+        }
+        viewModel?.isAddTrButtonVisible?.observe(this) { isVisible ->
+            addTranslationBtn?.isVisible = isVisible
+        }
+        viewModel?.isAddSynButtonVisible?.observe(this) { isVisible ->
+            addSynonymBtn?.isVisible = isVisible
+        }
+        viewModel?.isAddExButtonVisible?.observe(this) { isVisible ->
+            addExampleBtn?.isVisible = isVisible
         }
     }
 

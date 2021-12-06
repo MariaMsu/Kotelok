@@ -22,18 +22,33 @@ class DefDetailsViewModel(
     private val _displayedDefinition: MutableLiveData<WordDefinition?> =
         MutableLiveData(sharedWordDefProvider.sharedWordDefinition)
     private val _isEditable: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isAddTrButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isAddSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isAddExButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val displayedDefinition: LiveData<WordDefinition?>
         get() = _displayedDefinition
     val isEditable: LiveData<Boolean>
         get() = _isEditable
+    val isAddTrButtonVisible: LiveData<Boolean>
+        get() = _isAddTrButtonVisible
+    val isAddSynButtonVisible: LiveData<Boolean>
+        get() = _isAddSynButtonVisible
+    val isAddExButtonVisible: LiveData<Boolean>
+        get() = _isAddExButtonVisible
 
     fun enableEditableMode() {
         _isEditable.value = true
+        updateAddTrButtonVisibility()
+        updateAddSynButtonVisibility()
+        updateAddExButtonVisibility()
     }
 
     fun disableEditableMode() {
         _isEditable.value = false
+        updateAddTrButtonVisibility()
+        updateAddSynButtonVisibility()
+        updateAddExButtonVisibility()
     }
 
     fun saveChanges(definition: WordDefinition) {
@@ -66,6 +81,7 @@ class DefDetailsViewModel(
             allTranslations = definition.allTranslations.toMutableList().apply { add("") }
         )
         _displayedDefinition.value = extendedDefinition
+        updateAddTrButtonVisibility()
     }
 
     fun addSynonymField() {
@@ -74,6 +90,7 @@ class DefDetailsViewModel(
             synonyms = definition.synonyms.toMutableList().apply { add("") }
         )
         _displayedDefinition.value = extendedDefinition
+        updateAddSynButtonVisibility()
     }
 
     fun addExampleField() {
@@ -84,6 +101,7 @@ class DefDetailsViewModel(
             }
         )
         _displayedDefinition.value = extendedDefinition
+        updateAddExButtonVisibility()
     }
 
     fun deleteTranslation(translation: String) {
@@ -94,6 +112,7 @@ class DefDetailsViewModel(
             }
         )
         _displayedDefinition.value = extendedDefinition
+        updateAddTrButtonVisibility()
     }
 
     fun deleteSynonym(synonym: String) {
@@ -104,6 +123,7 @@ class DefDetailsViewModel(
             }
         )
         _displayedDefinition.value = extendedDefinition
+        updateAddSynButtonVisibility()
     }
 
     fun deleteExample(example: ExampleOfDefinitionUse) {
@@ -114,5 +134,42 @@ class DefDetailsViewModel(
             }
         )
         _displayedDefinition.value = extendedDefinition
+        updateAddExButtonVisibility()
+    }
+
+    private fun updateAddTrButtonVisibility() {
+        val prevState = _isAddTrButtonVisible.value ?: false
+
+        val size = _displayedDefinition.value?.allTranslations?.size ?: SIZE_EMPTY
+        val newState = (_isEditable.value == true) && (size < MAX_LISTS_SIZE)
+        if (newState != prevState) {
+            _isAddTrButtonVisible.value = newState
+        }
+    }
+
+    private fun updateAddSynButtonVisibility() {
+        val prevState = _isAddSynButtonVisible.value ?: false
+
+        val size = _displayedDefinition.value?.synonyms?.size ?: SIZE_EMPTY
+        val newState = (_isEditable.value == true) && (size < MAX_LISTS_SIZE)
+        if (newState != prevState) {
+            _isAddSynButtonVisible.value = newState
+        }
+    }
+
+    private fun updateAddExButtonVisibility() {
+        val prevState = _isAddExButtonVisible.value ?: false
+
+        val size = _displayedDefinition.value?.examples?.size ?: SIZE_EMPTY
+        val newState = (_isEditable.value == true) && (size < MAX_EXAMPLES_SIZE)
+        if (newState != prevState) {
+            _isAddExButtonVisible.value = newState
+        }
+    }
+
+    companion object {
+        private const val SIZE_EMPTY = 0
+        private const val MAX_LISTS_SIZE = 5
+        private const val MAX_EXAMPLES_SIZE = 3
     }
 }
