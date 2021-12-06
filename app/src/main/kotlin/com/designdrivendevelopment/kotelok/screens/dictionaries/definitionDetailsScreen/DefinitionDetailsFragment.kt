@@ -44,7 +44,6 @@ class DefinitionDetailsFragment :
     private var editDefinitionFab: FloatingActionButton? = null
     private var saveDefinitionFab: FloatingActionButton? = null
     private var viewModel: DefDetailsViewModel? = null
-    private var isEditable = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,6 +136,15 @@ class DefinitionDetailsFragment :
         viewModel?.isAddExButtonVisible?.observe(this) { isVisible ->
             animateChangingForButton(addExampleBtn, isVisible)
         }
+        viewModel?.isDeleteTrButtonVisible?.observe(this) { isVisible ->
+            changeVisibilityForDeleteTrButtons(isVisible)
+        }
+        viewModel?.isDeleteSynButtonVisible?.observe(this) { isVisible ->
+            changeVisibilityForDeleteSynButtons(isVisible)
+        }
+        viewModel?.isDeleteExButtonVisible?.observe(this) { isVisible ->
+            changeVisibilityForDeleteExButtons(isVisible)
+        }
     }
 
     private fun changeEditableStateForFields(newState: Boolean) {
@@ -153,20 +161,22 @@ class DefinitionDetailsFragment :
     private fun changeEditableStateForTranslations(newState: Boolean) {
         val translationsListSize = translationsList?.adapter?.itemCount ?: SIZE_EMPTY
         for (i in 0 until translationsListSize) {
-            val itemView = translationsList?.findViewHolderForAdapterPosition(i)?.itemView
-            itemView?.findViewById<View>(R.id.translation_field)?.isEnabled = newState
-            itemView?.findViewById<View>(R.id.delete_translation_btn)
-                ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
+            translationsList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.translation_field)
+                ?.isEnabled = newState
         }
     }
 
     private fun changeEditableStateForSynonyms(newState: Boolean) {
         val synonymsListSize = synonymsList?.adapter?.itemCount ?: SIZE_EMPTY
         for (i in 0 until synonymsListSize) {
-            val itemView = synonymsList?.findViewHolderForAdapterPosition(i)?.itemView
-            itemView?.findViewById<View>(R.id.synonym_field)?.isEnabled = newState
-            itemView?.findViewById<View>(R.id.delete_synonym_btn)
-                ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
+            synonymsList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.synonym_field)
+                ?.isEnabled = newState
         }
     }
 
@@ -176,8 +186,39 @@ class DefinitionDetailsFragment :
             val itemView = examplesList?.findViewHolderForAdapterPosition(i)?.itemView
             itemView?.findViewById<View>(R.id.example_original_field)?.isEnabled = newState
             itemView?.findViewById<View>(R.id.example_translation_field)?.isEnabled = newState
-            itemView?.findViewById<View>(R.id.delete_example_btn)
-                ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun changeVisibilityForDeleteTrButtons(isVisible: Boolean) {
+        val translationsListSize = translationsList?.adapter?.itemCount ?: SIZE_EMPTY
+        for (i in 0 until translationsListSize) {
+            translationsList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.delete_translation_btn)
+                ?.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun changeVisibilityForDeleteSynButtons(isVisible: Boolean) {
+        val synonymsListSize = synonymsList?.adapter?.itemCount ?: SIZE_EMPTY
+        for (i in 0 until synonymsListSize) {
+            synonymsList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.delete_synonym_btn)
+                ?.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun changeVisibilityForDeleteExButtons(isVisible: Boolean) {
+        val examplesListSize = examplesList?.adapter?.itemCount ?: SIZE_EMPTY
+        for (i in 0 until examplesListSize) {
+            examplesList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.delete_example_btn)
+                ?.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
         }
     }
 

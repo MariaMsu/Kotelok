@@ -12,6 +12,7 @@ import com.designdrivendevelopment.kotelok.screens.sharedWordDefProvider.SharedW
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Suppress("TooManyFunctions")
 class DefDetailsViewModel(
     private val saveMode: Int,
     private val dictionaryId: Long,
@@ -25,6 +26,9 @@ class DefDetailsViewModel(
     private val _isAddTrButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isAddSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isAddExButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isDeleteTrButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isDeleteSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isDeleteExButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val displayedDefinition: LiveData<WordDefinition?>
         get() = _displayedDefinition
@@ -36,19 +40,35 @@ class DefDetailsViewModel(
         get() = _isAddSynButtonVisible
     val isAddExButtonVisible: LiveData<Boolean>
         get() = _isAddExButtonVisible
+    val isDeleteTrButtonVisible: LiveData<Boolean>
+        get() = _isDeleteTrButtonVisible
+    val isDeleteSynButtonVisible: LiveData<Boolean>
+        get() = _isDeleteSynButtonVisible
+    val isDeleteExButtonVisible: LiveData<Boolean>
+        get() = _isDeleteExButtonVisible
 
     fun enableEditableMode() {
         _isEditable.value = true
+
         updateAddTrButtonVisibility()
         updateAddSynButtonVisibility()
         updateAddExButtonVisibility()
+
+        updateDeleteTrButtonVisibility()
+        updateDeleteSynButtonVisibility()
+        updateDeleteExButtonVisibility()
     }
 
     fun disableEditableMode() {
         _isEditable.value = false
+
         updateAddTrButtonVisibility()
         updateAddSynButtonVisibility()
         updateAddExButtonVisibility()
+
+        updateDeleteTrButtonVisibility()
+        updateDeleteSynButtonVisibility()
+        updateDeleteExButtonVisibility()
     }
 
     fun saveChanges(definition: WordDefinition) {
@@ -82,6 +102,7 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
         updateAddTrButtonVisibility()
+        updateDeleteTrButtonVisibility()
     }
 
     fun addSynonymField() {
@@ -91,6 +112,7 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
         updateAddSynButtonVisibility()
+        updateDeleteSynButtonVisibility()
     }
 
     fun addExampleField() {
@@ -102,6 +124,7 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
         updateAddExButtonVisibility()
+        updateDeleteExButtonVisibility()
     }
 
     fun deleteTranslation(translation: String) {
@@ -113,6 +136,7 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
         updateAddTrButtonVisibility()
+        updateDeleteTrButtonVisibility()
     }
 
     fun deleteSynonym(synonym: String) {
@@ -124,6 +148,7 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
         updateAddSynButtonVisibility()
+        updateDeleteSynButtonVisibility()
     }
 
     fun deleteExample(example: ExampleOfDefinitionUse) {
@@ -135,6 +160,7 @@ class DefDetailsViewModel(
         )
         _displayedDefinition.value = extendedDefinition
         updateAddExButtonVisibility()
+        updateDeleteExButtonVisibility()
     }
 
     private fun updateAddTrButtonVisibility() {
@@ -167,8 +193,39 @@ class DefDetailsViewModel(
         }
     }
 
+    private fun updateDeleteTrButtonVisibility() {
+        val prevState = _isDeleteTrButtonVisible.value ?: false
+
+        val size = _displayedDefinition.value?.allTranslations?.size ?: SIZE_EMPTY
+        val newState = (_isEditable.value == true) && (size > MIN_LIST_SIZE)
+        if (newState != prevState) {
+            _isDeleteTrButtonVisible.value = newState
+        }
+    }
+
+    private fun updateDeleteSynButtonVisibility() {
+        val prevState = _isDeleteSynButtonVisible.value ?: false
+
+        val size = _displayedDefinition.value?.synonyms?.size ?: SIZE_EMPTY
+        val newState = (_isEditable.value == true) && (size > MIN_LIST_SIZE)
+        if (newState != prevState) {
+            _isDeleteSynButtonVisible.value = newState
+        }
+    }
+
+    private fun updateDeleteExButtonVisibility() {
+        val prevState = _isDeleteExButtonVisible.value ?: false
+
+        val size = _displayedDefinition.value?.examples?.size ?: SIZE_EMPTY
+        val newState = (_isEditable.value == true) && (size > MIN_LIST_SIZE)
+        if (newState != prevState) {
+            _isDeleteExButtonVisible.value = newState
+        }
+    }
+
     companion object {
         private const val SIZE_EMPTY = 0
+        private const val MIN_LIST_SIZE = 1
         private const val MAX_LISTS_SIZE = 5
         private const val MAX_EXAMPLES_SIZE = 3
     }
