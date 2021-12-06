@@ -49,8 +49,8 @@ class DefinitionDetailsFragment :
     private var yandexDictHyperlink: TextView? = null
     private var viewModel: DefDetailsViewModel? = null
     private var isNeedAnimate = false
-
     private var trAdapter: TranslationsAdapter? = null
+    private var synAdapter: SynonymsAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,16 +81,17 @@ class DefinitionDetailsFragment :
         )
 
         val translationsAdapter = TranslationsAdapter(context, this, emptyList())
-        trAdapter = translationsAdapter
         val synonymsAdapter = SynonymsAdapter(context, this, emptyList())
         val examplesAdapter = ExamplesAdapter(context, this, emptyList())
+        trAdapter = translationsAdapter
+        synAdapter = synonymsAdapter
         setupTranslations(translationsAdapter)
         setupSynonyms(synonymsAdapter)
         setupExamples(examplesAdapter)
 
         viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
         setupViewModel(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter)
-        setupListeners(viewModel, translationsAdapter)
+        setupListeners(viewModel, translationsAdapter, synonymsAdapter)
     }
 
     override fun onResume() {
@@ -114,8 +115,10 @@ class DefinitionDetailsFragment :
         viewModel?.deleteTranslation(position, definition)
     }
 
-    override fun onDeleteSynonym(synonym: String) {
-        viewModel?.deleteSynonym(synonym)
+    override fun onDeleteSynonym(position: Int) {
+        val definition = readDefinitionFromFields()
+        synAdapter?.synonyms = definition.synonyms
+        viewModel?.deleteSynonym(position, definition)
     }
 
     override fun onDeleteExample(example: ExampleOfDefinitionUse) {
@@ -313,14 +316,20 @@ class DefinitionDetailsFragment :
         }
     }
 
-    private fun setupListeners(viewModel: DefDetailsViewModel?, translationsAdapter: TranslationsAdapter) {
+    private fun setupListeners(
+        viewModel: DefDetailsViewModel?,
+        translationsAdapter: TranslationsAdapter,
+        synonymsAdapter: SynonymsAdapter
+    ) {
         addTranslationBtn?.setOnClickListener {
             val definition = readDefinitionFromFields()
             translationsAdapter.translations = definition.allTranslations
             viewModel?.addTranslationField(definition)
         }
         addSynonymBtn?.setOnClickListener {
-            viewModel?.addSynonymField()
+            val definition = readDefinitionFromFields()
+            synonymsAdapter.synonyms = definition.synonyms
+            viewModel?.addSynonymField(definition)
         }
         addExampleBtn?.setOnClickListener {
             viewModel?.addExampleField()

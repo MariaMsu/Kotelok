@@ -38,7 +38,9 @@ class SynonymsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val synonym = synonyms[position]
         holder.onBind(synonym)
-        holder.deleteBtn.setOnClickListener { deleteClickListener.onDeleteSynonym(synonym) }
+        holder.deleteBtn.setOnClickListener {
+            deleteClickListener.onDeleteSynonym(holder.adapterPosition)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -47,5 +49,5 @@ class SynonymsAdapter(
 }
 
 interface DeleteSynonymListener {
-    fun onDeleteSynonym(synonym: String)
+    fun onDeleteSynonym(position: Int)
 }

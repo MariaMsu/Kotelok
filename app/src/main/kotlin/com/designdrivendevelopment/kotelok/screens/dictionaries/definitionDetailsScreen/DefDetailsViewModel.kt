@@ -1,5 +1,6 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -87,13 +88,14 @@ class DefDetailsViewModel(
                 examples = definition.examples.filter { it.originalText.isNotEmpty() }
             )
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
-            editWordDefRepository.addNewWordDefinitionWithDictionaries(
-                addedDefinition,
-                listOf(dictionary)
-            )
-        }
+        Log.d("SAVING", "save def = $addedDefinition")
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
+//            editWordDefRepository.addNewWordDefinitionWithDictionaries(
+//                addedDefinition,
+//                listOf(dictionary)
+//            )
+//        }
     }
 
     fun addTranslationField(definition: WordDefinition) {
@@ -107,10 +109,9 @@ class DefDetailsViewModel(
         updateDeleteTrButtonVisibility()
     }
 
-    fun addSynonymField() {
-        val definition = displayedDefinition.value ?: createDefinitionStub()
+    fun addSynonymField(definition: WordDefinition) {
         val extendedDefinition = definition.copy(
-            synonyms = definition.synonyms.toMutableList().apply { add("") }
+            synonyms = definition.synonyms.toMutableList().apply { add(INDEX_AT_INSERT, "") }
         )
         _displayedDefinition.value = extendedDefinition
         updateAddSynButtonVisibility()
@@ -138,12 +139,9 @@ class DefDetailsViewModel(
         updateDeleteTrButtonVisibility()
     }
 
-    fun deleteSynonym(synonym: String) {
-        val definition = displayedDefinition.value ?: createDefinitionStub()
+    fun deleteSynonym(position: Int, definition: WordDefinition) {
         val extendedDefinition = definition.copy(
-            synonyms = definition.synonyms.toMutableList().apply {
-                remove(synonym)
-            }
+            synonyms = definition.synonyms.toMutableList().apply { removeAt(position) }
         )
         _displayedDefinition.value = extendedDefinition
         updateAddSynButtonVisibility()
