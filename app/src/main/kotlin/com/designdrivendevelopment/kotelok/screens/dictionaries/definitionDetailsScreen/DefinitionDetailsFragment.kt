@@ -231,8 +231,7 @@ class DefinitionDetailsFragment :
         examplesList?.addItemDecoration(
             MarginItemDecoration(
                 marginVertical = 24,
-                marginHorizontal = 0,
-                marginBottomInPx = dpToPx(12).toInt()
+                marginHorizontal = 0
             )
         )
         examplesList?.adapter = adapter
