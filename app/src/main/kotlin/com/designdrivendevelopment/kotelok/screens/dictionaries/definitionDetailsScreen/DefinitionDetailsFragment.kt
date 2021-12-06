@@ -23,8 +23,10 @@ import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.dpToPx
+import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
 import com.designdrivendevelopment.kotelok.screens.screensUtils.toNullIfEmpty
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
 @Suppress("TooManyFunctions")
@@ -348,9 +350,38 @@ class DefinitionDetailsFragment :
             viewModel?.enableEditableMode()
         }
         saveDefinitionFab?.setOnClickListener {
-            viewModel?.disableEditableMode()
-            val definition = readDefinitionFromFields()
-            viewModel?.saveChanges(definition)
+            writingField?.error = null
+            translationField?.error = null
+            val isWritingEmpty = writingField?.editText?.text?.toString().isNullOrEmpty()
+            val isTranslationEmpty =
+                translationField?.editText?.text?.toString().isNullOrEmpty()
+            return@setOnClickListener when {
+                isWritingEmpty && isTranslationEmpty -> {
+                    writingField?.error = getString(R.string.error_field_required)
+                    translationField?.error = getString(R.string.error_field_required)
+                    writingField?.editText?.focusAndShowKeyboard()
+                    Unit
+                }
+
+                isWritingEmpty -> {
+                    writingField?.error = getString(R.string.error_field_required)
+                    writingField?.editText?.focusAndShowKeyboard()
+                    Unit
+                }
+
+                isTranslationEmpty -> {
+                    translationField?.error = getString(R.string.error_field_required)
+                    translationField?.editText?.focusAndShowKeyboard()
+                    Unit
+                }
+
+                else -> {
+                    viewModel?.disableEditableMode()
+                    val definition = readDefinitionFromFields()
+                    viewModel?.saveChanges(definition)
+                    Unit
+                }
+            }
         }
     }
 
