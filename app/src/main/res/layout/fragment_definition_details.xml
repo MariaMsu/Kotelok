@@ -56,6 +56,7 @@
                 app:layout_constraintStart_toEndOf="@id/start_border"
                 app:layout_constraintEnd_toStartOf="@id/end_border"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:hintAnimationEnabled="false"
                 app:helperTextEnabled="true"
                 app:helperText="Обязательно"
                 app:endIconMode="clear_text"
@@ -79,6 +80,7 @@
                 app:layout_constraintStart_toEndOf="@id/start_border"
                 app:layout_constraintEnd_toStartOf="@id/end_border"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:hintAnimationEnabled="false"
                 app:endIconMode="clear_text"
                 app:helperTextEnabled="true"
                 app:helperText="Обязательно"
@@ -104,6 +106,7 @@
                 app:layout_constraintEnd_toStartOf="@id/part_of_speech_text_field"
                 app:layout_constraintHorizontal_weight="3"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:hintAnimationEnabled="false"
                 app:endIconMode="clear_text" >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -126,6 +129,7 @@
                 app:layout_constraintEnd_toStartOf="@id/end_border"
                 app:layout_constraintHorizontal_weight="2"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:hintAnimationEnabled="false"
                 app:endIconMode="clear_text" >
 
                 <com.google.android.material.textfield.TextInputEditText

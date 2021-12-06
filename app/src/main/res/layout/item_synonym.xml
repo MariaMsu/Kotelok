@@ -13,6 +13,7 @@
         android:hint="@string/field_hint_synonym"
         android:enabled="false"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:hintAnimationEnabled="false"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText

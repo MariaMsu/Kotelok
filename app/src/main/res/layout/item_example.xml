@@ -19,6 +19,7 @@
             android:hint="@string/field_hint_example"
             android:enabled="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:hintAnimationEnabled="false"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -36,6 +37,7 @@
             android:hint="@string/field_hint_example_translation"
             android:enabled="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:hintAnimationEnabled="false"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
