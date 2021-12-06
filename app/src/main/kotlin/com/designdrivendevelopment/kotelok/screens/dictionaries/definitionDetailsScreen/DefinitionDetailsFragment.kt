@@ -137,6 +137,7 @@ class DefinitionDetailsFragment :
 
         changeEditableStateForTranslations(newState)
         changeEditableStateForSynonyms(newState)
+        changeEditableStateForExamples(newState)
     }
 
     private fun changeEditableStateForTranslations(newState: Boolean) {
@@ -156,8 +157,8 @@ class DefinitionDetailsFragment :
     }
 
     private fun changeEditableStateForSynonyms(newState: Boolean) {
-        val translationsListSize = translationsList?.adapter?.itemCount ?: 0
-        for (i in 0 until translationsListSize) {
+        val synonymsListSize = synonymsList?.adapter?.itemCount ?: 0
+        for (i in 0 until synonymsListSize) {
             synonymsList
                 ?.findViewHolderForAdapterPosition(i)
                 ?.itemView
@@ -167,6 +168,27 @@ class DefinitionDetailsFragment :
                 ?.findViewHolderForAdapterPosition(i)
                 ?.itemView
                 ?.findViewById<View>(R.id.delete_synonym_btn)
+                ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun changeEditableStateForExamples(newState: Boolean) {
+        val examplesListSize = examplesList?.adapter?.itemCount ?: 0
+        for (i in 0 until examplesListSize) {
+            examplesList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.example_original_field)
+                ?.isEnabled = newState
+            examplesList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.example_translation_field)
+                ?.isEnabled = newState
+            examplesList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.delete_example_btn)
                 ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
         }
     }

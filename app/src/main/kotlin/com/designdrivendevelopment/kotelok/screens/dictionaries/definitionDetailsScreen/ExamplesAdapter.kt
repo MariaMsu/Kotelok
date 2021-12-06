@@ -15,10 +15,18 @@ class ExamplesAdapter(
     private val deleteExampleClickListener: DeleteExampleClickListener,
     var examples: List<ExampleOfDefinitionUse>
 ) : RecyclerView.Adapter<ExamplesAdapter.ViewHolder>() {
+    var isEditable = false
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val deleteBtn: ImageButton = view.findViewById(R.id.delete_example_btn)
         val exampleOriginalField: TextInputLayout = view.findViewById(R.id.example_original_field)
         val exampleTranslationField: TextInputLayout = view.findViewById(R.id.example_translation_field)
+
+        init {
+            exampleOriginalField.isEnabled = isEditable
+            exampleTranslationField.isEnabled = isEditable
+            deleteBtn.visibility = if (isEditable) View.VISIBLE else View.INVISIBLE
+        }
 
         fun bind(example: ExampleOfDefinitionUse) {
             exampleOriginalField.editText?.setText(example.originalText)
