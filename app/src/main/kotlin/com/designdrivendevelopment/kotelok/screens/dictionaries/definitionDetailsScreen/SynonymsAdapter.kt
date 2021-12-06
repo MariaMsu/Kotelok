@@ -14,9 +14,16 @@ class SynonymsAdapter(
     private val deleteClickListener: DeleteSynonymListener,
     var synonyms: List<String>
 ) : RecyclerView.Adapter<SynonymsAdapter.ViewHolder>() {
+    var isEditable = false
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val synonymField: TextInputLayout = view.findViewById(R.id.synonym_field)
         val deleteBtn: ImageButton = view.findViewById(R.id.delete_synonym_btn)
+
+        init {
+            synonymField.isEnabled = isEditable
+            deleteBtn.visibility = if (isEditable) View.VISIBLE else View.INVISIBLE
+        }
 
         fun onBind(translation: String) {
             synonymField.editText?.setText(translation)

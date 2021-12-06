@@ -136,6 +136,7 @@ class DefinitionDetailsFragment :
         partOfSpeechField?.isEnabled = newState
 
         changeEditableStateForTranslations(newState)
+        changeEditableStateForSynonyms(newState)
     }
 
     private fun changeEditableStateForTranslations(newState: Boolean) {
@@ -150,6 +151,22 @@ class DefinitionDetailsFragment :
                 ?.findViewHolderForAdapterPosition(i)
                 ?.itemView
                 ?.findViewById<View>(R.id.delete_translation_btn)
+                ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun changeEditableStateForSynonyms(newState: Boolean) {
+        val translationsListSize = translationsList?.adapter?.itemCount ?: 0
+        for (i in 0 until translationsListSize) {
+            synonymsList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.synonym_field)
+                ?.isEnabled = newState
+            synonymsList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.delete_synonym_btn)
                 ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
         }
     }
