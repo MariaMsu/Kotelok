@@ -153,15 +153,9 @@ class DefinitionDetailsFragment :
     private fun changeEditableStateForTranslations(newState: Boolean) {
         val translationsListSize = translationsList?.adapter?.itemCount ?: SIZE_EMPTY
         for (i in 0 until translationsListSize) {
-            translationsList
-                ?.findViewHolderForAdapterPosition(i)
-                ?.itemView
-                ?.findViewById<View>(R.id.translation_field)
-                ?.isEnabled = newState
-            translationsList
-                ?.findViewHolderForAdapterPosition(i)
-                ?.itemView
-                ?.findViewById<View>(R.id.delete_translation_btn)
+            val itemView = translationsList?.findViewHolderForAdapterPosition(i)?.itemView
+            itemView?.findViewById<View>(R.id.translation_field)?.isEnabled = newState
+            itemView?.findViewById<View>(R.id.delete_translation_btn)
                 ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
         }
     }
@@ -169,15 +163,9 @@ class DefinitionDetailsFragment :
     private fun changeEditableStateForSynonyms(newState: Boolean) {
         val synonymsListSize = synonymsList?.adapter?.itemCount ?: SIZE_EMPTY
         for (i in 0 until synonymsListSize) {
-            synonymsList
-                ?.findViewHolderForAdapterPosition(i)
-                ?.itemView
-                ?.findViewById<View>(R.id.synonym_field)
-                ?.isEnabled = newState
-            synonymsList
-                ?.findViewHolderForAdapterPosition(i)
-                ?.itemView
-                ?.findViewById<View>(R.id.delete_synonym_btn)
+            val itemView = synonymsList?.findViewHolderForAdapterPosition(i)?.itemView
+            itemView?.findViewById<View>(R.id.synonym_field)?.isEnabled = newState
+            itemView?.findViewById<View>(R.id.delete_synonym_btn)
                 ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
         }
     }
@@ -185,20 +173,10 @@ class DefinitionDetailsFragment :
     private fun changeEditableStateForExamples(newState: Boolean) {
         val examplesListSize = examplesList?.adapter?.itemCount ?: SIZE_EMPTY
         for (i in 0 until examplesListSize) {
-            examplesList
-                ?.findViewHolderForAdapterPosition(i)
-                ?.itemView
-                ?.findViewById<View>(R.id.example_original_field)
-                ?.isEnabled = newState
-            examplesList
-                ?.findViewHolderForAdapterPosition(i)
-                ?.itemView
-                ?.findViewById<View>(R.id.example_translation_field)
-                ?.isEnabled = newState
-            examplesList
-                ?.findViewHolderForAdapterPosition(i)
-                ?.itemView
-                ?.findViewById<View>(R.id.delete_example_btn)
+            val itemView = examplesList?.findViewHolderForAdapterPosition(i)?.itemView
+            itemView?.findViewById<View>(R.id.example_original_field)?.isEnabled = newState
+            itemView?.findViewById<View>(R.id.example_translation_field)?.isEnabled = newState
+            itemView?.findViewById<View>(R.id.delete_example_btn)
                 ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
         }
     }
