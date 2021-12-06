@@ -22,7 +22,7 @@ class SynonymsAdapter(
 
         init {
             synonymField.isEnabled = isEditable
-            deleteBtn.visibility = if (isEditable) View.VISIBLE else View.INVISIBLE
+            deleteBtn.visibility = if (isEditable && synonyms.size > 1) View.VISIBLE else View.INVISIBLE
         }
 
         fun onBind(translation: String) {

@@ -25,7 +25,7 @@ class ExamplesAdapter(
         init {
             exampleOriginalField.isEnabled = isEditable
             exampleTranslationField.isEnabled = isEditable
-            deleteBtn.visibility = if (isEditable) View.VISIBLE else View.INVISIBLE
+            deleteBtn.visibility = if (isEditable && examples.size > 1) View.VISIBLE else View.INVISIBLE
         }
 
         fun bind(example: ExampleOfDefinitionUse) {
