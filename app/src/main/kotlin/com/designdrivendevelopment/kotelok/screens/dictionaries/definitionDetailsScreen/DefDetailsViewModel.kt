@@ -1,14 +1,17 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionariesRepository
 import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
+import com.designdrivendevelopment.kotelok.screens.screensUtils.UiEvent
 import com.designdrivendevelopment.kotelok.screens.sharedWordDefProvider.SharedWordDefinitionProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
 class DefDetailsViewModel(
@@ -27,6 +30,7 @@ class DefDetailsViewModel(
     private val _isDeleteTrButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isDeleteSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isDeleteExButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _messageEvents = MutableLiveData<UiEvent.ShowMessage>()
 
     init {
         setInitialState(_displayedDefinition.value)
@@ -48,6 +52,8 @@ class DefDetailsViewModel(
         get() = _isDeleteSynButtonVisible
     val isDeleteExButtonVisible: LiveData<Boolean>
         get() = _isDeleteExButtonVisible
+    val messageEvents: LiveData<UiEvent.ShowMessage>
+        get() = _messageEvents
 
     override fun onCleared() {
         sharedWordDefProvider.sharedWordDefinition = null
@@ -77,6 +83,10 @@ class DefDetailsViewModel(
         updateDeleteExButtonVisibility()
     }
 
+    fun notifyToEventIsHandled(event: UiEvent) {
+        event.isHandled = true
+    }
+
     fun saveChanges(definition: WordDefinition) {
         val addedDefinition = if (saveMode == DefinitionDetailsFragment.SAVE_MODE_COPY) {
             definition.copy(
@@ -92,14 +102,19 @@ class DefDetailsViewModel(
                 examples = definition.examples.filter { it.originalText.isNotEmpty() }
             )
         }
-        Log.d("SAVING", "save def = $addedDefinition")
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
+        viewModelScope.launch(Dispatchers.IO) {
+            val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
+            if (addedDefinition.id == 0L) {
+                _messageEvents
+                    .postValue(UiEvent.ShowMessage("Сохранено в \"${dictionary.label}\""))
+            } else {
+                _messageEvents.postValue(UiEvent.ShowMessage("Изменения сохранены"))
+            }
 //            editWordDefRepository.addNewWordDefinitionWithDictionaries(
 //                addedDefinition,
 //                listOf(dictionary)
 //            )
-//        }
+        }
     }
 
     fun addTranslationField(definition: WordDefinition) {

@@ -94,7 +94,7 @@ class DefinitionDetailsFragment :
         setupExamples(examplesAdapter)
 
         viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
-        setupViewModel(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter)
+        setupViewModel(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter, view)
         setupListeners(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter)
     }
 
@@ -138,7 +138,8 @@ class DefinitionDetailsFragment :
         viewModel: DefDetailsViewModel?,
         translationsAdapter: TranslationsAdapter,
         synonymsAdapter: SynonymsAdapter,
-        examplesAdapter: ExamplesAdapter
+        examplesAdapter: ExamplesAdapter,
+        rootView: View
     ) {
         viewModel?.displayedDefinition?.observe(this) { wordDefinition ->
             if (wordDefinition != null) {
@@ -198,6 +199,10 @@ class DefinitionDetailsFragment :
         }
         viewModel?.isDeleteExButtonVisible?.observe(this) { isVisible ->
             changeVisibilityForDeleteExButtons(isVisible)
+        }
+        viewModel?.messageEvents?.observe(this) { event ->
+            sendMessage(rootView, event.message)
+            viewModel.notifyToEventIsHandled(event)
         }
     }
 
@@ -528,6 +533,10 @@ class DefinitionDetailsFragment :
             )
         }
         return examples
+    }
+
+    private fun sendMessage(rootView: View, message: String) {
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun showDefinitions(wordDefinition: WordDefinition) {
