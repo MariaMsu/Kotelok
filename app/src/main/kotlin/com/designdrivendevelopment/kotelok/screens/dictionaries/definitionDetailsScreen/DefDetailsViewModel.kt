@@ -28,6 +28,10 @@ class DefDetailsViewModel(
     private val _isDeleteSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isDeleteExButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
 
+    init {
+        setInitialState(_displayedDefinition.value)
+    }
+
     val displayedDefinition: LiveData<WordDefinition>
         get() = _displayedDefinition
     val isEditable: LiveData<Boolean>
@@ -214,6 +218,18 @@ class DefDetailsViewModel(
         if (newState != prevState) {
             _isDeleteExButtonVisible.value = newState
         }
+    }
+
+    private fun setInitialState(definition: WordDefinition?) {
+        _isEditable.value = definition?.writing?.isEmpty() == true
+
+        updateAddTrButtonVisibility()
+        updateAddSynButtonVisibility()
+        updateAddExButtonVisibility()
+
+        updateDeleteTrButtonVisibility()
+        updateDeleteSynButtonVisibility()
+        updateDeleteExButtonVisibility()
     }
 
     private fun createDefinitionStub(): WordDefinition {
