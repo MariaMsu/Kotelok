@@ -7,7 +7,7 @@ object FragmentResult {
         const val OPEN_DEF_DETAILS_FRAGMENT_KEY = "fragment_result_open_def_details_key"
 
         const val RESULT_DICT_ID_KEY = "result_dict_id_key"
-        const val RESULT_SAVE_MODE_KEY = "result_dict_id_key"
+        const val RESULT_SAVE_MODE_KEY = "result_save_mode_key"
     }
 
     object RecognizeTab
