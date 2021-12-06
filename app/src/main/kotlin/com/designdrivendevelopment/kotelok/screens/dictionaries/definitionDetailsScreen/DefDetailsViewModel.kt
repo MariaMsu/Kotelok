@@ -18,10 +18,10 @@ class DefDetailsViewModel(
     private val dictionaryId: Long,
     private val editWordDefRepository: EditWordDefinitionsRepository,
     private val dictionariesRepository: DictionariesRepository,
-    sharedWordDefProvider: SharedWordDefinitionProvider
+    private val sharedWordDefProvider: SharedWordDefinitionProvider
 ) : ViewModel() {
-    private val _displayedDefinition: MutableLiveData<WordDefinition?> =
-        MutableLiveData(sharedWordDefProvider.sharedWordDefinition)
+    private val _displayedDefinition: MutableLiveData<WordDefinition> =
+        MutableLiveData(prepareDefinitionToShowing(sharedWordDefProvider.sharedWordDefinition))
     private val _isEditable: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isAddTrButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isAddSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -30,7 +30,7 @@ class DefDetailsViewModel(
     private val _isDeleteSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isDeleteExButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    val displayedDefinition: LiveData<WordDefinition?>
+    val displayedDefinition: LiveData<WordDefinition>
         get() = _displayedDefinition
     val isEditable: LiveData<Boolean>
         get() = _isEditable
@@ -96,8 +96,8 @@ class DefDetailsViewModel(
     }
 
     fun addTranslationField() {
-        val definition = displayedDefinition.value
-        val extendedDefinition = definition?.copy(
+        val definition = displayedDefinition.value ?: createDefinitionStub()
+        val extendedDefinition = definition.copy(
             allTranslations = definition.allTranslations.toMutableList().apply { add("") }
         )
         _displayedDefinition.value = extendedDefinition
@@ -106,8 +106,8 @@ class DefDetailsViewModel(
     }
 
     fun addSynonymField() {
-        val definition = displayedDefinition.value
-        val extendedDefinition = definition?.copy(
+        val definition = displayedDefinition.value ?: createDefinitionStub()
+        val extendedDefinition = definition.copy(
             synonyms = definition.synonyms.toMutableList().apply { add("") }
         )
         _displayedDefinition.value = extendedDefinition
@@ -116,8 +116,8 @@ class DefDetailsViewModel(
     }
 
     fun addExampleField() {
-        val definition = displayedDefinition.value
-        val extendedDefinition = definition?.copy(
+        val definition = displayedDefinition.value ?: createDefinitionStub()
+        val extendedDefinition = definition.copy(
             examples = definition.examples.toMutableList().apply {
                 add(ExampleOfDefinitionUse(originalText = "", translatedText = ""))
             }
@@ -128,8 +128,8 @@ class DefDetailsViewModel(
     }
 
     fun deleteTranslation(translation: String) {
-        val definition = displayedDefinition.value
-        val extendedDefinition = definition?.copy(
+        val definition = displayedDefinition.value ?: createDefinitionStub()
+        val extendedDefinition = definition.copy(
             allTranslations = definition.allTranslations.toMutableList().apply {
                 remove(translation)
             }
@@ -140,8 +140,8 @@ class DefDetailsViewModel(
     }
 
     fun deleteSynonym(synonym: String) {
-        val definition = displayedDefinition.value
-        val extendedDefinition = definition?.copy(
+        val definition = displayedDefinition.value ?: createDefinitionStub()
+        val extendedDefinition = definition.copy(
             synonyms = definition.synonyms.toMutableList().apply {
                 remove(synonym)
             }
@@ -152,8 +152,8 @@ class DefDetailsViewModel(
     }
 
     fun deleteExample(example: ExampleOfDefinitionUse) {
-        val definition = displayedDefinition.value
-        val extendedDefinition = definition?.copy(
+        val definition = displayedDefinition.value ?: createDefinitionStub()
+        val extendedDefinition = definition.copy(
             examples = definition.examples.toMutableList().apply {
                 remove(example)
             }
@@ -221,6 +221,40 @@ class DefDetailsViewModel(
         if (newState != prevState) {
             _isDeleteExButtonVisible.value = newState
         }
+    }
+
+    private fun createDefinitionStub(): WordDefinition {
+        return WordDefinition(
+            id = 0L,
+            writing = "",
+            partOfSpeech = null,
+            transcription = null,
+            synonyms = emptyList(),
+            mainTranslation = "",
+            allTranslations = emptyList(),
+            examples = emptyList()
+        )
+    }
+
+    private fun prepareDefinitionToShowing(wordDefinition: WordDefinition?): WordDefinition {
+        val definition = wordDefinition ?: createDefinitionStub()
+        return definition.copy(
+            allTranslations = if (definition.allTranslations.isEmpty()) {
+                listOf("")
+            } else {
+                definition.allTranslations
+            },
+            synonyms = if (definition.synonyms.isEmpty()) {
+                listOf("")
+            } else {
+                definition.synonyms
+            },
+            examples = if (definition.examples.isEmpty()) {
+                listOf(ExampleOfDefinitionUse(originalText = "", translatedText = ""))
+            } else {
+                definition.examples
+            }
+        )
     }
 
     companion object {
