@@ -23,6 +23,7 @@ import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.dpToPx
+import com.designdrivendevelopment.kotelok.screens.screensUtils.toNullIfEmpty
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 
@@ -48,6 +49,8 @@ class DefinitionDetailsFragment :
     private var yandexDictHyperlink: TextView? = null
     private var viewModel: DefDetailsViewModel? = null
     private var isNeedAnimate = false
+
+    private var trAdapter: TranslationsAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,6 +81,7 @@ class DefinitionDetailsFragment :
         )
 
         val translationsAdapter = TranslationsAdapter(context, this, emptyList())
+        trAdapter = translationsAdapter
         val synonymsAdapter = SynonymsAdapter(context, this, emptyList())
         val examplesAdapter = ExamplesAdapter(context, this, emptyList())
         setupTranslations(translationsAdapter)
@@ -86,7 +90,7 @@ class DefinitionDetailsFragment :
 
         viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
         setupViewModel(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter)
-        setupListeners(viewModel)
+        setupListeners(viewModel, translationsAdapter)
     }
 
     override fun onResume() {
@@ -104,8 +108,10 @@ class DefinitionDetailsFragment :
         clearViews()
     }
 
-    override fun onDeleteTranslation(translation: String) {
-        viewModel?.deleteTranslation(translation)
+    override fun onDeleteTranslation(position: Int) {
+        val definition = readDefinitionFromFields()
+        trAdapter?.translations = definition.allTranslations
+        viewModel?.deleteTranslation(position, definition)
     }
 
     override fun onDeleteSynonym(synonym: String) {
@@ -155,7 +161,7 @@ class DefinitionDetailsFragment :
             if (isNeedAnimate) {
                 animateChangingForButton(addTranslationBtn, isVisible)
             } else {
-                  addTranslationBtn?.isVisible = isVisible
+                addTranslationBtn?.isVisible = isVisible
             }
         }
         viewModel?.isAddSynButtonVisible?.observe(this) { isVisible ->
@@ -307,9 +313,11 @@ class DefinitionDetailsFragment :
         }
     }
 
-    private fun setupListeners(viewModel: DefDetailsViewModel?) {
+    private fun setupListeners(viewModel: DefDetailsViewModel?, translationsAdapter: TranslationsAdapter) {
         addTranslationBtn?.setOnClickListener {
-            viewModel?.addTranslationField()
+            val definition = readDefinitionFromFields()
+            translationsAdapter.translations = definition.allTranslations
+            viewModel?.addTranslationField(definition)
         }
         addSynonymBtn?.setOnClickListener {
             viewModel?.addSynonymField()
@@ -322,6 +330,8 @@ class DefinitionDetailsFragment :
         }
         saveDefinitionFab?.setOnClickListener {
             viewModel?.disableEditableMode()
+            val definition = readDefinitionFromFields()
+            viewModel?.saveChanges(definition)
         }
     }
 
@@ -407,6 +417,67 @@ class DefinitionDetailsFragment :
         )
         DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
         adapter.examples = newExamples
+    }
+
+    private fun readDefinitionFromFields(): WordDefinition {
+        val definition = viewModel?.displayedDefinition?.value
+            ?: throw NullPointerException("Cannot read from fields")
+
+        return definition.copy(
+            writing = writingField?.editText?.text?.toString().orEmpty(),
+            partOfSpeech = partOfSpeechField?.editText?.text?.toString().toNullIfEmpty(),
+            transcription = transcriptionField?.editText?.text?.toString().toNullIfEmpty(),
+            mainTranslation = translationField?.editText?.text?.toString().orEmpty(),
+            allTranslations = readTranslationsFromFields(),
+            synonyms = readSynonymsFromFields(),
+            examples = readExamplesFromFields()
+        )
+    }
+
+    private fun readTranslationsFromFields(): List<String> {
+        val translations = mutableListOf<String>()
+        val translationsListSize = translationsList?.adapter?.itemCount ?: SIZE_EMPTY
+        for (i in 0 until translationsListSize) {
+            translations.add(
+                translationsList
+                    ?.findViewHolderForAdapterPosition(i)
+                    ?.itemView
+                    ?.findViewById<TextInputLayout>(R.id.translation_field)
+                    ?.editText?.text?.toString().orEmpty()
+            )
+        }
+        return translations
+    }
+
+    private fun readSynonymsFromFields(): List<String> {
+        val synonyms = mutableListOf<String>()
+        val synonymsListSize = synonymsList?.adapter?.itemCount ?: SIZE_EMPTY
+        for (i in 0 until synonymsListSize) {
+            synonyms.add(
+                synonymsList
+                    ?.findViewHolderForAdapterPosition(i)
+                    ?.itemView
+                    ?.findViewById<TextInputLayout>(R.id.synonym_field)
+                    ?.editText?.text?.toString().orEmpty()
+            )
+        }
+        return synonyms
+    }
+
+    private fun readExamplesFromFields(): List<ExampleOfDefinitionUse> {
+        val examples = mutableListOf<ExampleOfDefinitionUse>()
+        val translationsListSize = examplesList?.adapter?.itemCount ?: SIZE_EMPTY
+        for (i in 0 until translationsListSize) {
+            val itemView = examplesList?.findViewHolderForAdapterPosition(i)?.itemView
+            val original = itemView?.findViewById<TextInputLayout>(R.id.example_original_field)
+                ?.editText?.text?.toString().orEmpty()
+            val translation = itemView?.findViewById<TextInputLayout>(R.id.example_translation_field)
+                ?.editText?.text?.toString().toNullIfEmpty()
+            examples.add(
+                ExampleOfDefinitionUse(original, translation)
+            )
+        }
+        return examples
     }
 
     private fun showDefinitions(wordDefinition: WordDefinition) {

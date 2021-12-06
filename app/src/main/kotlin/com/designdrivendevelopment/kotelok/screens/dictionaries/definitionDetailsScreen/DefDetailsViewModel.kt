@@ -3,14 +3,11 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetai
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionariesRepository
 import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
 import com.designdrivendevelopment.kotelok.screens.sharedWordDefProvider.SharedWordDefinitionProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
 class DefDetailsViewModel(
@@ -99,10 +96,11 @@ class DefDetailsViewModel(
         }
     }
 
-    fun addTranslationField() {
-        val definition = displayedDefinition.value ?: createDefinitionStub()
+    fun addTranslationField(definition: WordDefinition) {
         val extendedDefinition = definition.copy(
-            allTranslations = definition.allTranslations.toMutableList().apply { add("") }
+            allTranslations = definition.allTranslations.toMutableList().apply {
+                add(INDEX_AT_INSERT, "")
+            }
         )
         _displayedDefinition.value = extendedDefinition
         updateAddTrButtonVisibility()
@@ -131,12 +129,9 @@ class DefDetailsViewModel(
         updateDeleteExButtonVisibility()
     }
 
-    fun deleteTranslation(translation: String) {
-        val definition = displayedDefinition.value ?: createDefinitionStub()
+    fun deleteTranslation(position: Int, definition: WordDefinition) {
         val extendedDefinition = definition.copy(
-            allTranslations = definition.allTranslations.toMutableList().apply {
-                remove(translation)
-            }
+            allTranslations = definition.allTranslations.toMutableList().apply { removeAt(position) }
         )
         _displayedDefinition.value = extendedDefinition
         updateAddTrButtonVisibility()
@@ -262,6 +257,7 @@ class DefDetailsViewModel(
     }
 
     companion object {
+        private const val INDEX_AT_INSERT = 0
         private const val SIZE_EMPTY = 0
         private const val MIN_LIST_SIZE = 1
         private const val MAX_LISTS_SIZE = 5

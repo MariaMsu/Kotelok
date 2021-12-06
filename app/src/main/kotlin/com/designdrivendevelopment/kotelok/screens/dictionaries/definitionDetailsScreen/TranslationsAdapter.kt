@@ -38,7 +38,9 @@ class TranslationsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val translation = translations[position]
         holder.onBind(translation)
-        holder.deleteBtn.setOnClickListener { deleteClickListener.onDeleteTranslation(translation) }
+        holder.deleteBtn.setOnClickListener {
+            deleteClickListener.onDeleteTranslation(holder.adapterPosition)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -47,5 +49,5 @@ class TranslationsAdapter(
 }
 
 interface DeleteTranslationListener {
-    fun onDeleteTranslation(translation: String)
+    fun onDeleteTranslation(position: Int)
 }
