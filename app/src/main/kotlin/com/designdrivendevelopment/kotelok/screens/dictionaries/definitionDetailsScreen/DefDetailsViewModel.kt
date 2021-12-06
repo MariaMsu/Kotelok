@@ -47,6 +47,10 @@ class DefDetailsViewModel(
     val isDeleteExButtonVisible: LiveData<Boolean>
         get() = _isDeleteExButtonVisible
 
+    override fun onCleared() {
+        sharedWordDefProvider.sharedWordDefinition = null
+    }
+
     fun enableEditableMode() {
         _isEditable.value = true
 
