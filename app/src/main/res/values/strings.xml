@@ -35,4 +35,6 @@
     <string name="btn_delete_example">Удалить пример</string>
     <string name="fab_edit_definition">Редактировать определение</string>
     <string name="fab_save_definition">Сохранить информацию об определении</string>
+    <string name="header_text_main_fields">Основное:</string>
+    <string name="header_text_additional_fields">Дополнительно:</string>
 </resources>

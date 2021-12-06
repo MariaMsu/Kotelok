@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="6dp" />
+                app:layout_constraintGuide_begin="12dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/bottom_border"
@@ -49,10 +49,10 @@
                 android:id="@+id/writing_text_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:hint="@string/field_hint_writing"
                 android:enabled="false"
-                app:layout_constraintTop_toBottomOf="@id/top_border"
+                app:layout_constraintTop_toBottomOf="@id/main_fields_text"
                 app:layout_constraintStart_toEndOf="@id/start_border"
                 app:layout_constraintEnd_toStartOf="@id/end_border"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -93,15 +93,40 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/main_fields_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/header_text_main_fields"
+                android:textColor="?attr/subheadingColor"
+                android:textSize="@dimen/subheading_size"
+                android:background="@drawable/background_with_underline"
+                app:layout_constraintTop_toBottomOf="@id/top_border"
+                app:layout_constraintStart_toEndOf="@id/start_border"
+                app:layout_constraintEnd_toStartOf="@id/end_border" />
+
+            <TextView
+                android:id="@+id/additional_fields_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/header_text_additional_fields"
+                android:textColor="?attr/subheadingColor"
+                android:textSize="@dimen/subheading_size"
+                android:background="@drawable/background_with_underline"
+                app:layout_constraintTop_toBottomOf="@id/translation_text_field"
+                app:layout_constraintStart_toEndOf="@id/start_border"
+                app:layout_constraintEnd_toStartOf="@id/end_border" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/transcription_text_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="12dp"
                 android:hint="@string/field_hint_transcription"
                 android:enabled="false"
-                app:layout_constraintTop_toBottomOf="@id/translation_text_field"
+                app:layout_constraintTop_toBottomOf="@id/additional_fields_text"
                 app:layout_constraintStart_toEndOf="@id/start_border"
                 app:layout_constraintEnd_toStartOf="@id/part_of_speech_text_field"
                 app:layout_constraintHorizontal_weight="3"
@@ -120,11 +145,11 @@
                 android:id="@+id/part_of_speech_text_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="12dp"
                 android:hint="@string/field_hint_pos"
                 android:enabled="false"
-                app:layout_constraintTop_toBottomOf="@id/translation_text_field"
+                app:layout_constraintTop_toBottomOf="@id/additional_fields_text"
                 app:layout_constraintStart_toEndOf="@id/transcription_text_field"
                 app:layout_constraintEnd_toStartOf="@id/end_border"
                 app:layout_constraintHorizontal_weight="2"
@@ -163,7 +188,6 @@
                 android:id="@+id/other_translations"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 app:layout_constraintTop_toBottomOf="@id/other_translations_text"
                 app:layout_constraintStart_toEndOf="@id/start_border"
                 app:layout_constraintEnd_toStartOf="@id/end_border" />
@@ -189,7 +213,7 @@
                 android:id="@+id/synonyms_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/text_header_synonyms"
                 android:textColor="?attr/subheadingColor"
                 android:textSize="@dimen/subheading_size"
@@ -228,7 +252,7 @@
                 android:id="@+id/examples_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/text_header_other_examples"
                 android:textColor="?attr/subheadingColor"
                 android:textSize="@dimen/subheading_size"
@@ -268,7 +292,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:paddingTop="24dp"
                 android:gravity="center"
+                android:background="@drawable/background_with_top_line"
                 android:textSize="@dimen/subheading_size"
                 android:textColorLink="?attr/titleColor"
                 android:text="@string/yandex_dict_api_hyper"
