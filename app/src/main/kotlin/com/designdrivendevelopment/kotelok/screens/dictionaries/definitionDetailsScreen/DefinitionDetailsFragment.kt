@@ -44,6 +44,7 @@ class DefinitionDetailsFragment :
     private var editDefinitionFab: FloatingActionButton? = null
     private var saveDefinitionFab: FloatingActionButton? = null
     private var viewModel: DefDetailsViewModel? = null
+    private var isNeedAnimate = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,6 +86,16 @@ class DefinitionDetailsFragment :
         setupListeners(viewModel)
     }
 
+    override fun onResume() {
+        super.onResume()
+        isNeedAnimate = true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isNeedAnimate = false
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
@@ -118,9 +129,19 @@ class DefinitionDetailsFragment :
         }
         viewModel?.isEditable?.observe(this) { isEditable ->
             if (isEditable) {
-                animateEditableTransition(editDefinitionFab, saveDefinitionFab)
+                if (isNeedAnimate) {
+                    animateEditableTransition(editDefinitionFab, saveDefinitionFab)
+                } else {
+                    editDefinitionFab?.isVisible = false
+                    saveDefinitionFab?.isVisible = true
+                }
             } else {
-                animateEditableTransition(saveDefinitionFab, editDefinitionFab)
+                if (isNeedAnimate) {
+                    animateEditableTransition(saveDefinitionFab, editDefinitionFab)
+                } else {
+                    editDefinitionFab?.isVisible = true
+                    saveDefinitionFab?.isVisible = false
+                }
             }
             translationsAdapter.isEditable = isEditable
             synonymsAdapter.isEditable = isEditable
@@ -128,13 +149,25 @@ class DefinitionDetailsFragment :
             changeEditableStateForFields(isEditable)
         }
         viewModel?.isAddTrButtonVisible?.observe(this) { isVisible ->
-            animateChangingForButton(addTranslationBtn, isVisible)
+            if (isNeedAnimate) {
+                animateChangingForButton(addTranslationBtn, isVisible)
+            } else {
+                  addTranslationBtn?.isVisible = isVisible
+            }
         }
         viewModel?.isAddSynButtonVisible?.observe(this) { isVisible ->
-            animateChangingForButton(addSynonymBtn, isVisible)
+            if (isNeedAnimate) {
+                animateChangingForButton(addSynonymBtn, isVisible)
+            } else {
+                addSynonymBtn?.isVisible = isVisible
+            }
         }
         viewModel?.isAddExButtonVisible?.observe(this) { isVisible ->
-            animateChangingForButton(addExampleBtn, isVisible)
+            if (isNeedAnimate) {
+                animateChangingForButton(addExampleBtn, isVisible)
+            } else {
+                addExampleBtn?.isVisible = isVisible
+            }
         }
         viewModel?.isDeleteTrButtonVisible?.observe(this) { isVisible ->
             changeVisibilityForDeleteTrButtons(isVisible)
