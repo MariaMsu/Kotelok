@@ -22,6 +22,7 @@ class TranslationsAdapter(
 
         init {
             translationField.isEnabled = isEditable
+            deleteBtn.visibility = if (isEditable) View.VISIBLE else View.INVISIBLE
         }
 
         fun onBind(translation: String) {

@@ -31,6 +31,7 @@
         android:layout_marginStart="8dp"
         android:layout_gravity="center"
         android:layout_weight="1"
+        android:visibility="invisible"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:tint="?attr/colorPrimary"
         app:srcCompat="@drawable/ic_close"

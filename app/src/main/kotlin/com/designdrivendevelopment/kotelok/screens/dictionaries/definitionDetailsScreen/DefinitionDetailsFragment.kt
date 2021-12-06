@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.animation.addListener
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -126,16 +125,20 @@ class DefinitionDetailsFragment :
             addExampleBtn?.isVisible = (examplesAdapter.examples.size < MAX_EXAMPLES_SIZE) &&
                 isEditable
             translationsAdapter.isEditable = isEditable
-            changeEnableStateForFields(isEditable)
+            changeEditableStateForFields(isEditable)
         }
     }
 
-    private fun changeEnableStateForFields(newState: Boolean) {
+    private fun changeEditableStateForFields(newState: Boolean) {
         writingField?.isEnabled = newState
         translationField?.isEnabled = newState
         transcriptionField?.isEnabled = newState
         partOfSpeechField?.isEnabled = newState
 
+        changeEditableStateForTranslations(newState)
+    }
+
+    private fun changeEditableStateForTranslations(newState: Boolean) {
         val translationsListSize = translationsList?.adapter?.itemCount ?: 0
         for (i in 0 until translationsListSize) {
             translationsList
@@ -143,6 +146,11 @@ class DefinitionDetailsFragment :
                 ?.itemView
                 ?.findViewById<View>(R.id.translation_field)
                 ?.isEnabled = newState
+            translationsList
+                ?.findViewHolderForAdapterPosition(i)
+                ?.itemView
+                ?.findViewById<View>(R.id.delete_translation_btn)
+                ?.visibility = if (newState) View.VISIBLE else View.INVISIBLE
         }
     }
 
