@@ -104,16 +104,16 @@ class DefDetailsViewModel(
         }
         viewModelScope.launch(Dispatchers.IO) {
             val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
-            if (addedDefinition.id == 0L) {
+            if (addedDefinition.id == NEW_WORD_ID) {
                 _messageEvents
                     .postValue(UiEvent.ShowMessage("Сохранено в \"${dictionary.label}\""))
             } else {
                 _messageEvents.postValue(UiEvent.ShowMessage("Изменения сохранены"))
             }
-//            editWordDefRepository.addNewWordDefinitionWithDictionaries(
-//                addedDefinition,
-//                listOf(dictionary)
-//            )
+            editWordDefRepository.addNewWordDefinitionWithDictionaries(
+                addedDefinition,
+                listOf(dictionary)
+            )
         }
     }
 
@@ -282,6 +282,7 @@ class DefDetailsViewModel(
     }
 
     companion object {
+        private const val NEW_WORD_ID = 0L
         private const val INDEX_AT_INSERT = 0
         private const val SIZE_EMPTY = 0
         private const val MIN_LIST_SIZE = 1
