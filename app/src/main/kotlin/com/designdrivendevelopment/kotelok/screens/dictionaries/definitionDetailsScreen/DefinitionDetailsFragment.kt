@@ -51,6 +51,7 @@ class DefinitionDetailsFragment :
     private var isNeedAnimate = false
     private var trAdapter: TranslationsAdapter? = null
     private var synAdapter: SynonymsAdapter? = null
+    private var exAdapter: ExamplesAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,13 +86,14 @@ class DefinitionDetailsFragment :
         val examplesAdapter = ExamplesAdapter(context, this, emptyList())
         trAdapter = translationsAdapter
         synAdapter = synonymsAdapter
+        exAdapter = examplesAdapter
         setupTranslations(translationsAdapter)
         setupSynonyms(synonymsAdapter)
         setupExamples(examplesAdapter)
 
         viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
         setupViewModel(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter)
-        setupListeners(viewModel, translationsAdapter, synonymsAdapter)
+        setupListeners(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter)
     }
 
     override fun onResume() {
@@ -106,6 +108,9 @@ class DefinitionDetailsFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
+        trAdapter = null
+        synAdapter = null
+        exAdapter = null
         clearViews()
     }
 
@@ -121,8 +126,10 @@ class DefinitionDetailsFragment :
         viewModel?.deleteSynonym(position, definition)
     }
 
-    override fun onDeleteExample(example: ExampleOfDefinitionUse) {
-        viewModel?.deleteExample(example)
+    override fun onDeleteExample(position: Int) {
+        val definition = readDefinitionFromFields()
+        exAdapter?.examples = definition.examples
+        viewModel?.deleteExample(position, definition)
     }
 
     private fun setupViewModel(
@@ -319,7 +326,8 @@ class DefinitionDetailsFragment :
     private fun setupListeners(
         viewModel: DefDetailsViewModel?,
         translationsAdapter: TranslationsAdapter,
-        synonymsAdapter: SynonymsAdapter
+        synonymsAdapter: SynonymsAdapter,
+        examplesAdapter: ExamplesAdapter
     ) {
         addTranslationBtn?.setOnClickListener {
             val definition = readDefinitionFromFields()
@@ -332,7 +340,9 @@ class DefinitionDetailsFragment :
             viewModel?.addSynonymField(definition)
         }
         addExampleBtn?.setOnClickListener {
-            viewModel?.addExampleField()
+            val definition = readDefinitionFromFields()
+            examplesAdapter.examples = definition.examples
+            viewModel?.addExampleField(definition)
         }
         editDefinitionFab?.setOnClickListener {
             viewModel?.enableEditableMode()

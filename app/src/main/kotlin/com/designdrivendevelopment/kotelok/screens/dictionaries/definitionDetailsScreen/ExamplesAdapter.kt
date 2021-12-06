@@ -19,8 +19,8 @@ class ExamplesAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val deleteBtn: ImageButton = view.findViewById(R.id.delete_example_btn)
-        val exampleOriginalField: TextInputLayout = view.findViewById(R.id.example_original_field)
-        val exampleTranslationField: TextInputLayout = view.findViewById(R.id.example_translation_field)
+        private val exampleOriginalField: TextInputLayout = view.findViewById(R.id.example_original_field)
+        private val exampleTranslationField: TextInputLayout = view.findViewById(R.id.example_translation_field)
 
         init {
             exampleOriginalField.isEnabled = isEditable
@@ -45,7 +45,7 @@ class ExamplesAdapter(
         val example = examples[position]
         holder.bind(example)
         holder.deleteBtn.setOnClickListener {
-            deleteExampleClickListener.onDeleteExample(example)
+            deleteExampleClickListener.onDeleteExample(holder.adapterPosition)
         }
     }
 
@@ -55,5 +55,5 @@ class ExamplesAdapter(
 }
 
 interface DeleteExampleClickListener {
-    fun onDeleteExample(example: ExampleOfDefinitionUse)
+    fun onDeleteExample(position: Int)
 }

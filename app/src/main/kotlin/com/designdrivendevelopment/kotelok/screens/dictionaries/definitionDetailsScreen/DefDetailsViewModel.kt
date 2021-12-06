@@ -118,11 +118,10 @@ class DefDetailsViewModel(
         updateDeleteSynButtonVisibility()
     }
 
-    fun addExampleField() {
-        val definition = displayedDefinition.value ?: createDefinitionStub()
+    fun addExampleField(definition: WordDefinition) {
         val extendedDefinition = definition.copy(
             examples = definition.examples.toMutableList().apply {
-                add(ExampleOfDefinitionUse(originalText = "", translatedText = ""))
+                add(INDEX_AT_INSERT, ExampleOfDefinitionUse(originalText = "", translatedText = ""))
             }
         )
         _displayedDefinition.value = extendedDefinition
@@ -148,12 +147,9 @@ class DefDetailsViewModel(
         updateDeleteSynButtonVisibility()
     }
 
-    fun deleteExample(example: ExampleOfDefinitionUse) {
-        val definition = displayedDefinition.value ?: createDefinitionStub()
+    fun deleteExample(position: Int, definition: WordDefinition) {
         val extendedDefinition = definition.copy(
-            examples = definition.examples.toMutableList().apply {
-                remove(example)
-            }
+            examples = definition.examples.toMutableList().apply { removeAt(position) }
         )
         _displayedDefinition.value = extendedDefinition
         updateAddExButtonVisibility()
