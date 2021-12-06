@@ -5,10 +5,12 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -43,6 +45,7 @@ class DefinitionDetailsFragment :
     private var addExampleBtn: Button? = null
     private var editDefinitionFab: FloatingActionButton? = null
     private var saveDefinitionFab: FloatingActionButton? = null
+    private var yandexDictHyperlink: TextView? = null
     private var viewModel: DefDetailsViewModel? = null
     private var isNeedAnimate = false
 
@@ -426,6 +429,8 @@ class DefinitionDetailsFragment :
         addExampleBtn = view.findViewById(R.id.add_example_button)
         editDefinitionFab = view.findViewById(R.id.edit_definition_fab)
         saveDefinitionFab = view.findViewById(R.id.save_definition_fab)
+        yandexDictHyperlink = view.findViewById(R.id.yandex_dict_api_hyperlink)
+        yandexDictHyperlink?.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun clearViews() {
@@ -441,6 +446,7 @@ class DefinitionDetailsFragment :
         addExampleBtn = null
         editDefinitionFab = null
         saveDefinitionFab = null
+        yandexDictHyperlink = null
     }
 
     companion object {

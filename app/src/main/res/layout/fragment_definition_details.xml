@@ -260,9 +260,23 @@
                 app:layout_constraintTop_toBottomOf="@id/examples"
                 app:layout_constraintStart_toEndOf="@id/start_border"
                 app:layout_constraintEnd_toStartOf="@id/end_border"
-                app:layout_constraintBottom_toTopOf="@id/bottom_border"
+                app:layout_constraintBottom_toTopOf="@id/yandex_dict_api_hyperlink"
                 />
 
+            <TextView
+                android:id="@+id/yandex_dict_api_hyperlink"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:textSize="@dimen/subheading_size"
+                android:textColorLink="?attr/titleColor"
+                android:text="@string/yandex_dict_api_hyper"
+                app:layout_constraintTop_toBottomOf="@id/add_example_button"
+                app:layout_constraintStart_toEndOf="@id/start_border"
+                app:layout_constraintEnd_toStartOf="@id/end_border"
+                app:layout_constraintBottom_toTopOf="@id/bottom_border"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
