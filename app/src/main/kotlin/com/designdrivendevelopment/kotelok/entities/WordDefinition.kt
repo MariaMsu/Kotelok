@@ -10,4 +10,10 @@ data class WordDefinition(
     val mainTranslation: String,
     val allTranslations: List<String>,
     val examples: List<ExampleOfDefinitionUse>
-)
+) {
+    companion object {
+        const val MAX_TRANSLATIONS_SIZE = 5
+        const val MAX_SYNONYMS_SIZE = 5
+        const val MAX_EXAMPLES_SIZE = 3
+    }
+}

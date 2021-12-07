@@ -1,10 +1,13 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes
 
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.SelectableItem
 
-class WordDefinitionItem(
+data class WordDefinitionItem(
     private val definition: WordDefinition,
-) : CommonItem<WordDefinition>(), ItemWithType {
+    override val isSelected: Boolean = false,
+    override val isPartOfSelection: Boolean = false
+) : CommonItem<WordDefinition>(), ItemWithType, SelectableItem {
     override val data: WordDefinition
         get() = definition
 

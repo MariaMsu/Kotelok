@@ -10,6 +10,7 @@
     <string name="add_word_fab_description">Довить значение слова</string>
     <string name="enter_writing_hint">Введите слово</string>
     <string name="lookup_word_button_text">Найти определения</string>
+
     <string name="default_word">Слово</string>
     <string name="dict_completed">Тренировка завершена!</string>
     <string name="enter_word">введите слово</string>
@@ -17,4 +18,34 @@
     <string name="check_button_text">проверить</string>
     <string name="correct_guess">Верно!</string>
     <string name="incorrect_guess">Неверно!\nВерный ответ: %1$s</string>
+
+    <string name="add_custom_definition_button">Добавить собственное определение</string>
+    <string name="add_custom_definition_text">Добавить</string>
+    <string name="save_definitions">Сохранить определения</string>
+    <string name="lookup_def_input_error">Ошибка: Вы должны ввести слово</string>
+    <string name="yandex_dict_api_hyper"><a href="http://api.yandex.ru/dictionary/">Реализовано с помощью сервиса \n«API Яндекс.Словарь»</a></string>
+    <string name="add_def_screen_title">Добавить определение</string>
+    <string name="landscape_input_warning">Чтобы ввести слово, поверните телефон вертикально</string>
+    <string name="field_hint_writing">Написание</string>
+    <string name="field_hint_translation">Перевод</string>
+    <string name="field_hint_pos">Часть речи</string>
+    <string name="field_hint_transcription">Транскрипция</string>
+    <string name="text_header_other_translations">Другие варианты перевода:</string>
+    <string name="text_header_synonyms">Синонимы:</string>
+    <string name="text_header_other_examples">Примеры:</string>
+    <string name="btn_add_other_translation">Добавить вариант</string>
+    <string name="btn_add_synonym">Добавить синоним</string>
+    <string name="btn_add_example">Добавить пример</string>
+    <string name="field_hint_synonym">Синоним</string>
+    <string name="field_hint_example">Пример</string>
+    <string name="field_hint_example_translation">Перевод примера</string>
+    <string name="delete_translation_btn">Удалить вариант перевода</string>
+    <string name="button_delete_synonym">Удалить синоним</string>
+    <string name="btn_delete_example">Удалить пример</string>
+    <string name="fab_edit_definition">Редактировать определение</string>
+    <string name="fab_save_definition">Сохранить информацию об определении</string>
+    <string name="header_text_main_fields">Основное:</string>
+    <string name="header_text_additional_fields">Дополнительно:</string>
+    <string name="error_field_required">Это обязательное поле</string>
+
 </resources>

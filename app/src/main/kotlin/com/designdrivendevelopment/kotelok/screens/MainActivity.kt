@@ -7,6 +7,8 @@ import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
+import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
+import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.trainers.TrainWriteFragment
@@ -54,11 +56,24 @@ class MainActivity : AppCompatActivity() {
             setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
                 this@MainActivity
-            ) { _, _ ->
+            ) { _, bundle ->
+                val dictionaryId = bundle.getLong(DictionaryDetailsFragment.RESULT_DATA_KEY)
                 addFragment(
-                    fragment = LookupWordDefinitionsFragment.newInstance(),
+                    fragment = LookupWordDefinitionsFragment.newInstance(dictionaryId),
                     tag = "Lookup_word_def_fragment",
                     transactionName = "open_lookup_word_def_fragment"
+                )
+            }
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_DEF_DETAILS_FRAGMENT_KEY,
+                this@MainActivity
+            ) { _, bundle ->
+                val dictionaryId = bundle.getLong(FragmentResult.DictionariesTab.RESULT_DICT_ID_KEY)
+                val saveMode = bundle.getInt(FragmentResult.DictionariesTab.RESULT_SAVE_MODE_KEY)
+                addFragment(
+                    fragment = DefinitionDetailsFragment.newInstance(dictionaryId, saveMode),
+                    tag = "def_details_fragment",
+                    transactionName = "open_def_details_fragment"
                 )
             }
         }

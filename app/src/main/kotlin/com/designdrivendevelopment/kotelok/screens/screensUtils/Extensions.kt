@@ -53,3 +53,7 @@ fun View.focusAndShowKeyboard() {
         )
     }
 }
+
+fun String?.toNullIfEmpty(): String? {
+    return if (this.isNullOrEmpty()) null else this
+}

@@ -20,20 +20,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.dictionaries.DefinitionClickListener
+import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
+import com.designdrivendevelopment.kotelok.screens.screensUtils.TtsPrefs
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.Locale
 
 @Suppress("TooManyFunctions")
-class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlaySoundBtnClickListener {
+class DictionaryDetailsFragment :
+    Fragment(),
+    TextToSpeech.OnInitListener,
+    PlaySoundBtnClickListener,
+    DefinitionClickListener {
     private var scrollPosition = SCROLL_START_POSITION
     private var textToSpeech: TextToSpeech? = null
     private var wordDefinitionsList: RecyclerView? = null
     private var addFab: FloatingActionButton? = null
     private var viewModel: DictDetailsViewModel? = null
+    private var dictId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +55,10 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         initViews(view)
-        setupListeners()
+
+        val dictionaryId = arguments?.getLong(DICT_ID_KEY, NOT_EXIST_DICT_ID) ?: NOT_EXIST_DICT_ID
+        dictId = dictionaryId
+        setupListeners(dictionaryId)
 
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
         val context = requireContext()
@@ -56,11 +67,12 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
 
         textToSpeech = TextToSpeech(context, this)
 
-        val dictionaryId = arguments?.getLong(DICT_ID_KEY, NOT_EXIST_DICT_ID) ?: NOT_EXIST_DICT_ID
         val factory = DictDetailsViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)
-                .appComponent.dictDefinitionsRepository
+                .appComponent.dictDefinitionsRepository,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.sharedWordDefProvider
         )
         viewModel = setupFragmentViewModel(this, factory, adapter)
     }
@@ -73,6 +85,7 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
+        textToSpeech = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -109,9 +122,9 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            val result = textToSpeech?.setLanguage(Locale.US)
-            textToSpeech?.setPitch(1f)
-            textToSpeech?.setSpeechRate(STANDARD_SPEECH_RATE)
+            val result = textToSpeech?.setLanguage(TtsPrefs.locale)
+            textToSpeech?.setPitch(TtsPrefs.STANDARD_PITCH)
+            textToSpeech?.setSpeechRate(TtsPrefs.STANDARD_SPEECH_RATE)
             if (result == TextToSpeech.LANG_MISSING_DATA ||
                 result == TextToSpeech.LANG_NOT_SUPPORTED
             ) {
@@ -124,6 +137,22 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
 
     override fun onPlayBtnClick(text: String) {
         textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, text)
+    }
+
+    override fun onClickToDefinition(wordDefinition: WordDefinition) {
+        openDefinitionDetails(wordDefinition)
+    }
+
+    private fun openDefinitionDetails(definition: WordDefinition? = null) {
+        viewModel?.setDisplayedDefinition(definition)
+        val bundle = Bundle().apply {
+            putLong(FragmentResult.DictionariesTab.RESULT_DICT_ID_KEY, dictId!!)
+            putInt(
+                FragmentResult.DictionariesTab.RESULT_SAVE_MODE_KEY,
+                DefinitionDetailsFragment.SAVE_MODE_UPDATE
+            )
+        }
+        setFragmentResult(FragmentResult.DictionariesTab.OPEN_DEF_DETAILS_FRAGMENT_KEY, bundle)
     }
 
     private fun setupWordDefinitionsList(
@@ -161,7 +190,7 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         context: Context,
         definitions: List<WordDefinition>
     ): WordDefinitionsAdapter {
-        return WordDefinitionsAdapter(context, this, definitions)
+        return WordDefinitionsAdapter(context, this, this, definitions)
     }
 
     private fun createLayoutManager(context: Context): LinearLayoutManager {
@@ -180,11 +209,11 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         adapter.wordDefinitions = newDefinitions
     }
 
-    private fun setupListeners() {
+    private fun setupListeners(dictionaryId: Long) {
         addFab?.setOnClickListener {
             setFragmentResult(
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
-                Bundle()
+                Bundle().apply { putLong(RESULT_DATA_KEY, dictionaryId) }
             )
         }
         val onScrollListener = object : RecyclerView.OnScrollListener() {
@@ -224,10 +253,10 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
 
     companion object {
         private const val DISPLAY_PARTS_NUMBER = 4
-        private const val STANDARD_SPEECH_RATE = 0.7f
         private const val SCROLL_START_POSITION = 0
         private const val NOT_EXIST_DICT_ID = 0L
         private const val SCROLL_POS_KEY = "position"
+        const val RESULT_DATA_KEY = "result_data_key"
         const val DICT_ID_KEY = "dictionary_id"
 
         @JvmStatic

@@ -6,7 +6,7 @@ import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsRepository
 import com.designdrivendevelopment.kotelok.yandexDictApi.YandexDictionaryApiService
 import com.designdrivendevelopment.kotelok.yandexDictApi.responses.YandexDictionaryResponse
-import java.net.UnknownHostException
+import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -22,6 +22,7 @@ class LookupWordDefRepositoryImpl(
         writing: String
     ): Flow<DefinitionsRequestResult> = flow {
         try {
+            emit(DefinitionsRequestResult.Loading)
             val response: YandexDictionaryResponse = yandexDictApiService.lookupWord(writing)
             val definitionsList: List<WordDefinition> = response
                 .definitions.flatMap { definitionResponse ->
@@ -33,8 +34,8 @@ class LookupWordDefRepositoryImpl(
                     }
                 }
             emit(DefinitionsRequestResult.Success(definitionsList))
-        } catch (e: UnknownHostException) {
-            emit(DefinitionsRequestResult.Failure.Error("UnknownHostException"))
+        } catch (e: IOException) {
+            emit(DefinitionsRequestResult.Failure.Error(e.message.orEmpty()))
         } catch (e: HttpException) {
             emit(
                 DefinitionsRequestResult.Failure.HttpError(
