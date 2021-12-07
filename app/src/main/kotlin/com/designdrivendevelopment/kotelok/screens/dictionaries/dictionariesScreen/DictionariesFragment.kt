@@ -1,6 +1,5 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +27,6 @@ class DictionariesFragment : Fragment() {
 
         val tempTrainButton = view.findViewById<Button>(R.id.temp_train_button)
         tempTrainButton.setOnClickListener {
-
         }
     }
 

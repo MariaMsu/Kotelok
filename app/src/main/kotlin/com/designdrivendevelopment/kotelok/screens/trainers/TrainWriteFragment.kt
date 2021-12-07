@@ -15,16 +15,15 @@ import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.google.android.material.textfield.TextInputLayout
 
 class TrainWriteFragment : Fragment() {
-    lateinit var viewModel : TrainWriteViewModel
+    lateinit var viewModel: TrainWriteViewModel
 
-    private var inputText : TextInputLayout? = null
+    private var inputText: TextInputLayout? = null
     private var checkButton: Button? = null
     private var textCompleted: TextView? = null
-    private var flashcard : TextView? = null
-    private var correctWord : TextView? = null
-    private var nextWordButton : Button? = null
+    private var flashcard: TextView? = null
+    private var correctWord: TextView? = null
+    private var nextWordButton: Button? = null
     private var repeatDict: ImageButton? = null
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_write, container, false)
@@ -100,7 +99,7 @@ class TrainWriteFragment : Fragment() {
         }
     }
 
-    private fun checkedVisibility(isChecked: Boolean){
+    private fun checkedVisibility(isChecked: Boolean) {
         inputText?.isEnabled = !isChecked
         checkButton?.isVisible = !isChecked
         checkButton?.isClickable = !isChecked
@@ -132,5 +131,4 @@ class TrainWriteFragment : Fragment() {
     enum class State {
         NOT_GUESSED, GUESSED_CORRECT, GUESSED_INCORRECT
     }
-
 }
