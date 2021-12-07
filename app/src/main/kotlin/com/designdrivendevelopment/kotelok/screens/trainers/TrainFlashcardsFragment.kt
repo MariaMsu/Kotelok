@@ -88,7 +88,7 @@ class TrainFlashcardsFragment : Fragment() {
         noButton?.isClickable = isActive
     }
 
-    private fun completedVisibility(isCompleted: Boolean){
+    private fun completedVisibility(isCompleted: Boolean) {
         textCompleted?.isVisible = isCompleted
         flashcardButton?.isClickable = !isCompleted
         repeatDict?.isVisible = isCompleted
@@ -112,7 +112,6 @@ class TrainFlashcardsFragment : Fragment() {
             completedVisibility(true)
         }
     }
-
 
     enum class State {
         NOT_GUESSED, GUESSED_TRANSLATION, GUESSED_WORD
