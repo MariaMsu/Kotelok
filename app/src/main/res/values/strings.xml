@@ -38,4 +38,5 @@
     <string name="header_text_main_fields">Основное:</string>
     <string name="header_text_additional_fields">Дополнительно:</string>
     <string name="error_field_required">Это обязательное поле</string>
+    <string name="learn_button_text">Изучать</string>
 </resources>

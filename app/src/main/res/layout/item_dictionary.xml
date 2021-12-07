@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="12dp"
+    android:clickable="true"
+    android:background="@drawable/ripple_background_definition_item"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="12dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="12dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="10dp" />
+
+    <TextView
+        android:id="@+id/dictionary_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/title_size"
+        android:textStyle="bold"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintBottom_toTopOf="@id/dictionary_size_text"
+        app:layout_constraintStart_toEndOf="@id/start_border"
+        app:layout_constraintEnd_toStartOf="@id/is_favorite_checkbox"
+        tools:text="Серега" />
+
+    <TextView
+        android:id="@+id/dictionary_size_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/subheading_size"
+        android:textColor="?attr/subheadingColor"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/dictionary_title"
+        app:layout_constraintBottom_toTopOf="@id/learn_button"
+        app:layout_constraintStart_toEndOf="@id/start_border"
+        app:layout_constraintEnd_toStartOf="@id/is_favorite_checkbox"
+        tools:text="15 слов" />
+
+    <CheckBox
+        android:id="@+id/is_favorite_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:button="@drawable/selector_is_favorite"
+        android:buttonTint="?attr/colorAccent"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        tools:checked="false"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintEnd_toStartOf="@id/end_border"
+        />
+
+    <Button
+        android:id="@+id/learn_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="4dp"
+        android:minHeight="4dp"
+        android:paddingStart="0dp"
+        android:text="@string/learn_button_text"
+        android:textSize="@dimen/subheading_size"
+        app:layout_constraintHorizontal_bias="0"
+        app:icon="@drawable/ic_school"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        app:layout_constraintTop_toBottomOf="@id/dictionary_size_text"
+        app:layout_constraintBottom_toTopOf="@id/bottom_border"
+        app:layout_constraintStart_toEndOf="@id/start_border"
+        app:layout_constraintEnd_toStartOf="@id/end_border"
+        tools:ignore="RtlSymmetry" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
