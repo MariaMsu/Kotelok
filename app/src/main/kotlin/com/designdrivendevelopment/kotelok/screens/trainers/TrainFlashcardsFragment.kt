@@ -27,7 +27,7 @@ class TrainFlashcardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        textCompleted = view.findViewById(R.id.textCompleted)
+        textCompleted = view.findViewById(R.id.text_completed)
         flashcardButton = view.findViewById(R.id.flashcardButton)
         flashcardButton?.setOnClickListener(listener)
         yesButton = view.findViewById(R.id.yesButton)

@@ -11,8 +11,11 @@ import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWo
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toExampleEntity
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toSynonymEntity
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toTranslationEntity
+import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toWordDefinition
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toWordDefinitionEntity
 import com.designdrivendevelopment.kotelok.screens.dictionaries.EditWordDefinitionsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class EditWordDefRepositoryImpl(
     private val wordDefinitionsDao: WordDefinitionsDao,
@@ -40,12 +43,49 @@ class EditWordDefRepositoryImpl(
         }
     }
 
+    override suspend fun addDefinitionsToDictionary(
+        definitions: List<WordDefinition>,
+        dictionary: Dictionary
+    ) = withContext(Dispatchers.IO) {
+        val savedDefinitions = definitions.filter { it.id != NEW_WORD_ID }
+        val loadedDefinitions = definitions.filter { it.id == NEW_WORD_ID }
+
+        addCrossRefs(savedDefinitions, dictionary.id)
+        loadedDefinitions.forEach { definition ->
+            addNewWordDefinition(definition, listOf(dictionary))
+        }
+    }
+
     override suspend fun deleteWordDefinition(wordDefinition: WordDefinition) {
         wordDefinitionsDao.deleteWordDefinitionById(wordDefinition.id)
     }
 
     override suspend fun deleteWordDefinitions(wordDefinitions: List<WordDefinition>) {
         wordDefinitionsDao.deleteWordDefinitionsByIds(wordDefinitions.map { it.id })
+    }
+
+    override suspend fun copyDefinitionToDictionary(
+        wordDefinition: WordDefinition,
+        dictionary: Dictionary
+    ): Boolean = withContext(Dispatchers.IO) {
+        val existingDefinition =
+            wordDefinitionsDao.getDefinitionById(wordDefinition.id)?.toWordDefinition()
+        return@withContext if (existingDefinition == wordDefinition) {
+            val crossRef =
+                dictWordDefCrossRefDao.getCrossRefByDictAndDefIds(dictionary.id, wordDefinition.id)
+            if (crossRef == null) {
+                addCrossRefs(wordDefinition.id, listOf(dictionary))
+                false
+            } else {
+                true
+            }
+        } else {
+            addNewWordDefinitionWithDictionaries(
+                wordDefinition.copy(id = NEW_WORD_ID),
+                listOf(dictionary)
+            )
+            false
+        }
     }
 
     private suspend fun addNewWordDefinition(
@@ -116,6 +156,16 @@ class EditWordDefRepositoryImpl(
                 wordDefinitionId = wordDefinition.id
             )
         }
+    }
+
+    private suspend fun addCrossRefs(definitions: List<WordDefinition>, dictionaryId: Long) {
+        val crossRefs = definitions.map { definition ->
+            DictionaryWordDefCrossRef(
+                dictionaryId = dictionaryId,
+                wordDefinitionId = definition.id
+            )
+        }
+        dictWordDefCrossRefDao.insert(crossRefs)
     }
 
     private suspend fun addCrossRefs(definitionId: Long, dictionaries: List<Dictionary>) {
