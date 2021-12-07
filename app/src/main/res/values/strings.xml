@@ -63,4 +63,6 @@
     <string name="error_dict_label_field">Вы должны ввести название словаря</string>
     <string name="correct_guess">Верно!</string>
     <string name="incorrect_guess">Неверно!\nВерный ответ: %1$s</string>
+
+    <string name="statistics">Статистика:\nВерный ответ: %1$s</string>
 </resources>

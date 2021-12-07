@@ -39,8 +39,9 @@ class StatisticFragment : Fragment(){
         viewModel.totalStat.observe(
             viewLifecycleOwner,
             {
-                textView3?.text = "Статистика3: ${viewModel.totalStat.value}"
-
+                textView3?.text =
+                    String.format(getString(R.string.statistics),
+                        viewModel.totalStat.value?.totalNumOfCompletedTrainings)
             }
         )
     }
