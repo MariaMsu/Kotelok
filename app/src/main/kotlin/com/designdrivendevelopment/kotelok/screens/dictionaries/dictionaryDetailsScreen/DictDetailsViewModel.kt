@@ -14,6 +14,7 @@ class DictDetailsViewModel(
     private val dictWordDefinitionsRepository: DictionaryWordDefinitionsRepository,
     private val sharedWordDefinitionProvider: SharedWordDefinitionProvider
 ) : ViewModel() {
+    private var unfilteredDefinitions: List<WordDefinition> = emptyList()
     private val _dictionaryDefinitions = MutableLiveData<List<WordDefinition>>(emptyList())
     val dictionaryDefinitions: LiveData<List<WordDefinition>> = _dictionaryDefinitions
 
@@ -25,11 +26,23 @@ class DictDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val definitions = dictWordDefinitionsRepository
                 .getDefinitionsByDictionaryId(dictionaryId)
+            unfilteredDefinitions = definitions
             _dictionaryDefinitions.postValue(definitions)
         }
     }
 
     fun setDisplayedDefinition(definition: WordDefinition?) {
         sharedWordDefinitionProvider.sharedWordDefinition = definition
+    }
+
+    fun filter(text: String) {
+        if (text.isEmpty()) {
+            _dictionaryDefinitions.value = unfilteredDefinitions
+        } else {
+            val filteredDictionaries = unfilteredDefinitions.filter { definition ->
+                definition.writing.startsWith(text, ignoreCase = true)
+            }
+            _dictionaryDefinitions.value = filteredDictionaries
+        }
     }
 }

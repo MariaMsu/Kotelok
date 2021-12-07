@@ -89,7 +89,8 @@ class DictionaryDetailsFragment :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_word_def_search, menu)
+        menu.clear()
+        inflater.inflate(R.menu.menu_search, menu)
         val searchView = menu.findItem(R.id.search).actionView as SearchView
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
@@ -98,22 +99,10 @@ class DictionaryDetailsFragment :
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    val initialDefinitions = viewModel?.dictionaryDefinitions?.value
-                        ?: throw NullPointerException("DictDefinitionsViewModel is null")
-
-                    wordDefinitionsList?.adapter?.let { adapter ->
-                        val wordDefinitionsAdapter = adapter as WordDefinitionsAdapter
-
-                        if (newText.isNullOrEmpty()) {
-                            wordDefinitionsList?.scrollToPosition(SCROLL_START_POSITION)
-                            onDefinitionsChanged(initialDefinitions, wordDefinitionsAdapter)
-                        } else {
-                            val filteredDefinitions = initialDefinitions.filter { definition ->
-                                definition.writing.startsWith(newText, ignoreCase = true)
-                            }
-                            onDefinitionsChanged(filteredDefinitions, wordDefinitionsAdapter)
-                        }
+                    if (newText.orEmpty().isEmpty()) {
+                        wordDefinitionsList?.scrollToPosition(SCROLL_START_POSITION)
                     }
+                    viewModel?.filter(newText.orEmpty())
                     return true
                 }
             }
