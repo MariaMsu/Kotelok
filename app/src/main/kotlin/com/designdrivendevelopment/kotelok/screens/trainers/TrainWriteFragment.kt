@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ class TrainWriteFragment : Fragment() {
     private var flashcard : TextView? = null
     private var correctWord : TextView? = null
     private var nextWordButton : Button? = null
+    private var repeatDict: ImageButton? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,6 +40,8 @@ class TrainWriteFragment : Fragment() {
         correctWord = view.findViewById(R.id.correct_word)
         nextWordButton = view.findViewById(R.id.next_word_button)
         nextWordButton?.setOnClickListener(listener)
+        repeatDict = view.findViewById(R.id.repeatDict)
+        repeatDict?.setOnClickListener(listener)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainWriteViewModelFactory(
@@ -63,21 +67,17 @@ class TrainWriteFragment : Fragment() {
     }
 
     private fun onStateChanged(state: State?) {
-        if (!viewModel.trainerWriter.isDone) {
-            if (state == State.NOT_GUESSED) {
-                inputText?.editText?.text?.clear()
-                checkedVisibility(false)
-            } else {
-                checkedVisibility(true)
-                if (state == State.GUESSED_CORRECT) {
-                    correctWord?.text = getString(R.string.correct_guess)
-                } else {
-                    correctWord?.text =
-                        String.format(getString(R.string.incorrect_guess), viewModel.currentWord.value?.writing)
-                }
-            }
+        if (state == State.NOT_GUESSED) {
+            inputText?.editText?.text?.clear()
+            checkedVisibility(false)
         } else {
-            completedVisibility(true)
+            checkedVisibility(true)
+            if (state == State.GUESSED_CORRECT) {
+                correctWord?.text = getString(R.string.correct_guess)
+            } else {
+                correctWord?.text =
+                    String.format(getString(R.string.incorrect_guess), viewModel.currentWord.value?.writing)
+            }
         }
     }
 
@@ -85,9 +85,17 @@ class TrainWriteFragment : Fragment() {
         when (view.id) {
             R.id.check_button -> {
                 viewModel.onGuess(inputText?.editText?.text.toString())
+                if (viewModel.trainerWriter.isDone) {
+                    checkedVisibility(false)
+                    completedVisibility(true)
+                }
             }
             R.id.next_word_button -> {
                 viewModel.onPressNext()
+            }
+            R.id.repeatDict -> {
+                completedVisibility(false)
+                viewModel.restartDict()
             }
         }
     }
@@ -109,6 +117,8 @@ class TrainWriteFragment : Fragment() {
         nextWordButton?.isVisible = !isCompleted
         nextWordButton?.isClickable = !isCompleted
         textCompleted?.isVisible = isCompleted
+        repeatDict?.isVisible = isCompleted
+        repeatDict?.isClickable = isCompleted
     }
 
     companion object {
