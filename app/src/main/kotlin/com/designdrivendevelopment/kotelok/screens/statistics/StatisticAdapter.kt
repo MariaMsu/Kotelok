@@ -1,6 +1,5 @@
 package com.designdrivendevelopment.kotelok.screens.statistics
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 
-class StatisticAdapter(private val dataSet: Array<String>) :
+class StatisticAdapter(private val dataSet: List<String>) :
     RecyclerView.Adapter<StatisticAdapter.ViewHolder>() {
 
     /**
