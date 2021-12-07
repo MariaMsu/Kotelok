@@ -62,6 +62,10 @@ class DictionariesRepositoryImpl(
         dictionariesDao.update(dictionary.toDictionaryEntity(dictionary.id))
     }
 
+    override suspend fun updateDictionaries(dictionaries: List<Dictionary>) = withContext(Dispatchers.IO) {
+        dictionariesDao.update(dictionaries.map { it.toDictionaryEntity(it.id) })
+    }
+
     override suspend fun deleteDictionary(dictionary: Dictionary) = withContext(Dispatchers.IO) {
         dictionariesDao.deleteById(dictionary.id)
 //        dictionaryWordDefCrossRefDao.deleteByDictionaryId(dictionary.id)

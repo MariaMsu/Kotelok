@@ -18,6 +18,8 @@ interface DictionariesRepository {
 
     suspend fun updateDictionary(dictionary: Dictionary)
 
+    suspend fun updateDictionaries(dictionaries: List<Dictionary>)
+
     suspend fun deleteDictionary(dictionary: Dictionary)
 
     suspend fun deleteWordDefinitionFromDictionary(
