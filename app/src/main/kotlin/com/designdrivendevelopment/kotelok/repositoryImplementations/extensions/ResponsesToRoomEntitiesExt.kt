@@ -1,6 +1,7 @@
 package com.designdrivendevelopment.kotelok.repositoryImplementations.extensions
 
 import com.designdrivendevelopment.kotelok.entities.Language
+import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.SynonymEntity
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.TranslationEntity
@@ -33,9 +34,17 @@ fun TranslationResponse.getWordDefinitionEntity(
 }
 
 fun TranslationResponse.getSynonymEntities(defId: Long): List<SynonymEntity> {
-    return synonyms?.map { synonymResponse ->
-        SynonymEntity(defId, synonymResponse.writing)
-    }.orEmpty()
+    return if (synonyms.isNullOrEmpty()) {
+        emptyList()
+    } else {
+        if (synonyms.size > WordDefinition.MAX_TRANSLATIONS_SIZE) {
+            synonyms.take(WordDefinition.MAX_TRANSLATIONS_SIZE).map { synonymResponse ->
+                SynonymEntity(defId, synonymResponse.writing)
+            }
+        } else {
+            synonyms.map { synonymResponse -> SynonymEntity(defId, synonymResponse.writing) }
+        }
+    }
 }
 
 fun String?.toRuPosOrNull(): String? {
@@ -51,22 +60,41 @@ fun String?.toRuPosOrNull(): String? {
 }
 
 fun TranslationResponse.getTranslationEntities(defId: Long): List<TranslationEntity> {
-    return (
-        otherTranslations
-            ?.map { otherTranslationResponse ->
-                otherTranslationResponse.writing
-            }.orEmpty() + translation
-        ).map { translation ->
-        TranslationEntity(defId, translation)
+    return if (otherTranslations.isNullOrEmpty()) {
+        emptyList()
+    } else {
+        if (otherTranslations.size > WordDefinition.MAX_SYNONYMS_SIZE) {
+            otherTranslations.take(WordDefinition.MAX_SYNONYMS_SIZE).map { translationResponse ->
+                TranslationEntity(defId, translationResponse.writing)
+            }
+        } else {
+            otherTranslations.map { translationResponse ->
+                TranslationEntity(defId, translationResponse.writing)
+            }
+        }
     }
 }
 
 fun TranslationResponse.getExampleEntities(defId: Long): List<ExampleEntity> {
-    return examples?.map { exampleResponse ->
-        ExampleEntity(
-            wordDefinitionId = defId,
-            original = exampleResponse.original,
-            translation = exampleResponse.translations?.first()?.translation
-        )
-    }.orEmpty()
+    return if (examples.isNullOrEmpty()) {
+        emptyList()
+    } else {
+        if (examples.size > WordDefinition.MAX_EXAMPLES_SIZE) {
+            examples.take(WordDefinition.MAX_EXAMPLES_SIZE).map { exampleResponse ->
+                ExampleEntity(
+                    wordDefinitionId = defId,
+                    original = exampleResponse.original,
+                    translation = exampleResponse.translations?.first()?.translation
+                )
+            }
+        } else {
+            examples.map { exampleResponse ->
+                ExampleEntity(
+                    wordDefinitionId = defId,
+                    original = exampleResponse.original,
+                    translation = exampleResponse.translations?.first()?.translation
+                )
+            }
+        }
+    }
 }
