@@ -2,8 +2,11 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScr
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +37,7 @@ class DictionariesFragment : Fragment(), DictionaryClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
         initViews(view)
         val activity = requireActivity()
         val context = requireContext()
@@ -52,6 +56,27 @@ class DictionariesFragment : Fragment(), DictionaryClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.menu_search, menu)
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.orEmpty().isEmpty()) {
+                        dictionariesList?.scrollToPosition(SCROLL_START_POSITION)
+                    }
+                    dictionariesViewModel?.filter(newText.orEmpty())
+                    return true
+                }
+            }
+        )
     }
 
     override fun onDictionaryClicked(dictionary: Dictionary) {
@@ -103,6 +128,7 @@ class DictionariesFragment : Fragment(), DictionaryClickListener {
     }
 
     companion object {
+        private const val SCROLL_START_POSITION = 0
         const val DICT_ID_KEY = "dictionary_id_bundle_key"
 
         @JvmStatic
