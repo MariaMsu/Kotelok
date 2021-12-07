@@ -8,6 +8,7 @@ import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
 import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
+import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.DictionariesFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
@@ -50,6 +51,11 @@ class MainActivity : AppCompatActivity() {
                 FragmentResult.DictionariesTab.OPEN_DICTIONARY_KEY,
                 this@MainActivity
             ) { _, bundle ->
+                val dictionaryId = bundle.getLong(DictionariesFragment.DICT_ID_KEY)
+                addFragment(
+                    fragment = DictionaryDetailsFragment.newInstance(dictionaryId),
+                    tag = "dictionary_details_fragment"
+                )
             }
             setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,

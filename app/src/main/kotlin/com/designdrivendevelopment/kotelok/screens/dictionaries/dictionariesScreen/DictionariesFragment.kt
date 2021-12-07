@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.Dictionary
+import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -53,6 +55,8 @@ class DictionariesFragment : Fragment(), DictionaryClickListener {
     }
 
     override fun onDictionaryClicked(dictionary: Dictionary) {
+        val bundle = Bundle().apply { putLong(DICT_ID_KEY, dictionary.id) }
+        setFragmentResult(FragmentResult.DictionariesTab.OPEN_DICTIONARY_KEY, bundle)
     }
 
     private fun setupViewModel(viewModel: DictionariesViewModel?, adapter: DictionariesAdapter) {
@@ -99,7 +103,7 @@ class DictionariesFragment : Fragment(), DictionaryClickListener {
     }
 
     companion object {
-        const val OPEN_DICTIONARIES_TAG = "open_dictionaries"
+        const val DICT_ID_KEY = "dictionary_id_bundle_key"
 
         @JvmStatic
         fun newInstance() = DictionariesFragment()
