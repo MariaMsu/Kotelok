@@ -16,8 +16,7 @@ import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsViewM
 class StatisticFragment : Fragment(){
     lateinit var viewModel: StatisticViewModel
 
-    private var textView2 : TextView? = null
-    private var textView3 : TextView? = null
+    private var totalStatisticText : TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -27,8 +26,7 @@ class StatisticFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        textView2 = view.findViewById(R.id.textView2)
-        textView3 = view.findViewById(R.id.textView3)
+        totalStatisticText = view.findViewById(R.id.totalStatisticText)
 
         val factory = StatisticViewModelFactory(
             (requireActivity().application as KotelokApplication)
@@ -39,7 +37,7 @@ class StatisticFragment : Fragment(){
         viewModel.totalStat.observe(
             viewLifecycleOwner,
             {
-                textView3?.text =
+                totalStatisticText?.text =
                     String.format(getString(R.string.statistics),
                         viewModel.totalStat.value?.totalNumOfWordDefinitions,
                         viewModel.totalStat.value?.totalNumOfCompletedTrainings,
