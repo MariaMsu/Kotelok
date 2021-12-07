@@ -21,15 +21,15 @@ class DictionariesViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             dictionariesRepository.getAllDictionariesFlow().collect { dictionaries ->
-                unfilteredDictionaries = dictionaries
-                _dictionaries.postValue(dictionaries)
+                unfilteredDictionaries = dictionaries.sortedBy { it.isFavorite }
+                _dictionaries.postValue(unfilteredDictionaries)
             }
         }
     }
 
-    fun updateIsFavoriteStatus(dictionaries: List<Dictionary>) {
+    fun saveIsFavoriteStatus() {
         viewModelScope.launch(Dispatchers.IO) {
-            dictionariesRepository.updateDictionaries(dictionaries)
+            dictionariesRepository.updateDictionaries(unfilteredDictionaries)
         }
     }
 
@@ -41,6 +41,16 @@ class DictionariesViewModel(
                 dictionary.label.startsWith(text, ignoreCase = true)
             }
             _dictionaries.value = filteredDictionaries
+        }
+    }
+
+    fun updateIsFavoriteStatus(dictionaryId: Long, isFavorite: Boolean) {
+        unfilteredDictionaries = unfilteredDictionaries.map { dictionary ->
+            if (dictionary.id == dictionaryId) {
+                dictionary.copy(isFavorite = isFavorite)
+            } else {
+                dictionary
+            }
         }
     }
 }

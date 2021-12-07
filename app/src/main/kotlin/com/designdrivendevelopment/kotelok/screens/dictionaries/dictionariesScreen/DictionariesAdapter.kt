@@ -14,12 +14,13 @@ import com.designdrivendevelopment.kotelok.entities.Dictionary
 class DictionariesAdapter(
     private val context: Context,
     private val dictionaryClickListener: DictionaryClickListener,
+    private val isFavoriteListener: IsFavoriteListener,
     var dictionaries: List<Dictionary>
 ) : RecyclerView.Adapter<DictionariesAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val label: TextView = view.findViewById(R.id.dictionary_title)
         private val dictionarySize: TextView = view.findViewById(R.id.dictionary_size_text)
-        private val isFavoriteCheckBox: CheckBox = view.findViewById(R.id.is_favorite_checkbox)
+        val isFavoriteCheckBox: CheckBox = view.findViewById(R.id.is_favorite_checkbox)
         val learnButton: Button = view.findViewById(R.id.learn_button)
 
         fun bind(dictionary: Dictionary) {
@@ -50,6 +51,16 @@ class DictionariesAdapter(
         holder.itemView.setOnClickListener {
             dictionaryClickListener.onDictionaryClicked(dictionary)
         }
+        holder.isFavoriteCheckBox.setOnClickListener {
+            dictionaries.toMutableList().mapIndexed { index, dictionary ->
+                if (index == holder.adapterPosition) {
+                    dictionary.copy(isFavorite = holder.isFavoriteCheckBox.isChecked)
+                } else {
+                    dictionary
+                }
+            }
+            isFavoriteListener.onIsFavoriteChanged(dictionary.id, holder.isFavoriteCheckBox.isChecked)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -61,6 +72,10 @@ class DictionariesAdapter(
         private const val LAST_NUMBER_ONE = 1
         private val LAST_NUMBERS_RANGE = 2..3
     }
+}
+
+interface IsFavoriteListener {
+    fun onIsFavoriteChanged(dictionaryId: Long, isFavorite: Boolean)
 }
 
 interface DictionaryClickListener {
