@@ -48,4 +48,5 @@
     <string name="header_text_additional_fields">Дополнительно:</string>
     <string name="error_field_required">Это обязательное поле</string>
 
+    <string name="statistics">Статистика:\nВерный ответ: %1$s</string>
 </resources>
