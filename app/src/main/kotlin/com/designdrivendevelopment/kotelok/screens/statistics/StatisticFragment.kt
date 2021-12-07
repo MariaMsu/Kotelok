@@ -41,7 +41,10 @@ class StatisticFragment : Fragment(){
             {
                 textView3?.text =
                     String.format(getString(R.string.statistics),
-                        viewModel.totalStat.value?.totalNumOfCompletedTrainings)
+                        viewModel.totalStat.value?.totalNumOfWordDefinitions,
+                        viewModel.totalStat.value?.totalNumOfCompletedTrainings,
+                        viewModel.totalStat.value?.totalNumOfSuccessfullyTrainings,
+                    )
             }
         )
     }
