@@ -25,11 +25,6 @@ class DictionariesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val tempTrainButton = view.findViewById<Button>(R.id.temp_train_button)
-        tempTrainButton.setOnClickListener {
-
-        }
     }
 
     companion object {

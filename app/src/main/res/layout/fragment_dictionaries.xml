@@ -17,12 +17,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/dictionaries_ru" />
 
-    <Button
-        android:text="временный train"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/temp_train_button"
-        tools:layout_editor_absoluteY="579dp"
-        tools:layout_editor_absoluteX="70dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
