@@ -57,10 +57,13 @@ class DictionaryDetailsFragment :
         initViews(view)
 
         val dictionaryId = arguments?.getLong(DICT_ID_KEY, NOT_EXIST_DICT_ID) ?: NOT_EXIST_DICT_ID
+        val label = arguments?.getString(DICT_LABEL_KEY) ?: getString(R.string.app_name)
         dictId = dictionaryId
         setupListeners(dictionaryId)
 
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
+        val activity = requireActivity()
+        activity.title = label
         val context = requireContext()
         val adapter = createAdapter(context, emptyList())
         setupWordDefinitionsList(wordDefinitionsList, context, adapter, scrollPosition)
@@ -69,9 +72,9 @@ class DictionaryDetailsFragment :
 
         val factory = DictDetailsViewModelFactory(
             dictionaryId,
-            (requireActivity().application as KotelokApplication)
+            (activity.application as KotelokApplication)
                 .appComponent.dictDefinitionsRepository,
-            (requireActivity().application as KotelokApplication)
+            (activity.application as KotelokApplication)
                 .appComponent.sharedWordDefProvider
         )
         viewModel = setupFragmentViewModel(this, factory, adapter)
@@ -247,12 +250,14 @@ class DictionaryDetailsFragment :
         private const val SCROLL_POS_KEY = "position"
         const val RESULT_DATA_KEY = "result_data_key"
         const val DICT_ID_KEY = "dictionary_id"
+        const val DICT_LABEL_KEY = "dictionary_label"
 
         @JvmStatic
-        fun newInstance(dictionaryId: Long) =
+        fun newInstance(dictionaryId: Long, label: String) =
             DictionaryDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putLong(DICT_ID_KEY, dictionaryId)
+                    putString(DICT_LABEL_KEY, label)
                 }
             }
     }

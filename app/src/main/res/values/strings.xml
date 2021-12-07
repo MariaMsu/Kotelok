@@ -43,4 +43,5 @@
     <string name="size_2_4">%1$d слова</string>
     <string name="size_1">%1$d слово</string>
     <string name="size_5_10">%1$d слов</string>
+    <string name="title_dictionaries">Словари</string>
 </resources>

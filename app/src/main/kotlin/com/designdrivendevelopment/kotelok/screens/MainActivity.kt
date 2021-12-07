@@ -52,8 +52,12 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity
             ) { _, bundle ->
                 val dictionaryId = bundle.getLong(DictionariesFragment.DICT_ID_KEY)
+                val dictionaryLabel = bundle.getString(
+                    DictionariesFragment.DICT_LABEL_KEY,
+                    getString(R.string.app_name)
+                )
                 addFragment(
-                    fragment = DictionaryDetailsFragment.newInstance(dictionaryId),
+                    fragment = DictionaryDetailsFragment.newInstance(dictionaryId, dictionaryLabel),
                     tag = "dictionary_details_fragment"
                 )
             }

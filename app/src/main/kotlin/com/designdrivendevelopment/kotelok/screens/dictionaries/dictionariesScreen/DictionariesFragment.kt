@@ -43,6 +43,7 @@ class DictionariesFragment : Fragment(), DictionaryClickListener, IsFavoriteList
         setHasOptionsMenu(true)
         initViews(view)
         val activity = requireActivity()
+        activity.title = getString(R.string.title_dictionaries)
         val context = requireContext()
         val factory = DictionariesViewModelFactory(
             (activity.application as KotelokApplication)
@@ -88,7 +89,10 @@ class DictionariesFragment : Fragment(), DictionaryClickListener, IsFavoriteList
     }
 
     override fun onDictionaryClicked(dictionary: Dictionary) {
-        val bundle = Bundle().apply { putLong(DICT_ID_KEY, dictionary.id) }
+        val bundle = Bundle().apply {
+            putLong(DICT_ID_KEY, dictionary.id)
+            putString(DICT_LABEL_KEY, dictionary.label)
+        }
         setFragmentResult(FragmentResult.DictionariesTab.OPEN_DICTIONARY_KEY, bundle)
     }
 
@@ -160,6 +164,7 @@ class DictionariesFragment : Fragment(), DictionaryClickListener, IsFavoriteList
         private const val SIZE_EMPTY = 0
         private const val SCROLL_START_POSITION = 0
         const val DICT_ID_KEY = "dictionary_id_bundle_key"
+        const val DICT_LABEL_KEY = "dictionary_label_bundle_key"
 
         @JvmStatic
         fun newInstance() = DictionariesFragment()
