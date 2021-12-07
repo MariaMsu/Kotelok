@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
-import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsFragment
-import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsViewModel
-import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsViewModelFactory
+
 
 class StatisticFragment : Fragment(){
     lateinit var viewModel: StatisticViewModel
 
     private var totalStatisticText : TextView? = null
+    private var wordDefinitionsList: RecyclerView? = null
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -45,5 +46,10 @@ class StatisticFragment : Fragment(){
                     )
             }
         )
+
+        wordDefinitionsList = view.findViewById(R.id.statisticRecycler)
+        wordDefinitionsList?.adapter = StatisticAdapter(arrayOf("str1", "str2", "str3"))
+        wordDefinitionsList?.layoutManager = LinearLayoutManager(
+            context, LinearLayoutManager.VERTICAL, false)
     }
 }
