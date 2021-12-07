@@ -15,6 +15,7 @@ class DictionariesAdapter(
     private val context: Context,
     private val dictionaryClickListener: DictionaryClickListener,
     private val isFavoriteListener: IsFavoriteListener,
+    private val learnButtonListener: LearnButtonListener,
     var dictionaries: List<Dictionary>
 ) : RecyclerView.Adapter<DictionariesAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -61,6 +62,9 @@ class DictionariesAdapter(
             }
             isFavoriteListener.onIsFavoriteChanged(dictionary.id, holder.isFavoriteCheckBox.isChecked)
         }
+        holder.learnButton.setOnClickListener {
+            learnButtonListener.onLearnClicked(dictionary.id)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -80,4 +84,8 @@ interface IsFavoriteListener {
 
 interface DictionaryClickListener {
     fun onDictionaryClicked(dictionary: Dictionary)
+}
+
+interface LearnButtonListener {
+    fun onLearnClicked(dictionaryId: Long)
 }

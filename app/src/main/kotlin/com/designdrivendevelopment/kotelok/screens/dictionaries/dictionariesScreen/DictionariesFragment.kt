@@ -22,7 +22,11 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecora
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 @Suppress("TooManyFunctions")
-class DictionariesFragment : Fragment(), DictionaryClickListener, IsFavoriteListener {
+class DictionariesFragment :
+    Fragment(),
+    DictionaryClickListener,
+    IsFavoriteListener,
+    LearnButtonListener {
     private var dictionariesList: RecyclerView? = null
     private var addDictionaryFab: FloatingActionButton? = null
     private var dictionariesViewModel: DictionariesViewModel? = null
@@ -51,7 +55,13 @@ class DictionariesFragment : Fragment(), DictionaryClickListener, IsFavoriteList
         )
         dictionariesViewModel = ViewModelProvider(this, factory)[DictionariesViewModel::class.java]
 
-        val adapter = DictionariesAdapter(context, this, this, emptyList())
+        val adapter = DictionariesAdapter(
+            context,
+            dictionaryClickListener = this,
+            isFavoriteListener = this,
+            learnButtonListener = this,
+            emptyList()
+        )
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         setupDictionariesList(dictionariesList, adapter, layoutManager)
         setupViewModel(dictionariesViewModel, adapter)
@@ -98,6 +108,11 @@ class DictionariesFragment : Fragment(), DictionaryClickListener, IsFavoriteList
 
     override fun onIsFavoriteChanged(dictionaryId: Long, isFavorite: Boolean) {
         dictionariesViewModel?.updateIsFavoriteStatus(dictionaryId, isFavorite)
+    }
+
+    override fun onLearnClicked(dictionaryId: Long) {
+        val bundle = Bundle().apply { putLong(DICT_ID_KEY, dictionaryId) }
+        setFragmentResult(FragmentResult.DictionariesTab.OPEN_TRAINERS_DIALOG_KEY, bundle)
     }
 
     private fun setupViewModel(viewModel: DictionariesViewModel?, adapter: DictionariesAdapter) {
