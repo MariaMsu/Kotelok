@@ -171,7 +171,7 @@ class DefDetailsViewModel(
         val prevState = _isAddTrButtonVisible.value ?: false
 
         val size = _displayedDefinition.value?.allTranslations?.size ?: SIZE_EMPTY
-        val newState = (_isEditable.value == true) && (size < MAX_LISTS_SIZE)
+        val newState = (_isEditable.value == true) && (size < WordDefinition.MAX_TRANSLATIONS_SIZE)
         if (newState != prevState) {
             _isAddTrButtonVisible.value = newState
         }
@@ -181,7 +181,7 @@ class DefDetailsViewModel(
         val prevState = _isAddSynButtonVisible.value ?: false
 
         val size = _displayedDefinition.value?.synonyms?.size ?: SIZE_EMPTY
-        val newState = (_isEditable.value == true) && (size < MAX_LISTS_SIZE)
+        val newState = (_isEditable.value == true) && (size < WordDefinition.MAX_SYNONYMS_SIZE)
         if (newState != prevState) {
             _isAddSynButtonVisible.value = newState
         }
@@ -191,7 +191,7 @@ class DefDetailsViewModel(
         val prevState = _isAddExButtonVisible.value ?: false
 
         val size = _displayedDefinition.value?.examples?.size ?: SIZE_EMPTY
-        val newState = (_isEditable.value == true) && (size < MAX_EXAMPLES_SIZE)
+        val newState = (_isEditable.value == true) && (size < WordDefinition.MAX_EXAMPLES_SIZE)
         if (newState != prevState) {
             _isAddExButtonVisible.value = newState
         }
@@ -274,11 +274,8 @@ class DefDetailsViewModel(
     }
 
     companion object {
-        private const val NEW_WORD_ID = 0L
         private const val INDEX_AT_INSERT = 0
         private const val SIZE_EMPTY = 0
         private const val MIN_LIST_SIZE = 1
-        private const val MAX_LISTS_SIZE = 5
-        private const val MAX_EXAMPLES_SIZE = 3
     }
 }
