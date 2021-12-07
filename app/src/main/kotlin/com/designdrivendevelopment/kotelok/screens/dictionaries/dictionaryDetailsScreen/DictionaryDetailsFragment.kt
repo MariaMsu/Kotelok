@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.dictionaries.DefinitionClickListener
+import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
@@ -29,12 +31,17 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 @Suppress("TooManyFunctions")
-class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlaySoundBtnClickListener {
+class DictionaryDetailsFragment :
+    Fragment(),
+    TextToSpeech.OnInitListener,
+    PlaySoundBtnClickListener,
+    DefinitionClickListener {
     private var scrollPosition = SCROLL_START_POSITION
     private var textToSpeech: TextToSpeech? = null
     private var wordDefinitionsList: RecyclerView? = null
     private var addFab: FloatingActionButton? = null
     private var viewModel: DictDetailsViewModel? = null
+    private var dictId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +57,7 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         initViews(view)
 
         val dictionaryId = arguments?.getLong(DICT_ID_KEY, NOT_EXIST_DICT_ID) ?: NOT_EXIST_DICT_ID
+        dictId = dictionaryId
         setupListeners(dictionaryId)
 
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
@@ -62,7 +70,9 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         val factory = DictDetailsViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)
-                .appComponent.dictDefinitionsRepository
+                .appComponent.dictDefinitionsRepository,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.sharedWordDefProvider
         )
         viewModel = setupFragmentViewModel(this, factory, adapter)
     }
@@ -129,6 +139,22 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, text)
     }
 
+    override fun onClickToDefinition(wordDefinition: WordDefinition) {
+        openDefinitionDetails(wordDefinition)
+    }
+
+    private fun openDefinitionDetails(definition: WordDefinition? = null) {
+        viewModel?.setDisplayedDefinition(definition)
+        val bundle = Bundle().apply {
+            putLong(FragmentResult.DictionariesTab.RESULT_DICT_ID_KEY, dictId!!)
+            putInt(
+                FragmentResult.DictionariesTab.RESULT_SAVE_MODE_KEY,
+                DefinitionDetailsFragment.SAVE_MODE_UPDATE
+            )
+        }
+        setFragmentResult(FragmentResult.DictionariesTab.OPEN_DEF_DETAILS_FRAGMENT_KEY, bundle)
+    }
+
     private fun setupWordDefinitionsList(
         wordDefinitionsList: RecyclerView?,
         context: Context,
@@ -164,7 +190,7 @@ class DictionaryDetailsFragment : Fragment(), TextToSpeech.OnInitListener, PlayS
         context: Context,
         definitions: List<WordDefinition>
     ): WordDefinitionsAdapter {
-        return WordDefinitionsAdapter(context, this, definitions)
+        return WordDefinitionsAdapter(context, this, this, definitions)
     }
 
     private fun createLayoutManager(context: Context): LinearLayoutManager {

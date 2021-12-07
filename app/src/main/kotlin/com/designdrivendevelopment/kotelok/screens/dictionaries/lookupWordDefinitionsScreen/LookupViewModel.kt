@@ -13,6 +13,7 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefini
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.WordDefinitionItem
 import com.designdrivendevelopment.kotelok.screens.screensUtils.UiEvent
+import com.designdrivendevelopment.kotelok.screens.sharedWordDefProvider.SharedWordDefinitionProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -23,6 +24,7 @@ class LookupViewModel(
     private val lookupWordDefRepository: LookupWordDefinitionsRepository,
     private val editWordDefinitionsRepository: EditWordDefinitionsRepository,
     private val dictionariesRepository: DictionariesRepository,
+    private val sharedWordDefinitionProvider: SharedWordDefinitionProvider,
     private val dictionaryId: Long
 ) : ViewModel() {
     companion object {
@@ -70,6 +72,8 @@ class LookupViewModel(
                                     "Попробуйте повторить попытку"
                             )
                         )
+                        delay(HIDE_LOADING_DELAY)
+                        _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
                         emptyList()
                     }
 
@@ -80,6 +84,8 @@ class LookupViewModel(
                                     "Попробуйте повторить попытку"
                             )
                         )
+                        delay(HIDE_LOADING_DELAY)
+                        _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
                         emptyList()
                     }
 
@@ -92,16 +98,26 @@ class LookupViewModel(
                                 )
                             )
                         }
+                        delay(HIDE_LOADING_DELAY)
+                        _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
                         remoteDefinitions
+                    }
+
+                    is DefinitionsRequestResult.Loading -> {
+                        emptyList()
                     }
                 }
 
                 currentItems = createItemsList(localDefinitions, remoteDefinitions)
                 _foundDefinitions.postValue(currentItems)
-                delay(HIDE_LOADING_DELAY)
-                _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
+//                delay(HIDE_LOADING_DELAY)
+//                _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
             }
         }
+    }
+
+    fun setDisplayedDefinition(definition: WordDefinition?) {
+        sharedWordDefinitionProvider.sharedWordDefinition = definition
     }
 
     fun notifyToEventIsHandled(event: UiEvent) {

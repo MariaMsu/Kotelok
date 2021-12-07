@@ -21,6 +21,7 @@ import androidx.core.animation.addListener
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.SelectionTracker
@@ -30,10 +31,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.dictionaries.DefinitionClickListener
+import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.DefinitionsKeyProvider
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.ItemWithTypeDetailsLookup
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.selection.selectionActionMode.SelectionModeCallBack
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.viewTypes.ItemWithType
+import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
 import com.designdrivendevelopment.kotelok.screens.screensUtils.TtsPrefs
@@ -43,24 +48,31 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyb
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.designdrivendevelopment.kotelok.screens.screensUtils.objectAnimation
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
-class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, TextToSpeech.OnInitListener {
+class LookupWordDefinitionsFragment :
+    Fragment(),
+    PlaySoundBtnClickListener,
+    TextToSpeech.OnInitListener,
+    DefinitionClickListener {
+
     private var loadingProgressBar: ProgressBar? = null
     private var yandexDictHyperlink: TextView? = null
     private var enterWritingTextField: TextInputLayout? = null
     private var lookupButton: Button? = null
     private var resultList: RecyclerView? = null
     private var scrollPosition = 0
-    private var addFab: ExtendedFloatingActionButton? = null
+    private var addFab: FloatingActionButton? = null
     private var textToSpeech: TextToSpeech? = null
     private var tracker: SelectionTracker<String>? = null
     private var actionMode: ActionMode? = null
+    private var lookupViewModel: LookupViewModel? = null
+    private var dictId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,6 +90,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
+        dictId = dictionaryId
 
         initViews(view)
         textToSpeech = TextToSpeech(context, this)
@@ -96,10 +109,12 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
                 .appComponent.editWordDefinitionsRepository,
             (activity.application as KotelokApplication)
                 .appComponent.dictionariesRepository,
+            (activity.application as KotelokApplication)
+                .appComponent.sharedWordDefProvider,
             dictionaryId
         )
 
-        val lookupViewModel = setupFragmentViewModel(
+        lookupViewModel = setupFragmentViewModel(
             rootView = view,
             activity = activity,
             fragment = this,
@@ -128,19 +143,19 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
                             tracker?.deselect(key)
                         }
                     } else {
-                        lookupViewModel.onItemSelectionChanged(key, selected)
+                        lookupViewModel?.onItemSelectionChanged(key, selected)
                     }
                 }
 
                 override fun onSelectionChanged() {
                     val selectionSize = tracker?.selection?.size()
                     if (selectionSize != null) {
-                        lookupViewModel.onSelectionSizeChanged(selectionSize)
+                        lookupViewModel?.onSelectionSizeChanged(selectionSize)
                     }
                 }
 
                 override fun onSelectionCleared() {
-                    lookupViewModel.onSelectionCleared()
+                    lookupViewModel?.onSelectionCleared()
                 }
             }
         )
@@ -198,11 +213,20 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
         }
     }
 
+    override fun onClickToDefinition(wordDefinition: WordDefinition) {
+        openDefinitionDetails(wordDefinition)
+    }
+
     private fun createAdapter(
         context: Context,
         items: List<ItemWithType>
     ): ItemWithTypesAdapter {
-        return ItemWithTypesAdapter(items, context, this).apply { setHasStableIds(true) }
+        return ItemWithTypesAdapter(
+            items,
+            context,
+            playSoundBtnClickListener = this,
+            definitionClickListener = this
+        ).apply { setHasStableIds(true) }
     }
 
     private fun createLayoutManager(context: Context): LinearLayoutManager {
@@ -236,6 +260,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
         return ViewModelProvider(fragment, factory)[LookupViewModel::class.java].apply {
             foundDefinitions.observe(fragment) { newItems ->
                 onItemsListChanged(newItems, adapter)
+                resultList?.scrollToPosition(SCROLL_START_POSITION)
             }
             dataLoadingEvents.observe(fragment) { loadingEvent ->
                 if (!loadingEvent.isHandled) {
@@ -273,7 +298,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
         }
     }
 
-    private fun setupListeners(lookupViewModel: LookupViewModel) {
+    private fun setupListeners(lookupViewModel: LookupViewModel?) {
         lookupButton?.setOnClickListener { button ->
             loadingProgressBar?.isVisible = true
             enterWritingTextField?.error = null
@@ -282,7 +307,7 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
             if (writing.isNullOrEmpty()) {
                 enterWritingTextField?.error = getString(R.string.lookup_def_input_error)
             } else {
-                lookupViewModel.lookupByWriting(writing)
+                lookupViewModel?.lookupByWriting(writing)
                 button.hideKeyboard()
             }
         }
@@ -300,6 +325,21 @@ class LookupWordDefinitionsFragment : Fragment(), PlaySoundBtnClickListener, Tex
             }
         }
         resultList?.addOnScrollListener(onScrollListener)
+        addFab?.setOnClickListener {
+            openDefinitionDetails()
+        }
+    }
+
+    private fun openDefinitionDetails(definition: WordDefinition? = null) {
+        lookupViewModel?.setDisplayedDefinition(definition)
+        val bundle = Bundle().apply {
+            putLong(FragmentResult.DictionariesTab.RESULT_DICT_ID_KEY, dictId!!)
+            putInt(
+                FragmentResult.DictionariesTab.RESULT_SAVE_MODE_KEY,
+                DefinitionDetailsFragment.SAVE_MODE_COPY
+            )
+        }
+        setFragmentResult(FragmentResult.DictionariesTab.OPEN_DEF_DETAILS_FRAGMENT_KEY, bundle)
     }
 
     private fun showLoading() {

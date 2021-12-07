@@ -22,6 +22,7 @@ class LookupWordDefRepositoryImpl(
         writing: String
     ): Flow<DefinitionsRequestResult> = flow {
         try {
+            emit(DefinitionsRequestResult.Loading)
             val response: YandexDictionaryResponse = yandexDictApiService.lookupWord(writing)
             val definitionsList: List<WordDefinition> = response
                 .definitions.flatMap { definitionResponse ->

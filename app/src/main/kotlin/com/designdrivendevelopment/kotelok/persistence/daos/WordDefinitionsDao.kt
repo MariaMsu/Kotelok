@@ -45,7 +45,7 @@ interface WordDefinitionsDao {
         WHERE (def_id = :wordDefinitionId)
     """
     )
-    suspend fun getDefinitionById(wordDefinitionId: Long): WordDefinitionQueryResult
+    suspend fun getDefinitionById(wordDefinitionId: Long): WordDefinitionQueryResult?
 
     @Transaction
     @Query(
