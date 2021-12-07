@@ -16,6 +16,18 @@ interface DictionaryWordDefCrossRefDao {
 
     @Query(
         """
+        SELECT *
+        FROM dictionary_word_def_cross_refs
+        WHERE dict_id == :dictionaryId AND word_def_id == :wordDefinitionId
+    """
+    )
+    suspend fun getCrossRefByDictAndDefIds(
+        dictionaryId: Long,
+        wordDefinitionId: Long
+    ): DictionaryWordDefCrossRef?
+
+    @Query(
+        """
         DELETE
         FROM dictionary_word_def_cross_refs
         WHERE ((dict_id = :dictionaryId) AND (word_def_id = :wordDefinitionId))

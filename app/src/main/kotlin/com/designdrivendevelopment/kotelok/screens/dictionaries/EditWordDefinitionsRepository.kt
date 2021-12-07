@@ -19,4 +19,9 @@ interface EditWordDefinitionsRepository {
     suspend fun deleteWordDefinition(wordDefinition: WordDefinition)
 
     suspend fun deleteWordDefinitions(wordDefinitions: List<WordDefinition>)
+
+    suspend fun copyDefinitionToDictionary(
+        wordDefinition: WordDefinition,
+        dictionary: Dictionary
+    ): Boolean
 }

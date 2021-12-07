@@ -88,32 +88,24 @@ class DefDetailsViewModel(
     }
 
     fun saveChanges(definition: WordDefinition) {
-        val addedDefinition = if (saveMode == DefinitionDetailsFragment.SAVE_MODE_COPY) {
-            definition.copy(
-                id = 0L,
-                allTranslations = definition.allTranslations.filter { it.isNotEmpty() },
-                synonyms = definition.synonyms.filter { it.isNotEmpty() },
-                examples = definition.examples.filter { it.originalText.isNotEmpty() }
-            )
-        } else {
-            definition.copy(
-                allTranslations = definition.allTranslations.filter { it.isNotEmpty() },
-                synonyms = definition.synonyms.filter { it.isNotEmpty() },
-                examples = definition.examples.filter { it.originalText.isNotEmpty() }
-            )
-        }
+        val addedDefinition = definition.copy(
+            allTranslations = definition.allTranslations.filter { it.isNotEmpty() },
+            synonyms = definition.synonyms.filter { it.isNotEmpty() },
+            examples = definition.examples.filter { it.originalText.isNotEmpty() }
+        )
         viewModelScope.launch(Dispatchers.IO) {
             val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
-            if (addedDefinition.id == NEW_WORD_ID) {
+            if (saveMode == DefinitionDetailsFragment.SAVE_MODE_COPY) {
+                editWordDefRepository.copyDefinitionToDictionary(addedDefinition, dictionary)
                 _messageEvents
                     .postValue(UiEvent.ShowMessage("Сохранено в \"${dictionary.label}\""))
             } else {
                 _messageEvents.postValue(UiEvent.ShowMessage("Изменения сохранены"))
+                editWordDefRepository.addNewWordDefinitionWithDictionaries(
+                    addedDefinition,
+                    listOf(dictionary)
+                )
             }
-            editWordDefRepository.addNewWordDefinitionWithDictionaries(
-                addedDefinition,
-                listOf(dictionary)
-            )
         }
     }
 
