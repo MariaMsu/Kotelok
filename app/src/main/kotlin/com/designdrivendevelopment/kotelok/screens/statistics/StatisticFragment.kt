@@ -35,6 +35,12 @@ class StatisticFragment : Fragment(){
         )
         viewModel = ViewModelProvider(this, factory).get(StatisticViewModel::class.java)
 
+
+
+        wordDefinitionsList = view.findViewById(R.id.statisticRecycler)
+//        wordDefinitionsList?.adapter = StatisticAdapter(arrayOf("str1", "str2", "str3"))
+        wordDefinitionsList?.layoutManager = LinearLayoutManager(
+            context, LinearLayoutManager.VERTICAL, false)
         viewModel.totalStat.observe(
             viewLifecycleOwner,
             {
@@ -44,12 +50,12 @@ class StatisticFragment : Fragment(){
                         viewModel.totalStat.value?.totalNumOfCompletedTrainings,
                         viewModel.totalStat.value?.totalNumOfSuccessfullyTrainings,
                     )
+
+                wordDefinitionsList?.adapter = StatisticAdapter(
+                    viewModel.totalStat.value?.dictionaryStats?.map{it.label}!!)
+
             }
         )
 
-        wordDefinitionsList = view.findViewById(R.id.statisticRecycler)
-        wordDefinitionsList?.adapter = StatisticAdapter(arrayOf("str1", "str2", "str3"))
-        wordDefinitionsList?.layoutManager = LinearLayoutManager(
-            context, LinearLayoutManager.VERTICAL, false)
     }
 }
