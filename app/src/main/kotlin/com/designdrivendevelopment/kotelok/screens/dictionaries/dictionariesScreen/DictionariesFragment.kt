@@ -90,7 +90,7 @@ class DictionariesFragment :
         val searchView = searchItem.actionView as SearchView
         if (searchQuery.isNotEmpty()) {
             searchItem.expandActionView()
-            searchView.setQuery(searchQuery, false)
+            searchView.setQuery(searchQuery, true)
         }
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
@@ -99,6 +99,7 @@ class DictionariesFragment :
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    searchQuery = newText.orEmpty()
                     if (newText.orEmpty().isEmpty()) {
                         dictionariesList?.scrollToPosition(SCROLL_START_POSITION)
                     }
