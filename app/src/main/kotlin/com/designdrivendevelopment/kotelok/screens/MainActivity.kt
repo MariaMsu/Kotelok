@@ -1,7 +1,6 @@
 package com.designdrivendevelopment.kotelok.screens
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -15,9 +14,9 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScre
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
-import com.designdrivendevelopment.kotelok.screens.trainers.TrainWriteFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+@Suppress("TooManyFunctions")
 class MainActivity : AppCompatActivity() {
     private var bottomNavigationView: BottomNavigationView? = null
     private val bottomNavigator: BottomNavigator by lazy {
