@@ -10,7 +10,7 @@ interface StatisticsDao {
     @Query(
         """
         SELECT d.id AS id, d.label AS label, AVG(w_d.easiness_factor) AS average_skill_level,
-        SUM(w_d.def_id) AS size, SUM(w_d.completed_trainings_number) AS completed_num,
+        COUNT(w_d.def_id) AS size, SUM(w_d.completed_trainings_number) AS completed_num,
         SUM(w_d.successfully_trainings_number) AS successfully_num
         FROM dictionaries AS d LEFT OUTER JOIN dictionary_word_def_cross_refs AS c_r
         ON (d.id = c_r.dict_id)
@@ -23,7 +23,7 @@ interface StatisticsDao {
     @Query(
         """
         SELECT d.id AS id, d.label AS label, AVG(w_d.easiness_factor) AS average_skill_level,
-        SUM(w_d.def_id) AS size, SUM(w_d.completed_trainings_number) AS completed_num,
+        COUNT(w_d.def_id) AS size, SUM(w_d.completed_trainings_number) AS completed_num,
         SUM(w_d.successfully_trainings_number) AS successfully_num
         FROM dictionaries AS d JOIN dictionary_word_def_cross_refs AS c_r ON (d.id = c_r.dict_id)
         JOIN word_definitions AS w_d ON (c_r.word_def_id = w_d.def_id)
