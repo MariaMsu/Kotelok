@@ -5,4 +5,9 @@ data class Dictionary(
     val label: String,
     val size: Int,
     var isFavorite: Boolean
-)
+) {
+    companion object {
+        const val NEW_DICTIONARY_ID = 0L
+        const val SIZE_EMPTY = 0
+    }
+}
