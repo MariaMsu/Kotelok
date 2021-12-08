@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import com.designdrivendevelopment.kotelok.R
+import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 
 class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setFragmentResult(FragmentResult.ProfileTab.OPEN_STATISTICS_KEY, Bundle())
     }
 
     override fun onCreateView(

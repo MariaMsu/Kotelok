@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setupDictionariesFragmentResultListeners()
         setupDefinitionsResultListeners()
         setupTrainersDialogResultListeners()
+        setupProfileResultListeners()
 
         if (savedInstanceState == null) {
             val item = bottomNavigationView?.menu?.findItem(R.id.dictionary_tab)
@@ -146,6 +147,17 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity
             ) { _, _ ->
                 replaceFragment(TrainWriteFragment.newInstance(trainedDictionaryId ?: 1))
+            }
+        }
+    }
+
+    private fun setupProfileResultListeners() {
+        supportFragmentManager.apply {
+            setFragmentResultListener(
+                FragmentResult.ProfileTab.OPEN_STATISTICS_KEY,
+                this@MainActivity
+            ) { _, _ ->
+                replaceFragment(StatisticFragment())
             }
         }
     }

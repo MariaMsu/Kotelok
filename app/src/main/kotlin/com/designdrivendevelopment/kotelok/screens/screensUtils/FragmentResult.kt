@@ -17,5 +17,7 @@ object FragmentResult {
 
     object RecognizeTab
 
-    object ProfileTab
+    object ProfileTab {
+        const val OPEN_STATISTICS_KEY = "fragment_result_open_statistics_key"
+    }
 }
