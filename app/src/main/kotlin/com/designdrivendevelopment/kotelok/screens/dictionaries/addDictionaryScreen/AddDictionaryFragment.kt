@@ -2,8 +2,11 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.addDictionarySc
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
@@ -33,6 +36,7 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
         initViews(view)
         val activity = requireActivity()
         activity.title = getString(R.string.title_add_new_dictionary)
@@ -65,6 +69,28 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
 
     override fun onDefinitionSelectionChanged(selectedDefinition: SelectableWordDefinition) {
         addDictViewModel?.changeItemSelection(selectedDefinition.def, selectedDefinition.isSelected)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.menu_search, menu)
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.orEmpty().isEmpty()) {
+                        definitionsList?.scrollToPosition(SCROLL_START_POSITION)
+                    }
+                    addDictViewModel?.filter(newText.orEmpty())
+                    return true
+                }
+            }
+        )
     }
 
     private fun setupViewModel(viewModel: AddDictViewModel?, adapter: SelectableDefsAdapter) {
@@ -127,6 +153,8 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
     }
 
     companion object {
+        private const val SCROLL_START_POSITION = 0
+
         @JvmStatic
         fun newInstance() = AddDictionaryFragment()
     }
