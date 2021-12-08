@@ -21,7 +21,7 @@ class DictionariesViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             dictionariesRepository.getAllDictionariesFlow().collect { dictionaries ->
-                unfilteredDictionaries = dictionaries.sortedBy { it.isFavorite }
+                unfilteredDictionaries = dictionaries.sortedByDescending { it.isFavorite }
                 _dictionaries.postValue(unfilteredDictionaries)
             }
         }
