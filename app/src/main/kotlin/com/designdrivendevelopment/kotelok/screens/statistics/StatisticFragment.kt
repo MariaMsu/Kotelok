@@ -12,16 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 
-
-class StatisticFragment : Fragment(){
+class StatisticFragment : Fragment() {
     lateinit var viewModel: StatisticViewModel
 
-    private var totalStatisticText : TextView? = null
+    private var totalStatisticText: TextView? = null
     private var wordDefinitionsList: RecyclerView? = null
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_statistics, container, false)
     }
 
@@ -35,26 +36,27 @@ class StatisticFragment : Fragment(){
         )
         viewModel = ViewModelProvider(this, factory).get(StatisticViewModel::class.java)
 
-
-
         wordDefinitionsList = view.findViewById(R.id.statisticRecycler)
         wordDefinitionsList?.layoutManager = LinearLayoutManager(
-            context, LinearLayoutManager.VERTICAL, false)
+            context,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         viewModel.totalStat.observe(
             viewLifecycleOwner,
             {
                 totalStatisticText?.text =
-                    String.format(getString(R.string.statistics),
+                    String.format(
+                        getString(R.string.statistics),
                         viewModel.totalStat.value?.totalNumOfWordDefinitions,
                         viewModel.totalStat.value?.totalNumOfCompletedTrainings,
                         viewModel.totalStat.value?.totalNumOfSuccessfullyTrainings,
                     )
 
                 wordDefinitionsList?.adapter = StatisticAdapter(
-                    viewModel.totalStat.value?.dictionaryStats!!)
-
+                    viewModel.totalStat.value?.dictionaryStats!!
+                )
             }
         )
-
     }
 }

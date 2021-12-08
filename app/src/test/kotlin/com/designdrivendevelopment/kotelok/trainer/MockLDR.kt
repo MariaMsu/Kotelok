@@ -65,5 +65,7 @@ class MockLDR : LearnableDefinitionsRepository {
         return data
     }
 
-    override suspend fun updateLearnableDefinition(wordDefinition: LearnableDefinition) {}
+    override suspend fun updateLearnableDefinition(wordDefinition: LearnableDefinition) {
+        // we do not use this method for tests
+    }
 }

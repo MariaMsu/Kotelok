@@ -65,7 +65,7 @@ class LevenshteinTest {
     )
 
     @Test
-    fun levenshteinTest() {
+    fun levenshteinTestFun() {
 
         for (testCase in tests) {
             val (levDistance, levDifference) = levenshteinDifference(

@@ -2,11 +2,9 @@ package com.designdrivendevelopment.kotelok.screens.statistics
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.CardsLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.screens.profile.GetStatisticsRepository
-import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsViewModel
 
-class StatisticViewModelFactory (
+class StatisticViewModelFactory(
     private val getStatisticsRepository: GetStatisticsRepository
 ) : ViewModelProvider.Factory {
 
