@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -65,6 +64,7 @@ class DictionariesFragment :
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         setupDictionariesList(dictionariesList, adapter, layoutManager)
         setupViewModel(dictionariesViewModel, adapter)
+        setupListeners()
     }
 
     override fun onStop() {
@@ -136,6 +136,12 @@ class DictionariesFragment :
         dictionariesList?.layoutManager = layoutManager
     }
 
+    private fun setupListeners() {
+        addDictionaryFab?.setOnClickListener {
+            setFragmentResult(FragmentResult.DictionariesTab.OPEN_ADD_DICTIONARY_KEY, Bundle())
+        }
+    }
+
     private fun onDictionariesChanged(
         newDictionaries: List<Dictionary>,
         adapter: DictionariesAdapter
@@ -146,22 +152,6 @@ class DictionariesFragment :
         )
         DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
         adapter.dictionaries = newDictionaries
-    }
-
-    private fun getIsFavoriteFromList(): List<Boolean> {
-        val isFavoriteList = mutableListOf<Boolean>()
-        val size = dictionariesList?.adapter?.itemCount ?: SIZE_EMPTY
-        for (i in 0 until size) {
-            isFavoriteList.add(
-                index = i,
-                element = dictionariesList
-                    ?.findViewHolderForAdapterPosition(i)
-                    ?.itemView
-                    ?.findViewById<CheckBox>(R.id.is_favorite_checkbox)
-                    ?.isChecked ?: false
-            )
-        }
-        return isFavoriteList
     }
 
     private fun initViews(view: View) {

@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         initViews()
         bottomNavigator.subscribe(supportFragmentManager)
         setupDictionariesFragmentResultListeners()
+        setupDefinitionsResultListeners()
         setupTrainersDialogResultListeners()
 
         if (savedInstanceState == null) {
@@ -67,6 +68,12 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_ADD_DICTIONARY_KEY,
+                this@MainActivity
+            ) { _, _ ->
+                replaceFragment(AddDictionaryFragment.newInstance(), "add_dictionary_fragment")
+            }
+            setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_NEW_DICTIONARY_KEY,
                 this@MainActivity
             ) { _, bundle ->
@@ -84,6 +91,11 @@ class MainActivity : AppCompatActivity() {
                     setReorderingAllowed(true)
                 }
             }
+        }
+    }
+
+    private fun setupDefinitionsResultListeners() {
+        supportFragmentManager.apply {
             setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
                 this@MainActivity
