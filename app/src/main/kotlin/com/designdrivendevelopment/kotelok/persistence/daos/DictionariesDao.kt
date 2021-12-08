@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.designdrivendevelopment.kotelok.persistence.queryResults.DictionaryQueryResult
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -26,6 +27,15 @@ interface DictionariesDao {
 
     @Query("SELECT * FROM dictionaries")
     fun getAllFlow(): Flow<List<DictionaryEntity>>
+
+    @Query(
+        """
+        SELECT d.id as dict_id, d.label AS label, d.is_favorite AS is_favorite, COUNT(*) AS size
+        FROM dictionaries AS d JOIN dictionary_word_def_cross_refs as cross_refs ON (d.id = cross_refs.dict_id)
+        GROUP BY d.id
+        """
+    )
+    fun getAllFlowInQueries(): Flow<List<DictionaryQueryResult>>
 
     @Query("SELECT * FROM dictionaries WHERE (id = :dictionaryId)")
     suspend fun getDictionaryById(dictionaryId: Long): DictionaryEntity

@@ -1,7 +1,6 @@
 package com.designdrivendevelopment.kotelok.screens
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -15,8 +14,12 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScre
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
+import com.designdrivendevelopment.kotelok.screens.statistics.StatisticFragment
+import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsFragment
+import com.designdrivendevelopment.kotelok.screens.trainers.TrainWriteFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+@Suppress("TooManyFunctions")
 class MainActivity : AppCompatActivity() {
     private var bottomNavigationView: BottomNavigationView? = null
     private val bottomNavigator: BottomNavigator by lazy {
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setupDictionariesFragmentResultListeners()
         setupDefinitionsResultListeners()
         setupTrainersDialogResultListeners()
+        setupProfileResultListeners()
 
         if (savedInstanceState == null) {
             val item = bottomNavigationView?.menu?.findItem(R.id.dictionary_tab)
@@ -136,15 +140,24 @@ class MainActivity : AppCompatActivity() {
                 FragmentResult.DictionariesTab.OPEN_CARDS_TRAINER_KEY,
                 this@MainActivity
             ) { _, _ ->
-//                открыть тренажер с карточками
-                Log.d("SHEET", "open cards")
+                replaceFragment(TrainFlashcardsFragment.newInstance(trainedDictionaryId ?: 1))
             }
             setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_WRITER_TRAINER_KEY,
                 this@MainActivity
             ) { _, _ ->
-//                открыть тренажер с написанием
-                Log.d("SHEET", "open writer")
+                replaceFragment(TrainWriteFragment.newInstance(trainedDictionaryId ?: 1))
+            }
+        }
+    }
+
+    private fun setupProfileResultListeners() {
+        supportFragmentManager.apply {
+            setFragmentResultListener(
+                FragmentResult.ProfileTab.OPEN_STATISTICS_KEY,
+                this@MainActivity
+            ) { _, _ ->
+                replaceFragment(StatisticFragment())
             }
         }
     }

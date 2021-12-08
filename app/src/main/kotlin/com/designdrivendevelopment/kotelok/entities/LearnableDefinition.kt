@@ -66,6 +66,7 @@ class LearnableDefinition(
         const val GRADE_THREE = 3
         const val GRADE_FOUR = 4
         const val GRADE_FIVE = 5
+        val GRADE_ARRAY = intArrayOf(GRADE_ZERO, GRADE_ONE, GRADE_TWO, GRADE_THREE, GRADE_FOUR, GRADE_FIVE)
         const val PASSING_GRADE = 4
         const val EF_INITIAL_VALUE = 2.5F
         private const val DEFAULT_COEFFICIENT = 1F

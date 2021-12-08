@@ -26,10 +26,14 @@ class DictionariesRepositoryImpl(
     }
 
     override fun getAllDictionariesFlow(): Flow<List<Dictionary>> {
-        return dictionariesDao.getAllFlow().map { dictionaryEntities ->
-            dictionaryEntities.map { dictionaryEntity ->
-                val size = dictionariesDao.getDictionarySizeById(dictionaryEntity.id)
-                dictionaryEntity.toDictionary(size)
+        return dictionariesDao.getAllFlowInQueries().map { results ->
+            results.map {
+                Dictionary(
+                    id = it.id,
+                    label = it.label,
+                    size = it.size,
+                    isFavorite = it.isFavorite
+                )
             }
         }.flowOn(Dispatchers.IO)
     }
