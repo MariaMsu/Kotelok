@@ -57,7 +57,7 @@
     <TextView
         android:text="@string/default_word"
         android:layout_width="0dp"
-        android:layout_height="85dp"
+        android:layout_height="wrap_content"
         android:id="@+id/correct_word"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_word"
@@ -73,7 +73,7 @@
     <TextView
         android:text="@string/dict_completed"
         android:layout_width="0dp"
-        android:layout_height="53dp"
+        android:layout_height="wrap_content"
         android:id="@+id/text_completed"
         android:textColor="@color/dark_purple_main"
         android:textStyle="bold"

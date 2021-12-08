@@ -14,6 +14,9 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScre
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
+import com.designdrivendevelopment.kotelok.screens.statistics.StatisticFragment
+import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsFragment
+import com.designdrivendevelopment.kotelok.screens.trainers.TrainWriteFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 @Suppress("TooManyFunctions")
@@ -136,15 +139,13 @@ class MainActivity : AppCompatActivity() {
                 FragmentResult.DictionariesTab.OPEN_CARDS_TRAINER_KEY,
                 this@MainActivity
             ) { _, _ ->
-//                открыть тренажер с карточками
-                Log.d("SHEET", "open cards")
+                replaceFragment(TrainFlashcardsFragment.newInstance(trainedDictionaryId ?: 1))
             }
             setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_WRITER_TRAINER_KEY,
                 this@MainActivity
             ) { _, _ ->
-//                открыть тренажер с написанием
-                Log.d("SHEET", "open writer")
+                replaceFragment(TrainWriteFragment.newInstance(trainedDictionaryId ?: 1))
             }
         }
     }
