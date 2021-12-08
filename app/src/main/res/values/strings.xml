@@ -46,6 +46,7 @@
     <string name="header_text_main_fields">Основное:</string>
     <string name="header_text_additional_fields">Дополнительно:</string>
     <string name="error_field_required">Это обязательное поле</string>
+    <string name="statistics_header">Статистика:</string>
     <string name="learn_button_text">Изучать</string>
     <string name="add_dictionary_fab_desc">Добавить словарь</string>
     <string name="size_2_4">%1$d слова</string>
@@ -64,8 +65,6 @@
     <string name="correct_guess">Верно!</string>
     <string name="incorrect_guess">Неверно!\nВерный ответ: %1$s</string>
 
-    <string name="statistics">Статистика:
-        \n Изучаемые слова: %1$s
-        \n Завершенные тренировки: %2$s
-        \n Успешно пройденные тренировки: %3$s</string>
+    <string name="statistics">
+        Изучаемые слова: %1$s\nЗавершенные тренировки: %2$s\nУспешно пройденные тренировки: %3$s</string>
 </resources>
