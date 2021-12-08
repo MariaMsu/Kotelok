@@ -57,3 +57,9 @@ fun View.focusAndShowKeyboard() {
 fun String?.toNullIfEmpty(): String? {
     return if (this.isNullOrEmpty()) null else this
 }
+
+fun String.capitalizeFirstChar(): String {
+    return this.replaceFirstChar { firstChar ->
+        if (firstChar.isLowerCase()) firstChar.titlecase() else firstChar.toString()
+    }
+}

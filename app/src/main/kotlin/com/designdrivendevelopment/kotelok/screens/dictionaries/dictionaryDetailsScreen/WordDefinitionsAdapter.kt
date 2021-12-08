@@ -11,6 +11,7 @@ import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.DefinitionClickListener
 import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
+import com.designdrivendevelopment.kotelok.screens.screensUtils.capitalizeFirstChar
 
 class WordDefinitionsAdapter(
     private val context: Context,
@@ -26,30 +27,24 @@ class WordDefinitionsAdapter(
         private val translationExampleText: TextView =
             view.findViewById(R.id.translation_example_text)
 
-        private fun String.capitalize(): String {
-            return this.replaceFirstChar { firstChar ->
-                if (firstChar.isLowerCase()) firstChar.titlecase() else firstChar.toString()
-            }
-        }
-
         fun bind(definition: WordDefinition) {
-            writingText.text = definition.writing.capitalize()
+            writingText.text = definition.writing.capitalizeFirstChar()
             if (definition.partOfSpeech != null) {
                 translationText.text = context.resources.getString(
                     R.string.translation_pos_line,
-                    definition.mainTranslation.capitalize(),
+                    definition.mainTranslation.capitalizeFirstChar(),
                     definition.partOfSpeech
                 )
             } else {
-                translationText.text = definition.mainTranslation.capitalize()
+                translationText.text = definition.mainTranslation.capitalizeFirstChar()
             }
             if (definition.examples.isNotEmpty()) {
                 val mainExample = definition.examples.first()
                 originalExampleText.visibility = View.VISIBLE
-                originalExampleText.text = mainExample.originalText.capitalize()
+                originalExampleText.text = mainExample.originalText.capitalizeFirstChar()
                 if (mainExample.translatedText != null) {
                     translationExampleText.visibility = View.VISIBLE
-                    translationExampleText.text = mainExample.translatedText.capitalize()
+                    translationExampleText.text = mainExample.translatedText.capitalizeFirstChar()
                 } else {
                     translationExampleText.visibility = View.GONE
                 }
