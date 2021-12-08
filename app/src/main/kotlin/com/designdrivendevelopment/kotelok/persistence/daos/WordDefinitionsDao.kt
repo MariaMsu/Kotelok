@@ -89,6 +89,21 @@ interface WordDefinitionsDao {
         """
         SELECT def_id AS id, writing, part_of_speech, language,
         transcription, main_translation
+        FROM word_definitions AS words_d
+        WHERE (words_d.def_id IN (
+            SELECT cross_refs.word_def_id
+            FROM dictionary_word_def_cross_refs AS cross_refs
+            WHERE (cross_refs.dict_id = :dictionaryId)
+        ))
+    """
+    )
+    fun getDefinitionsFlowByDictId(dictionaryId: Long): Flow<List<WordDefinitionQueryResult>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT def_id AS id, writing, part_of_speech, language,
+        transcription, main_translation
         FROM word_definitions
         """
     )

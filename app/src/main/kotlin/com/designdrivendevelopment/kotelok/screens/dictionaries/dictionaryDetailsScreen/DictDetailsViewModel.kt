@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.sharedWordDefProvider.SharedWordDefinitionProvider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class DictDetailsViewModel(
@@ -19,15 +20,12 @@ class DictDetailsViewModel(
     val dictionaryDefinitions: LiveData<List<WordDefinition>> = _dictionaryDefinitions
 
     init {
-        loadDefinitionsByDictId(dictionaryId)
-    }
-
-    private fun loadDefinitionsByDictId(dictionaryId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            val definitions = dictWordDefinitionsRepository
-                .getDefinitionsByDictionaryId(dictionaryId)
-            unfilteredDefinitions = definitions
-            _dictionaryDefinitions.postValue(definitions)
+            dictWordDefinitionsRepository.getDefinitionsFlowByDictId(dictionaryId)
+                .collect { definitions ->
+                unfilteredDefinitions = definitions.sortedBy { it.writing }
+                _dictionaryDefinitions.postValue(unfilteredDefinitions)
+            }
         }
     }
 
