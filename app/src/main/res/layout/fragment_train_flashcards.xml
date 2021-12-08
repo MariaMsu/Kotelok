@@ -10,7 +10,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/ic_flashcard_blank"
+        android:background="@drawable/shape_flashcard_background"
+        android:elevation="12dp"
         android:id="@+id/flashcardButton"
         android:gravity="center"
         android:text="@string/default_word"
