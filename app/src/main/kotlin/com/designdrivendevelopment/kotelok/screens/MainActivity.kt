@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                     DictionariesFragment.DICT_LABEL_KEY,
                     getString(R.string.app_name)
                 )
-                addFragment(
+                replaceFragment(
                     fragment = DictionaryDetailsFragment.newInstance(dictionaryId, dictionaryLabel),
                     tag = "dictionary_details_fragment"
                 )
