@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
+import com.designdrivendevelopment.kotelok.entities.DictionaryStat
 
-class StatisticAdapter(private val dataSet: List<String>) :
+class StatisticAdapter(private val dictionaryStatList: List<DictionaryStat>) :
     RecyclerView.Adapter<StatisticAdapter.ViewHolder>() {
 
     /**
@@ -15,11 +17,13 @@ class StatisticAdapter(private val dataSet: List<String>) :
      * (custom ViewHolder).
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView
+        val textDictName: TextView
+        val textAverageSkillLevel: TextView
 
         init {
             // Define click listener for the ViewHolder's View.
-            textView = view.findViewById(R.id.statisticRecycleItem)
+            textDictName = view.findViewById(R.id.recycleItemDictName)
+            textAverageSkillLevel = view.findViewById(R.id.recycleItemAverageSkillLevel)
         }
     }
 
@@ -37,9 +41,15 @@ class StatisticAdapter(private val dataSet: List<String>) :
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.textView.text = dataSet[position]
+        viewHolder.textDictName.text = dictionaryStatList[position].label
+//        viewHolder.textAverageSkillLevel.text =
+//            String.format(getString(R.string.averageSkill),
+//                dictionaryStatList[position].averageSkillLevel
+//            )
+        viewHolder.textAverageSkillLevel.text =
+            "Скилл: ${dictionaryStatList[position].averageSkillLevel}"
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = dictionaryStatList.size
 }
