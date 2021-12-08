@@ -51,4 +51,6 @@
     <string name="text_writing_trainer">Написание</string>
     <string name="icon_writing_trainer_desc">Иконка тренажера на проверку написания</string>
     <string name="hint_dictionary_label">Название словаря</string>
+    <string name="title_add_new_dictionary">Новый словарь</string>
+    <string name="error_dict_label_field">Вы должны ввести название словаря</string>
 </resources>
