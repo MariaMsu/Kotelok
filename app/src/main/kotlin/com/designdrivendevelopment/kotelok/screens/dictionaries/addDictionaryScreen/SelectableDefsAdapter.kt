@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -23,9 +24,11 @@ class SelectableDefsAdapter(
         private val originalExampleText: TextView = view.findViewById(R.id.original_example_text)
         private val translationExampleText: TextView =
             view.findViewById(R.id.translation_example_text)
-        val selectionCheckBox: CheckBox = view.findViewById(R.id.selection_checkbox)
+        private val selectionCheckBox: CheckBox = view.findViewById(R.id.selection_checkbox)
+        private val playSpeechButton: Button = view.findViewById(R.id.play_speech_btn)
 
         init {
+            playSpeechButton.isVisible = false
             selectionCheckBox.apply {
                 isVisible = true
                 isClickable = false
