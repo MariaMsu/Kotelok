@@ -25,7 +25,7 @@ class AddDictViewModel(
         loadAllDefinitions()
     }
 
-    fun loadAllDefinitions() {
+    private fun loadAllDefinitions() {
         viewModelScope.launch(Dispatchers.IO) {
             unfilteredDefinitions = dictDefinitionsRepository.getAllDefinitions()
                 .map { SelectableWordDefinition(it) }
@@ -46,6 +46,7 @@ class AddDictViewModel(
                 selectableDefinition
             }
         }
+        _allDefinitions.value = unfilteredDefinitions
     }
 
     fun filter(text: String) {
