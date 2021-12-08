@@ -45,7 +45,7 @@ class DictionariesRepositoryImpl(
     override suspend fun addDictionary(
         dictionary: Dictionary,
         addedWordDefinitions: List<WordDefinition>?
-    ) = withContext(Dispatchers.IO) {
+    ): Long = withContext(Dispatchers.IO) {
         val dictionaryId = dictionariesDao.insert(dictionary.toDictionaryEntity(entityId = 0))
         if (addedWordDefinitions != null) {
             val crossRefs = addedWordDefinitions.map { wordDefinition ->
@@ -56,6 +56,7 @@ class DictionariesRepositoryImpl(
             }
             dictionaryWordDefCrossRefDao.insert(crossRefs)
         }
+        return@withContext dictionaryId
     }
 
     override suspend fun updateDictionary(dictionary: Dictionary) = withContext(Dispatchers.IO) {

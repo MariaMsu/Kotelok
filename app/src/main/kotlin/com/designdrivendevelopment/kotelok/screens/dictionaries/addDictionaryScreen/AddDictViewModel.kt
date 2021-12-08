@@ -11,6 +11,7 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetail
 import com.designdrivendevelopment.kotelok.screens.screensUtils.capitalizeFirstChar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddDictViewModel(
     private val dictionariesRepository: DictionariesRepository,
@@ -61,17 +62,15 @@ class AddDictViewModel(
         }
     }
 
-    fun addDictionary(label: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            dictionariesRepository.addDictionary(
-                Dictionary(
-                    id = Dictionary.NEW_DICTIONARY_ID,
-                    label = label.capitalizeFirstChar(),
-                    size = Dictionary.SIZE_EMPTY,
-                    isFavorite = false
-                ),
-                selectedDefinitions
-            )
-        }
+    suspend fun addDictionary(label: String): Long = withContext(Dispatchers.IO) {
+        return@withContext dictionariesRepository.addDictionary(
+            Dictionary(
+                id = Dictionary.NEW_DICTIONARY_ID,
+                label = label.capitalizeFirstChar(),
+                size = Dictionary.SIZE_EMPTY,
+                isFavorite = false
+            ),
+            selectedDefinitions
+        )
     }
 }

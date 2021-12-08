@@ -14,7 +14,7 @@ interface DictionariesRepository {
     suspend fun addDictionary(
         dictionary: Dictionary,
         addedWordDefinitions: List<WordDefinition>? = null
-    )
+    ): Long
 
     suspend fun updateDictionary(dictionary: Dictionary)
 

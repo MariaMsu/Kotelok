@@ -8,6 +8,7 @@ import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
+import com.designdrivendevelopment.kotelok.screens.dictionaries.addDictionaryScreen.AddDictionaryFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.DictionariesFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.TrainersBottomSheet
@@ -64,6 +65,24 @@ class MainActivity : AppCompatActivity() {
                     fragment = DictionaryDetailsFragment.newInstance(dictionaryId, dictionaryLabel),
                     tag = "dictionary_details_fragment"
                 )
+            }
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_NEW_DICTIONARY_KEY,
+                this@MainActivity
+            ) { _, bundle ->
+                val dictionaryId = bundle.getLong(AddDictionaryFragment.DICT_ID_KEY)
+                val label = bundle.getString(
+                    AddDictionaryFragment.DICT_LABEL_KEY,
+                    getString(R.string.app_name)
+                )
+                supportFragmentManager.commit {
+                    replace(
+                        R.id.fragment_container,
+                        DictionaryDetailsFragment.newInstance(dictionaryId, label),
+                        "new_dictionary_fragment"
+                    )
+                    setReorderingAllowed(true)
+                }
             }
             setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,

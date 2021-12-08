@@ -8,16 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@Suppress("TooManyFunctions")
 class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
     private var saveDictionaryFab: FloatingActionButton? = null
     private var dictionaryLabelField: TextInputLayout? = null
@@ -114,13 +120,21 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
     private fun setupListeners() {
         saveDictionaryFab?.setOnClickListener {
             dictionaryLabelField?.error = null
-            val label = dictionaryLabelField?.editText?.text
+            val label = dictionaryLabelField?.editText?.text?.toString()
 
             if (label.isNullOrEmpty()) {
                 dictionaryLabelField?.error = getString(R.string.error_dict_label_field)
                 return@setOnClickListener
             } else {
-                addDictViewModel?.addDictionary(label.toString())
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val newDictId = addDictViewModel?.addDictionary(label)
+                        ?: NOT_EXIST_DICT_ID
+                    val bundle = Bundle().apply {
+                        putLong(DICT_ID_KEY, newDictId)
+                        putString(DICT_LABEL_KEY, label)
+                    }
+                    setFragmentResult(FragmentResult.DictionariesTab.OPEN_NEW_DICTIONARY_KEY, bundle)
+                }
             }
         }
     }
@@ -154,6 +168,9 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
 
     companion object {
         private const val SCROLL_START_POSITION = 0
+        private const val NOT_EXIST_DICT_ID = 0L
+        const val DICT_ID_KEY = "dictionary_id_key"
+        const val DICT_LABEL_KEY = "dictionary_label_key"
 
         @JvmStatic
         fun newInstance() = AddDictionaryFragment()
