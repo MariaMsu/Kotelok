@@ -8,6 +8,7 @@ import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionariesRepository
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryWordDefinitionsRepository
+import com.designdrivendevelopment.kotelok.screens.screensUtils.capitalizeFirstChar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -65,7 +66,7 @@ class AddDictViewModel(
             dictionariesRepository.addDictionary(
                 Dictionary(
                     id = Dictionary.NEW_DICTIONARY_ID,
-                    label = label,
+                    label = label.capitalizeFirstChar(),
                     size = Dictionary.SIZE_EMPTY,
                     isFavorite = false
                 ),
