@@ -11,7 +11,6 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetail
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
-import com.designdrivendevelopment.kotelok.screens.trainers.TrainWriteFragment
 import com.designdrivendevelopment.kotelok.screens.statistics.StatisticFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

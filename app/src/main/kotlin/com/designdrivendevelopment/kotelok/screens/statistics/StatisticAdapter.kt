@@ -42,7 +42,8 @@ class StatisticAdapter(private val dictionaryStatList: List<DictionaryStat>) :
         // contents of the view with that element
         viewHolder.textDictName.text = dictionaryStatList[position].label
         viewHolder.textAverageSkillLevel.text =
-            String.format(viewHolder.itemView.context.getString(R.string.averageSkill),
+            String.format(
+                viewHolder.itemView.context.getString(R.string.averageSkill),
                 dictionaryStatList[position].averageSkillLevel
             )
     }
