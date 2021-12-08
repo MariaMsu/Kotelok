@@ -23,9 +23,9 @@ class DictDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             dictWordDefinitionsRepository.getDefinitionsFlowByDictId(dictionaryId)
                 .collect { definitions ->
-                unfilteredDefinitions = definitions.sortedBy { it.writing }
-                _dictionaryDefinitions.postValue(unfilteredDefinitions)
-            }
+                    unfilteredDefinitions = definitions.sortedBy { it.writing }
+                    _dictionaryDefinitions.postValue(unfilteredDefinitions)
+                }
         }
     }
 

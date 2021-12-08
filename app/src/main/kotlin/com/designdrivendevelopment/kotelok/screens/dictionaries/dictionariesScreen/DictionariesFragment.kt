@@ -29,7 +29,7 @@ class DictionariesFragment :
     private var dictionariesList: RecyclerView? = null
     private var addDictionaryFab: FloatingActionButton? = null
     private var dictionariesViewModel: DictionariesViewModel? = null
-    private var searchView: SearchView? = null
+    private var searchQuery = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +42,7 @@ class DictionariesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        searchQuery = savedInstanceState?.getString(SEARCH_QUERY_KEY) ?: ""
 
         setHasOptionsMenu(true)
         initViews(view)
@@ -72,6 +73,11 @@ class DictionariesFragment :
         dictionariesViewModel?.saveIsFavoriteStatus()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_QUERY_KEY, searchQuery)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
@@ -80,8 +86,13 @@ class DictionariesFragment :
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         inflater.inflate(R.menu.menu_search, menu)
-        searchView = menu.findItem(R.id.search).actionView as SearchView
-        searchView?.setOnQueryTextListener(
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        if (searchQuery.isNotEmpty()) {
+            searchItem.expandActionView()
+            searchView.setQuery(searchQuery, false)
+        }
+        searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
@@ -162,10 +173,10 @@ class DictionariesFragment :
     private fun clearViews() {
         dictionariesList = null
         addDictionaryFab = null
-        searchView = null
     }
 
     companion object {
+        private const val SEARCH_QUERY_KEY = "search_query_key"
         private const val SIZE_EMPTY = 0
         private const val SCROLL_START_POSITION = 0
         const val DICT_ID_KEY = "dictionary_id_bundle_key"

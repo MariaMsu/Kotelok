@@ -42,6 +42,7 @@ class DictionaryDetailsFragment :
     private var addFab: FloatingActionButton? = null
     private var viewModel: DictDetailsViewModel? = null
     private var dictId: Long? = null
+    private var searchQuery = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +54,7 @@ class DictionaryDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        searchQuery = savedInstanceState?.getString(SEARCH_QUERY_KEY) ?: ""
         setHasOptionsMenu(true)
         initViews(view)
 
@@ -83,6 +85,7 @@ class DictionaryDetailsFragment :
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(SCROLL_POS_KEY, scrollPosition)
+        outState.putString(SEARCH_QUERY_KEY, searchQuery)
     }
 
     override fun onDestroyView() {
@@ -92,9 +95,13 @@ class DictionaryDetailsFragment :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
         inflater.inflate(R.menu.menu_search, menu)
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        if (searchQuery.isNotEmpty()) {
+            searchItem.expandActionView()
+            searchView.setQuery(searchQuery, false)
+        }
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -102,6 +109,7 @@ class DictionaryDetailsFragment :
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    searchQuery = newText.orEmpty()
                     if (newText.orEmpty().isEmpty()) {
                         wordDefinitionsList?.scrollToPosition(SCROLL_START_POSITION)
                     }
@@ -244,6 +252,7 @@ class DictionaryDetailsFragment :
     }
 
     companion object {
+        private const val SEARCH_QUERY_KEY = "search_query_key"
         private const val DISPLAY_PARTS_NUMBER = 4
         private const val SCROLL_START_POSITION = 0
         private const val NOT_EXIST_DICT_ID = 0L
