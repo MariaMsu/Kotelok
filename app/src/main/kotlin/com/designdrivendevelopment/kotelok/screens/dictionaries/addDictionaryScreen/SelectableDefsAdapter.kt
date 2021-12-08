@@ -1,33 +1,49 @@
-package com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen
+package com.designdrivendevelopment.kotelok.screens.dictionaries.addDictionaryScreen
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
-import com.designdrivendevelopment.kotelok.screens.dictionaries.DefinitionClickListener
-import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
 import com.designdrivendevelopment.kotelok.screens.screensUtils.capitalizeFirstChar
 
-class WordDefinitionsAdapter(
+class SelectableDefsAdapter(
     private val context: Context,
-    private val playSoundBtnClickListener: PlaySoundBtnClickListener,
-    private val definitionClickListener: DefinitionClickListener,
-    var wordDefinitions: List<WordDefinition>
-) : RecyclerView.Adapter<WordDefinitionsAdapter.ViewHolder>() {
-
+    private val definitionSelectionListener: DefinitionSelectionListener,
+    var definitions: List<SelectableWordDefinition>
+) : RecyclerView.Adapter<SelectableDefsAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val writingText: TextView = view.findViewById(R.id.writing_text)
         private val translationText: TextView = view.findViewById(R.id.translation_text)
         private val originalExampleText: TextView = view.findViewById(R.id.original_example_text)
         private val translationExampleText: TextView =
             view.findViewById(R.id.translation_example_text)
+        private val selectionCheckBox: CheckBox = view.findViewById(R.id.selection_checkbox)
+        private val playSpeechButton: Button = view.findViewById(R.id.play_speech_btn)
 
-        fun bind(definition: WordDefinition) {
+        init {
+            playSpeechButton.isVisible = false
+            selectionCheckBox.apply {
+                isVisible = true
+                isClickable = false
+                isFocusable = false
+            }
+        }
+
+        fun onSelectionChanged(isSelected: Boolean) {
+            selectionCheckBox.isChecked = isSelected
+            itemView.isActivated = isSelected
+        }
+
+        fun bind(definition: WordDefinition, isSelected: Boolean) {
+            selectionCheckBox.isChecked = isSelected
+            itemView.isActivated = isSelected
             writingText.text = definition.writing.capitalizeFirstChar()
             if (definition.partOfSpeech != null) {
                 translationText.text = context.resources.getString(
@@ -56,30 +72,35 @@ class WordDefinitionsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(context)
-        return ViewHolder(
-            layoutInflater.inflate(R.layout.item_word_definition, parent, false)
-        )
+        val inflater = LayoutInflater.from(context)
+        return ViewHolder(inflater.inflate(R.layout.item_word_definition, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(wordDefinitions[position])
-        val playSoundBtn: Button = holder.itemView.findViewById(R.id.play_speech_btn)
-        // Воспроизводимый текст необходимо сохранить в переменную, а затем её уже передать в
-        // setOnClickListener. В обратном случае в ClickListener`е будет сохранена позиция.
-        // Тогда в случае, если позиция item`а будет изменена без вызова onBind, то в листенере
-        // будет сохранено старое значение позиции, а массив wordDefinitions при этом
-        // будет новый. Поэтому будет впоспроизведен неправильный текст.
-        val text = wordDefinitions[position].writing
-        playSoundBtn.setOnClickListener {
-            playSoundBtnClickListener.onPlayBtnClick(text)
-        }
+        var selectableDefinition = definitions[position]
+        holder.bind(selectableDefinition.def, selectableDefinition.isSelected)
         holder.itemView.setOnClickListener {
-            definitionClickListener.onClickToDefinition(wordDefinitions[holder.adapterPosition])
+            val handledDefinition = selectableDefinition
+                .copy(isSelected = !selectableDefinition.isSelected)
+
+            definitions = definitions.toMutableList().map { selectableWordDefinition ->
+                if (selectableWordDefinition.def.id == handledDefinition.def.id) {
+                    handledDefinition
+                } else {
+                    selectableWordDefinition
+                }
+            }
+            selectableDefinition = handledDefinition
+            holder.onSelectionChanged(handledDefinition.isSelected)
+            definitionSelectionListener.onDefinitionSelectionChanged(handledDefinition)
         }
     }
 
     override fun getItemCount(): Int {
-        return wordDefinitions.size
+        return definitions.size
     }
+}
+
+interface DefinitionSelectionListener {
+    fun onDefinitionSelectionChanged(selectedDefinition: SelectableWordDefinition)
 }

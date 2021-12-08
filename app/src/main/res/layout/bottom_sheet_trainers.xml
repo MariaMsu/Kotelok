@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimaryBackground"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/choose_trainers_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/text_choose_trainer"
+        android:textSize="18sp"
+        android:textColor="?attr/colorPrimaryBackground"
+        android:contentDescription="@string/icon_choose_trainer_desc"
+        android:drawablePadding="32dp"
+        android:background="?attr/colorPrimary"
+        app:drawableLeftCompat="@drawable/ic_sport"
+        app:drawableTint="?attr/colorPrimaryBackground"/>
+
+    <TextView
+        android:id="@+id/cards_trainer_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="16dp"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginVertical="8dp"
+        android:background="@drawable/ripple_trainers_text"
+        android:text="@string/text_cards_trainer"
+        android:textSize="18sp"
+        android:contentDescription="@string/cards_trainer_icon"
+        android:drawablePadding="32dp"
+        app:drawableLeftCompat="@drawable/ic_copy"
+        app:drawableTint="?attr/colorPrimary" />
+
+    <TextView
+        android:id="@+id/writer_trainer_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginHorizontal="4dp"
+        android:background="@drawable/ripple_trainers_text"
+        android:text="@string/text_writing_trainer"
+        android:textSize="18sp"
+        android:contentDescription="@string/icon_writing_trainer_desc"
+        android:drawablePadding="32dp"
+        app:drawableLeftCompat="@drawable/ic_edit"
+        app:drawableTint="?attr/colorPrimary" />
+</LinearLayout>

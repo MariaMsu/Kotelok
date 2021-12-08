@@ -15,6 +15,9 @@ interface DictionariesDao {
     @Update
     suspend fun update(dictionaryEntity: DictionaryEntity)
 
+    @Update
+    suspend fun update(dictionaryEntities: List<DictionaryEntity>)
+
     @Query("DELETE FROM dictionaries WHERE (id = :dictionaryId)")
     suspend fun deleteById(dictionaryId: Long)
 

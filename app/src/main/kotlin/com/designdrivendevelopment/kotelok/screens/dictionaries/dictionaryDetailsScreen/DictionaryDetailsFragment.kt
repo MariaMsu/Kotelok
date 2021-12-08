@@ -42,6 +42,7 @@ class DictionaryDetailsFragment :
     private var addFab: FloatingActionButton? = null
     private var viewModel: DictDetailsViewModel? = null
     private var dictId: Long? = null
+    private var searchQuery = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,14 +54,18 @@ class DictionaryDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        searchQuery = savedInstanceState?.getString(SEARCH_QUERY_KEY) ?: ""
         setHasOptionsMenu(true)
         initViews(view)
 
         val dictionaryId = arguments?.getLong(DICT_ID_KEY, NOT_EXIST_DICT_ID) ?: NOT_EXIST_DICT_ID
+        val label = arguments?.getString(DICT_LABEL_KEY) ?: getString(R.string.app_name)
         dictId = dictionaryId
         setupListeners(dictionaryId)
 
         scrollPosition = savedInstanceState?.getInt(SCROLL_POS_KEY) ?: SCROLL_START_POSITION
+        val activity = requireActivity()
+        activity.title = label
         val context = requireContext()
         val adapter = createAdapter(context, emptyList())
         setupWordDefinitionsList(wordDefinitionsList, context, adapter, scrollPosition)
@@ -69,9 +74,9 @@ class DictionaryDetailsFragment :
 
         val factory = DictDetailsViewModelFactory(
             dictionaryId,
-            (requireActivity().application as KotelokApplication)
+            (activity.application as KotelokApplication)
                 .appComponent.dictDefinitionsRepository,
-            (requireActivity().application as KotelokApplication)
+            (activity.application as KotelokApplication)
                 .appComponent.sharedWordDefProvider
         )
         viewModel = setupFragmentViewModel(this, factory, adapter)
@@ -80,6 +85,7 @@ class DictionaryDetailsFragment :
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(SCROLL_POS_KEY, scrollPosition)
+        outState.putString(SEARCH_QUERY_KEY, searchQuery)
     }
 
     override fun onDestroyView() {
@@ -89,8 +95,13 @@ class DictionaryDetailsFragment :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_word_def_search, menu)
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        inflater.inflate(R.menu.menu_search, menu)
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        if (searchQuery.isNotEmpty()) {
+            searchItem.expandActionView()
+            searchView.setQuery(searchQuery, false)
+        }
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -98,22 +109,11 @@ class DictionaryDetailsFragment :
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    val initialDefinitions = viewModel?.dictionaryDefinitions?.value
-                        ?: throw NullPointerException("DictDefinitionsViewModel is null")
-
-                    wordDefinitionsList?.adapter?.let { adapter ->
-                        val wordDefinitionsAdapter = adapter as WordDefinitionsAdapter
-
-                        if (newText.isNullOrEmpty()) {
-                            wordDefinitionsList?.scrollToPosition(SCROLL_START_POSITION)
-                            onDefinitionsChanged(initialDefinitions, wordDefinitionsAdapter)
-                        } else {
-                            val filteredDefinitions = initialDefinitions.filter { definition ->
-                                definition.writing.startsWith(newText, ignoreCase = true)
-                            }
-                            onDefinitionsChanged(filteredDefinitions, wordDefinitionsAdapter)
-                        }
+                    searchQuery = newText.orEmpty()
+                    if (newText.orEmpty().isEmpty()) {
+                        wordDefinitionsList?.scrollToPosition(SCROLL_START_POSITION)
                     }
+                    viewModel?.filter(newText.orEmpty())
                     return true
                 }
             }
@@ -252,18 +252,21 @@ class DictionaryDetailsFragment :
     }
 
     companion object {
+        private const val SEARCH_QUERY_KEY = "search_query_key"
         private const val DISPLAY_PARTS_NUMBER = 4
         private const val SCROLL_START_POSITION = 0
         private const val NOT_EXIST_DICT_ID = 0L
         private const val SCROLL_POS_KEY = "position"
         const val RESULT_DATA_KEY = "result_data_key"
         const val DICT_ID_KEY = "dictionary_id"
+        const val DICT_LABEL_KEY = "dictionary_label"
 
         @JvmStatic
-        fun newInstance(dictionaryId: Long) =
+        fun newInstance(dictionaryId: Long, label: String) =
             DictionaryDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putLong(DICT_ID_KEY, dictionaryId)
+                    putString(DICT_LABEL_KEY, label)
                 }
             }
     }

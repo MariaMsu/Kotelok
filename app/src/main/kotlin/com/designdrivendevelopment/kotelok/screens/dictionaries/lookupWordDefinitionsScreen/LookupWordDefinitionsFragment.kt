@@ -260,7 +260,6 @@ class LookupWordDefinitionsFragment :
         return ViewModelProvider(fragment, factory)[LookupViewModel::class.java].apply {
             foundDefinitions.observe(fragment) { newItems ->
                 onItemsListChanged(newItems, adapter)
-                resultList?.scrollToPosition(SCROLL_START_POSITION)
             }
             dataLoadingEvents.observe(fragment) { loadingEvent ->
                 if (!loadingEvent.isHandled) {
@@ -270,6 +269,7 @@ class LookupWordDefinitionsFragment :
                         }
 
                         is UiEvent.Loading.HideLoading -> {
+                            resultList?.scrollToPosition(SCROLL_START_POSITION)
                             hideLoading()
                         }
                     }

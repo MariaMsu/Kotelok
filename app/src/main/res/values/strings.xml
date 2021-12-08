@@ -38,4 +38,19 @@
     <string name="header_text_main_fields">Основное:</string>
     <string name="header_text_additional_fields">Дополнительно:</string>
     <string name="error_field_required">Это обязательное поле</string>
+    <string name="learn_button_text">Изучать</string>
+    <string name="add_dictionary_fab_desc">Добавить словарь</string>
+    <string name="size_2_4">%1$d слова</string>
+    <string name="size_1">%1$d слово</string>
+    <string name="size_5_10">%1$d слов</string>
+    <string name="title_dictionaries">Словари</string>
+    <string name="cards_trainer_icon">Иконка тренажерас с карточками</string>
+    <string name="text_cards_trainer">Карточки</string>
+    <string name="text_choose_trainer">Выберите тренажер</string>
+    <string name="icon_choose_trainer_desc">Иконка выбора тренажера</string>
+    <string name="text_writing_trainer">Написание</string>
+    <string name="icon_writing_trainer_desc">Иконка тренажера на проверку написания</string>
+    <string name="hint_dictionary_label">Название словаря</string>
+    <string name="title_add_new_dictionary">Новый словарь</string>
+    <string name="error_dict_label_field">Вы должны ввести название словаря</string>
 </resources>

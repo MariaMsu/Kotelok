@@ -1,49 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimaryBackground" >
-
-    <ProgressBar
-        android:id="@+id/loading_circle"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/circle_loading_background"
-        android:padding="4dp"
-        android:layout_margin="12dp"
-        android:translationY="-52dp"
-        android:indeterminateTint="?attr/colorPrimary"
-        android:visibility="gone"
-        android:elevation="12dp"
-        tools:visibility="visible"
-        />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_new_definition_fab"
-        android:layout_gravity="bottom|end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:contentDescription="@string/add_custom_definition_button"
-        app:tint="?attr/colorPrimaryBackground"
-        app:srcCompat="@drawable/ic_add" />
+    android:background="?attr/colorPrimaryBackground"
+    tools:context=".screens.dictionaries.addDictionaryScreen.AddDictionaryFragment" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="?attr/colorOnPrimary"
-        tools:context=".screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
-            android:paddingBottom="6dp"
+            android:paddingBottom="2dp"
             android:background="@drawable/background_with_underline"
             android:elevation="4dp"
             android:orientation="vertical">
@@ -59,11 +33,12 @@
                 />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/enter_writing_text"
+                android:id="@+id/enter_dictionary_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:hint="@string/enter_writing_hint"
+                android:layout_marginBottom="6dp"
+                android:hint="@string/hint_dictionary_label"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true">
@@ -73,19 +48,21 @@
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/lookup_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lookup_word_button_text"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lookup_word_results_list"
+            android:id="@+id/added_dictionaries_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:visibility="visible" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/save_dictionary_fab"
+        android:layout_gravity="bottom|end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/add_dictionary_fab_desc"
+        app:tint="?attr/colorPrimaryBackground"
+        app:srcCompat="@drawable/ic_accept" />
+</FrameLayout>

@@ -110,8 +110,6 @@ class LookupViewModel(
 
                 currentItems = createItemsList(localDefinitions, remoteDefinitions)
                 _foundDefinitions.postValue(currentItems)
-//                delay(HIDE_LOADING_DELAY)
-//                _dataLoadingEvents.postValue(UiEvent.Loading.HideLoading())
             }
         }
     }
@@ -222,11 +220,25 @@ class LookupViewModel(
         val items = mutableListOf<ItemWithType>()
         if (remoteDefinitions.isNotEmpty()) {
             items.add(CategoryHeaderItem(header = "Загруженные определения"))
-            items.addAll(remoteDefinitions.map { WordDefinitionItem(it) })
+            items.addAll(
+                remoteDefinitions.map { definition ->
+                    WordDefinitionItem(
+                        definition,
+                        isSelected = selectedDefinitions.contains(definition)
+                    )
+                }
+            )
         }
         if (localDefinitions.isNotEmpty()) {
             items.add(CategoryHeaderItem(header = "Сохраненные определения"))
-            items.addAll(localDefinitions.map { WordDefinitionItem(it) })
+            items.addAll(
+                localDefinitions.map { definition ->
+                    WordDefinitionItem(
+                        definition,
+                        isSelected = selectedDefinitions.contains(definition)
+                    )
+                }
+            )
         }
         return items.toList()
     }

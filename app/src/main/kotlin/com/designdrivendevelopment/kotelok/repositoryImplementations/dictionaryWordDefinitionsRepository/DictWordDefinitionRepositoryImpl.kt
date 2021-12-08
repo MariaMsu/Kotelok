@@ -5,6 +5,8 @@ import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toWordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryWordDefinitionsRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class DictWordDefinitionRepositoryImpl(
@@ -15,6 +17,14 @@ class DictWordDefinitionRepositoryImpl(
     ): List<WordDefinition> = withContext(Dispatchers.IO) {
         wordDefinitionsDao.getDefinitionsByDictId(dictionaryId)
             .map { queryResult -> queryResult.toWordDefinition() }
+    }
+
+    override fun getDefinitionsFlowByDictId(dictionaryId: Long): Flow<List<WordDefinition>> {
+        return wordDefinitionsDao.getDefinitionsFlowByDictId(dictionaryId)
+            .map { definitionQueryResults ->
+                definitionQueryResults
+                    .map { queryResult -> queryResult.toWordDefinition() }
+            }
     }
 
     override suspend fun getAllDefinitions(): List<WordDefinition> = withContext(Dispatchers.IO) {

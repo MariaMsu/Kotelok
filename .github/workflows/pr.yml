@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🐕 Install reviewdog
-        run: sudo su -c 'wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ v0.10.2'
+        run: sudo su -c 'wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ v0.13.0'
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         name: ♻ Cache

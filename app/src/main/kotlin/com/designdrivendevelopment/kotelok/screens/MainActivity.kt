@@ -1,13 +1,17 @@
 package com.designdrivendevelopment.kotelok.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
+import com.designdrivendevelopment.kotelok.screens.dictionaries.addDictionaryScreen.AddDictionaryFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
+import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.DictionariesFragment
+import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.TrainersBottomSheet
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
@@ -18,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val bottomNavigator: BottomNavigator by lazy {
         (application as KotelokApplication).appComponent.bottomNavigator
     }
+    private var trainedDictionaryId: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         initViews()
         bottomNavigator.subscribe(supportFragmentManager)
         setupDictionariesFragmentResultListeners()
+        setupDefinitionsResultListeners()
+        setupTrainersDialogResultListeners()
 
         if (savedInstanceState == null) {
             val item = bottomNavigationView?.menu?.findItem(R.id.dictionary_tab)
@@ -50,13 +57,51 @@ class MainActivity : AppCompatActivity() {
                 FragmentResult.DictionariesTab.OPEN_DICTIONARY_KEY,
                 this@MainActivity
             ) { _, bundle ->
+                val dictionaryId = bundle.getLong(DictionariesFragment.DICT_ID_KEY)
+                val dictionaryLabel = bundle.getString(
+                    DictionariesFragment.DICT_LABEL_KEY,
+                    getString(R.string.app_name)
+                )
+                replaceFragment(
+                    fragment = DictionaryDetailsFragment.newInstance(dictionaryId, dictionaryLabel),
+                    tag = "dictionary_details_fragment"
+                )
             }
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_ADD_DICTIONARY_KEY,
+                this@MainActivity
+            ) { _, _ ->
+                replaceFragment(AddDictionaryFragment.newInstance(), "add_dictionary_fragment")
+            }
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_NEW_DICTIONARY_KEY,
+                this@MainActivity
+            ) { _, bundle ->
+                val dictionaryId = bundle.getLong(AddDictionaryFragment.DICT_ID_KEY)
+                val label = bundle.getString(
+                    AddDictionaryFragment.DICT_LABEL_KEY,
+                    getString(R.string.app_name)
+                )
+                supportFragmentManager.commit {
+                    replace(
+                        R.id.fragment_container,
+                        DictionaryDetailsFragment.newInstance(dictionaryId, label),
+                        "new_dictionary_fragment"
+                    )
+                    setReorderingAllowed(true)
+                }
+            }
+        }
+    }
+
+    private fun setupDefinitionsResultListeners() {
+        supportFragmentManager.apply {
             setFragmentResultListener(
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
                 this@MainActivity
             ) { _, bundle ->
                 val dictionaryId = bundle.getLong(DictionaryDetailsFragment.RESULT_DATA_KEY)
-                addFragment(
+                replaceFragment(
                     fragment = LookupWordDefinitionsFragment.newInstance(dictionaryId),
                     tag = "Lookup_word_def_fragment",
                     transactionName = "open_lookup_word_def_fragment"
@@ -73,6 +118,33 @@ class MainActivity : AppCompatActivity() {
                     tag = "def_details_fragment",
                     transactionName = "open_def_details_fragment"
                 )
+            }
+        }
+    }
+
+    private fun setupTrainersDialogResultListeners() {
+        supportFragmentManager.apply {
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_TRAINERS_DIALOG_KEY,
+                this@MainActivity
+            ) { _, bundle ->
+                trainedDictionaryId = bundle.getLong(DictionariesFragment.DICT_ID_KEY)
+                val trainersBottomSheet = TrainersBottomSheet()
+                trainersBottomSheet.show(supportFragmentManager, "trainers_bottom_sheet_tag")
+            }
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_CARDS_TRAINER_KEY,
+                this@MainActivity
+            ) { _, _ ->
+//                открыть тренажер с карточками
+                Log.d("SHEET", "open cards")
+            }
+            setFragmentResultListener(
+                FragmentResult.DictionariesTab.OPEN_WRITER_TRAINER_KEY,
+                this@MainActivity
+            ) { _, _ ->
+//                открыть тренажер с написанием
+                Log.d("SHEET", "open writer")
             }
         }
     }
