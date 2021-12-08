@@ -24,7 +24,7 @@ class TrainFlashcardsViewModel(
     init {
         dictId = dictionaryId
         viewModelScope.launch(Dispatchers.IO) {
-            //в onlyNotLearned ошибка, он работает наоборот
+            // в onlyNotLearned ошибка, он работает наоборот
             trainerCards.loadDictionary(dictionaryId, onlyNotLearned = false)
             val learnableDefinition = trainerCards.getNext()
             _currentWord.postValue(learnableDefinition)

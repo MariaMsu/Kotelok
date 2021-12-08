@@ -30,6 +30,15 @@ class TrainWriteViewModel(
         }
     }
 
+    fun restartDict() {
+        _viewState.postValue(TrainWriteFragment.State.NOT_GUESSED)
+        viewModelScope.launch(Dispatchers.IO) {
+            trainerWriter.loadDictionary(dictId, onlyNotLearned = true)
+            val learnableDefinition = trainerWriter.getNext()
+            _currentWord.postValue(learnableDefinition)
+        }
+    }
+
     fun onPressNext() {
         _viewState.value = TrainWriteFragment.State.NOT_GUESSED
         if (!trainerWriter.isDone) {
@@ -39,7 +48,7 @@ class TrainWriteViewModel(
 
     fun onGuess(guess: String) {
         val res = trainerWriter.checkUserInput(guess)
-        _viewState.value = if (res) TrainWriteFragment.State.GUESSED_CORRECT else TrainWriteFragment.State.GUESSED_INCORRECT
+        _viewState.value = if (res) TrainWriteFragment.State.GUESSED_CORRECT
+        else TrainWriteFragment.State.GUESSED_INCORRECT
     }
-
 }
