@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity
             ) { _, bundle ->
                 val dictionaryId = bundle.getLong(DictionaryDetailsFragment.RESULT_DATA_KEY)
-                addFragment(
+                replaceFragment(
                     fragment = LookupWordDefinitionsFragment.newInstance(dictionaryId),
                     tag = "Lookup_word_def_fragment",
                     transactionName = "open_lookup_word_def_fragment"
