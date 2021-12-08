@@ -38,7 +38,6 @@ class StatisticFragment : Fragment(){
 
 
         wordDefinitionsList = view.findViewById(R.id.statisticRecycler)
-//        wordDefinitionsList?.adapter = StatisticAdapter(arrayOf("str1", "str2", "str3"))
         wordDefinitionsList?.layoutManager = LinearLayoutManager(
             context, LinearLayoutManager.VERTICAL, false)
         viewModel.totalStat.observe(
@@ -52,7 +51,7 @@ class StatisticFragment : Fragment(){
                     )
 
                 wordDefinitionsList?.adapter = StatisticAdapter(
-                    viewModel.totalStat.value?.dictionaryStats?.map{it.label}!!)
+                    viewModel.totalStat.value?.dictionaryStats!!)
 
             }
         )
