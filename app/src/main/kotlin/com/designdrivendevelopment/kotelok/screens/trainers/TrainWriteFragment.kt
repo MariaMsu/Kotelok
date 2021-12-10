@@ -1,5 +1,7 @@
 package com.designdrivendevelopment.kotelok.screens.trainers
 
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +26,15 @@ class TrainWriteFragment : Fragment() {
     private var correctWord: TextView? = null
     private var nextWordButton: Button? = null
     private var repeatDict: Button? = null
+    private var wordExample: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_write, container, false)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,6 +49,7 @@ class TrainWriteFragment : Fragment() {
         nextWordButton?.setOnClickListener(listener)
         repeatDict = view.findViewById(R.id.repeatDict)
         repeatDict?.setOnClickListener(listener)
+        wordExample = view.findViewById(R.id.word_example)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainWriteViewModelFactory(
@@ -54,6 +63,11 @@ class TrainWriteFragment : Fragment() {
             viewLifecycleOwner,
             {
                 flashcard?.text = viewModel.currentWord.value?.mainTranslation
+                if (viewModel.currentWord.value?.examples?.isEmpty() == false) {
+                    wordExample?.text = viewModel.currentWord.value?.examples?.get(0)?.translatedText.toString()
+                } else {
+                    wordExample?.text = ""
+                }
             }
         )
 
@@ -79,6 +93,7 @@ class TrainWriteFragment : Fragment() {
             }
         }
     }
+
 
     private val listener = View.OnClickListener { view ->
         when (view.id) {
