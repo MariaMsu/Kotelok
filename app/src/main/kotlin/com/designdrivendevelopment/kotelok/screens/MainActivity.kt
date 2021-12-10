@@ -12,6 +12,7 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetail
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.statistics.StatisticFragment
+import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsFragment
 import com.designdrivendevelopment.kotelok.screens.trainers.TrainWriteFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
             item?.isChecked = true
             bottomNavigator.setDefaultTab(bottomNavigator.getTabByName(DICTIONARIES_TAB))
         }
-        addFragment(TrainWriteFragment.newInstance(1))
+        addFragment(TrainFlashcardsFragment.newInstance(1))
     }
 
     override fun onDestroy() {

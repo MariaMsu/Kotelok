@@ -23,6 +23,7 @@ class TrainFlashcardsFragment : Fragment() {
     private var flashcardButton: TextView? = null
     private var textCompleted: TextView? = null
     private var repeatDict: Button? = null
+    private var wordExample: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_flashcards, container, false)
@@ -44,6 +45,7 @@ class TrainFlashcardsFragment : Fragment() {
         noButton?.setOnClickListener(listener)
         repeatDict = view.findViewById(R.id.repeatDict)
         repeatDict?.setOnClickListener(listener)
+        wordExample = view.findViewById(R.id.word_example)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainFlashcardsViewModelFactory(
@@ -109,6 +111,16 @@ class TrainFlashcardsFragment : Fragment() {
             State.GUESSED_TRANSLATION -> viewModel.currentWord.value?.mainTranslation
             State.GUESSED_WORD -> viewModel.currentWord.value?.writing
             else -> "Error"
+        }
+        if (viewModel.currentWord.value?.examples?.isEmpty() == false) {
+            wordExample?.text = when (viewModel.viewState.value) {
+                State.NOT_GUESSED -> viewModel.currentWord.value?.examples?.get(0)?.originalText
+                State.GUESSED_TRANSLATION -> viewModel.currentWord.value?.examples?.get(0)?.translatedText
+                State.GUESSED_WORD -> viewModel.currentWord.value?.examples?.get(0)?.originalText
+                else -> "Error"
+            }
+        } else {
+            wordExample?.text = ""
         }
     }
 

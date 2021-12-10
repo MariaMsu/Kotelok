@@ -64,7 +64,7 @@ class TrainWriteFragment : Fragment() {
             {
                 flashcard?.text = viewModel.currentWord.value?.mainTranslation
                 if (viewModel.currentWord.value?.examples?.isEmpty() == false) {
-                    wordExample?.text = viewModel.currentWord.value?.examples?.get(0)?.translatedText.toString()
+                    wordExample?.text = viewModel.currentWord.value?.examples?.get(0)?.translatedText
                 } else {
                     wordExample?.text = ""
                 }
