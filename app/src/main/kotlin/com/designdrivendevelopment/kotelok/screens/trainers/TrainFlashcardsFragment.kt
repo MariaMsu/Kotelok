@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -19,7 +20,7 @@ class TrainFlashcardsFragment : Fragment() {
     private var noButton: ImageButton? = null
     private var flashcardButton: TextView? = null
     private var textCompleted: TextView? = null
-    private var repeatDict: ImageButton? = null
+    private var repeatDict: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_flashcards, container, false)

@@ -23,7 +23,7 @@ class TrainWriteFragment : Fragment() {
     private var flashcard: TextView? = null
     private var correctWord: TextView? = null
     private var nextWordButton: Button? = null
-    private var repeatDict: ImageButton? = null
+    private var repeatDict: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_write, container, false)

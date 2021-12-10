@@ -64,16 +64,15 @@
         app:layout_constraintEnd_toEndOf="@+id/flashcardButton"
         app:layout_constraintHorizontal_bias="0.5" />
 
-    <ImageButton
-        android:background="@drawable/repeat_dict_icon"
+    <Button
+        android:text="@string/repeat_train"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/repeatDict"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="invisible"
-        android:clickable="false" />
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="28dp"
+        android:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
