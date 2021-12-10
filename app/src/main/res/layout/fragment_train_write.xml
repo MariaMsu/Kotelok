@@ -26,19 +26,20 @@
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/input_word"
-        android:layout_width="346dp"
+        android:layout_width="0dp"
+        android:layout_marginHorizontal="34dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/flashcard"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/flashcard">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flashcard"
+        app:layout_constraintEnd_toEndOf="parent">
 
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="53dp"
+            android:layout_height="wrap_content"
             android:hint="@string/enter_word"
             android:maxLines="1"
-            android:inputType="text"/>
+            android:inputType="text" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -57,7 +58,7 @@
     <TextView
         android:text="@string/default_word"
         android:layout_width="0dp"
-        android:layout_height="85dp"
+        android:layout_height="wrap_content"
         android:id="@+id/correct_word"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_word"
@@ -73,7 +74,7 @@
     <TextView
         android:text="@string/dict_completed"
         android:layout_width="0dp"
-        android:layout_height="53dp"
+        android:layout_height="wrap_content"
         android:id="@+id/text_completed"
         android:textColor="@color/dark_purple_main"
         android:textStyle="bold"
