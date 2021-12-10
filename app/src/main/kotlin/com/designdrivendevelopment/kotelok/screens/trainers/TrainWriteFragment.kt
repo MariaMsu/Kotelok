@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -24,6 +23,7 @@ class TrainWriteFragment : Fragment() {
     private var correctWord: TextView? = null
     private var nextWordButton: Button? = null
     private var repeatDict: Button? = null
+    private var wordExample: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_write, container, false)
@@ -41,6 +41,7 @@ class TrainWriteFragment : Fragment() {
         nextWordButton?.setOnClickListener(listener)
         repeatDict = view.findViewById(R.id.repeatDict)
         repeatDict?.setOnClickListener(listener)
+        wordExample = view.findViewById(R.id.word_example)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainWriteViewModelFactory(
@@ -54,6 +55,11 @@ class TrainWriteFragment : Fragment() {
             viewLifecycleOwner,
             {
                 flashcard?.text = viewModel.currentWord.value?.mainTranslation
+                if (viewModel.currentWord.value?.examples?.isEmpty() == false) {
+                    wordExample?.text = viewModel.currentWord.value?.examples?.get(0)?.translatedText
+                } else {
+                    wordExample?.text = ""
+                }
             }
         )
 
@@ -79,6 +85,7 @@ class TrainWriteFragment : Fragment() {
             }
         }
     }
+
 
     private val listener = View.OnClickListener { view ->
         when (view.id) {

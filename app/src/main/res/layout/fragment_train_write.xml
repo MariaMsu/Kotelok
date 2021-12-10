@@ -108,5 +108,15 @@
         android:layout_marginBottom="28dp"
         android:visibility="invisible" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/word_example"
+        app:layout_constraintStart_toStartOf="@+id/flashcard"
+        app:layout_constraintEnd_toEndOf="@+id/flashcard"
+        app:layout_constraintTop_toTopOf="@+id/flashcard"
+        app:layout_constraintBottom_toBottomOf="@+id/flashcard"
+        app:layout_constraintVertical_bias="0.72" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
