@@ -63,6 +63,7 @@ class TrainFlashcardsFragment : Fragment() {
         ruWordExample = view.findViewById(R.id.word_example_ru)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
+        requireActivity().title = getString(R.string.cards_trainer_title)
         val factory = TrainFlashcardsViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)

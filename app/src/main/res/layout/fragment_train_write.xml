@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/default_word"
+            tools:text="@string/default_word"
             android:textSize="30sp"
             android:textStyle="bold" />
 

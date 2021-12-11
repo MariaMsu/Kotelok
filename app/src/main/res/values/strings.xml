@@ -66,4 +66,6 @@
         Изучаемые слова: %1$s\nЗавершенные тренировки: %2$s\nУспешно пройденные тренировки: %3$s</string>
     <string name="averageSkill"> Скилл: %1$s</string>
     <string name="repeat_train">Повторить тренировку</string>
+    <string name="cards_trainer_title">Карточки</string>
+    <string name="writer_trainer_title">Написание слов</string>
 </resources>
