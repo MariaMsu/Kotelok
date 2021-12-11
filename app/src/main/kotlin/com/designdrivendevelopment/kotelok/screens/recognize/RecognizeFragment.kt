@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -12,14 +13,17 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import com.designdrivendevelopment.kotelok.R
+import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.google.android.material.snackbar.Snackbar
 import com.google.common.util.concurrent.ListenableFuture
 
 class RecognizeFragment : Fragment() {
     private var previewView: PreviewView? = null
+    private var recognizeButton: Button? = null
     private val viewModel: RecognizeViewModel by viewModels()
     private var lastRecognizedText: String = ""
 
@@ -45,6 +49,7 @@ class RecognizeFragment : Fragment() {
         viewModel.recognizedText.observe(this) { text ->
             lastRecognizedText = text
         }
+        setupListeners()
     }
 
     override fun onDestroyView() {
@@ -101,12 +106,23 @@ class RecognizeFragment : Fragment() {
         return this
     }
 
+    private fun setupListeners() {
+        recognizeButton?.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, lastRecognizedText)
+            }
+            setFragmentResult(FragmentResult.RecognizeTab.OPEN_RECOGNIZED_TEXT_DIALOG, bundle)
+        }
+    }
+
     private fun initViews(view: View) {
         previewView = view.findViewById(R.id.preview_view)
+        recognizeButton = view.findViewById(R.id.recognize_button)
     }
 
     private fun clearViews() {
         previewView = null
+        recognizeButton = null
     }
 
     companion object {
