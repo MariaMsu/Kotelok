@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="start|top"
-        android:hint="@string/field_hint_example"
+        android:hint="@string/hint_recognized_text"
         android:enabled="true"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:errorEnabled="true"

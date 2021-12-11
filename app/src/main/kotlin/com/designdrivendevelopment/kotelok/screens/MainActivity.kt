@@ -18,6 +18,7 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScre
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.TrainersBottomSheet
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
+import com.designdrivendevelopment.kotelok.screens.recognize.RecognizedTextBottomSheet
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.statistics.StatisticFragment
 import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsFragment
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         setupDefinitionsResultListeners()
         setupTrainersDialogResultListeners()
         setupProfileResultListeners()
+        setupRecognizeResultListener()
 
         if (savedInstanceState == null) {
             val item = bottomNavigationView?.menu?.findItem(R.id.dictionary_tab)
@@ -178,6 +180,19 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity
             ) { _, _ ->
                 replaceFragment(StatisticFragment())
+            }
+        }
+    }
+
+    private fun setupRecognizeResultListener() {
+        supportFragmentManager.apply {
+            setFragmentResultListener(
+                FragmentResult.RecognizeTab.OPEN_RECOGNIZED_TEXT_DIALOG,
+                this@MainActivity
+            ) { _, bundle ->
+                val text = bundle.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, "")
+                val recognizedTextBottomSheet = RecognizedTextBottomSheet.newInstance(text)
+                recognizedTextBottomSheet.show(this, null)
             }
         }
     }
