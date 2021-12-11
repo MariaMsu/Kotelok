@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -18,9 +19,11 @@ class TrainFlashcardsFragment : Fragment() {
 
     private var yesButton: ImageButton? = null
     private var noButton: ImageButton? = null
-    private var flashcardButton: TextView? = null
+    private var flashcardButton: LinearLayout? = null
     private var textCompleted: TextView? = null
     private var repeatDict: Button? = null
+    private var wordText: TextView? = null
+    private var wordExample: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_flashcards, container, false)
@@ -37,6 +40,8 @@ class TrainFlashcardsFragment : Fragment() {
         noButton?.setOnClickListener(listener)
         repeatDict = view.findViewById(R.id.repeatDict)
         repeatDict?.setOnClickListener(listener)
+        wordText = view.findViewById(R.id.word_writing)
+        wordExample = view.findViewById(R.id.word_example)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainFlashcardsViewModelFactory(
@@ -97,11 +102,23 @@ class TrainFlashcardsFragment : Fragment() {
     }
 
     private fun updateFlashcard() {
-        flashcardButton?.text = when (viewModel.viewState.value) {
+        wordText?.text = when (viewModel.viewState.value) {
             State.NOT_GUESSED -> viewModel.currentWord.value?.writing
             State.GUESSED_TRANSLATION -> viewModel.currentWord.value?.mainTranslation
             State.GUESSED_WORD -> viewModel.currentWord.value?.writing
             else -> "Error"
+        }
+        if (viewModel.currentWord.value?.examples?.isNotEmpty() == true) {
+            wordExample?.text = when (viewModel.viewState.value) {
+                State.NOT_GUESSED -> viewModel.currentWord.value?.examples?.get(0)?.originalText
+                State.GUESSED_TRANSLATION -> viewModel.currentWord.value?.examples?.get(0)?.translatedText
+                State.GUESSED_WORD -> viewModel.currentWord.value?.examples?.get(0)?.originalText
+                else -> "Error"
+            }
+            wordExample?.isVisible = true
+        } else {
+            wordExample?.isVisible = false
+            wordExample?.text = ""
         }
     }
 

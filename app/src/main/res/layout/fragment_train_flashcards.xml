@@ -7,24 +7,41 @@
     android:background="@color/light_gray_background_main"
     tools:context=".screens.trainers.TrainFlashcardsFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/flashcardButton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/shape_flashcard_background"
-        android:elevation="12dp"
-        android:id="@+id/flashcardButton"
-        android:gravity="center"
-        android:text="@string/default_word"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:clickable="true"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="56dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintDimensionRatio = "5:3"
+        android:layout_marginTop="36dp"
         android:layout_marginHorizontal="24dp"
+        android:padding="12dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:elevation="12dp"
+        android:background="@drawable/shape_flashcard_background"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:focusable="true" />
+        app:layout_constraintDimensionRatio = "5:3">
+
+    <TextView
+            android:id="@+id/word_writing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/default_word"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/word_example"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
 
     <ImageButton
         android:layout_width="79dp"
@@ -75,15 +92,5 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="28dp"
         android:visibility="invisible" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/word_example"
-        app:layout_constraintStart_toStartOf="@+id/flashcardButton"
-        app:layout_constraintEnd_toEndOf="@+id/flashcardButton"
-        app:layout_constraintTop_toTopOf="@+id/flashcardButton"
-        app:layout_constraintBottom_toBottomOf="@+id/flashcardButton"
-        app:layout_constraintVertical_bias="0.72" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
