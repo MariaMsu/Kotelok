@@ -8,11 +8,15 @@ import org.junit.Test
 
 class TeTest {
     private val mockLDR = MockLDR()
+    private val mockCSR = MockCSR()
 
     @Test
     fun cardsTest() = runBlocking {
         val data = mockLDR.getAll()
-        val trainer = TrainerCards(learnableDefinitionsRepository = mockLDR)
+        val trainer = TrainerCards(
+            learnableDefinitionsRepository = mockLDR,
+            changeStatisticsRepository = mockCSR
+        )
         trainer.loadDictionary(dictionaryId = 69, onlyNotLearned = false)
         assertEquals(data.size, trainer.size)
         while (!trainer.isDone) {
