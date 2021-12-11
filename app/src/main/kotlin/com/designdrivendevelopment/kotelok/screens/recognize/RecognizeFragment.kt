@@ -1,16 +1,23 @@
 package com.designdrivendevelopment.kotelok.screens.recognize
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import com.designdrivendevelopment.kotelok.R
+import com.google.android.material.snackbar.Snackbar
+import com.google.common.util.concurrent.ListenableFuture
 
 class RecognizeFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var previewView: PreviewView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,6 +26,65 @@ class RecognizeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_recognize, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews(view)
+        val context = requireContext()
+
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context).configureCamera(
+            lifecycleOwner = this,
+            context = context,
+            previewView = previewView!!
+        )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        clearViews()
+    }
+
+    // Кто знает, что именно тут прилетит
+    @Suppress("TooGenericExceptionCaught")
+    private fun ListenableFuture<ProcessCameraProvider>.configureCamera(
+        lifecycleOwner: LifecycleOwner,
+        context: Context,
+        previewView: PreviewView,
+    ): ListenableFuture<ProcessCameraProvider> {
+        addListener(
+            {
+                val preview = Preview.Builder()
+                    .build()
+                    .apply {
+                        setSurfaceProvider(previewView.surfaceProvider)
+                    }
+
+                try {
+                    get().apply {
+                        unbindAll()
+                        bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview)
+                    }
+                } catch (e: Exception) {
+                    Snackbar.make(
+                        context,
+                        view!!,
+                        "Упс, произошла какая-то ошибка, попробуйте снова",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            },
+            ContextCompat.getMainExecutor(context)
+        )
+        return this
+    }
+
+    private fun initViews(view: View) {
+        previewView= view.findViewById(R.id.preview_view)
+    }
+
+    private fun clearViews() {
+        previewView = null
     }
 
     companion object {
