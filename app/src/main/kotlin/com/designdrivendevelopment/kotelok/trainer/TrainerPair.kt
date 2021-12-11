@@ -22,7 +22,7 @@ class TrainerPair(
         return Pair(words, currentWordSubList)
     }
 
-    public override fun checkUserInput(userInput: PairCheckInput): Boolean {
+    public override suspend fun checkUserInput(userInput: PairCheckInput): Boolean {
         // we don't really need to use a map instead of a list to search a word
         // because the list has a small length
         val learnableWorld = currentWordSubList.first { it.writing == userInput.writing }

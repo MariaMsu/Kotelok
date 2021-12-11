@@ -47,8 +47,10 @@ class TrainWriteViewModel(
     }
 
     fun onGuess(guess: String) {
-        val res = trainerWriter.checkUserInput(guess)
-        _viewState.value = if (res) TrainWriteFragment.State.GUESSED_CORRECT
-        else TrainWriteFragment.State.GUESSED_INCORRECT
+        viewModelScope.launch(Dispatchers.IO) {
+            val res = trainerWriter.checkUserInput(guess)
+            _viewState.value = if (res) TrainWriteFragment.State.GUESSED_CORRECT
+            else TrainWriteFragment.State.GUESSED_INCORRECT
+        }
     }
 }

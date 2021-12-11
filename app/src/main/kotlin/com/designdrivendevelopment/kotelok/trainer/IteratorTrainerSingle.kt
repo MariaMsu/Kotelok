@@ -15,7 +15,7 @@ abstract class IteratorTrainerSingle<CheckInputType>(
         return shuffledWords[this.currentIdx]
     }
 
-    public override fun checkUserInput(userInput: CheckInputType): Boolean {
+    public override suspend fun checkUserInput(userInput: CheckInputType): Boolean {
         val currWord = shuffledWords[this.currentIdx]
         val scoreEF = rateEF(currWord, userInput)
         return handleAnswer(currWord, scoreEF)

@@ -49,7 +49,9 @@ class TrainFlashcardsViewModel(
     }
 
     fun onGuessPressed(guess: Boolean) {
-        trainerCards.checkUserInput(guess)
+        viewModelScope.launch(Dispatchers.IO) {
+            trainerCards.checkUserInput(guess)
+        }
         _viewState.value = TrainFlashcardsFragment.State.NOT_GUESSED
         if (!trainerCards.isDone) {
             _currentWord.value = trainerCards.getNext()

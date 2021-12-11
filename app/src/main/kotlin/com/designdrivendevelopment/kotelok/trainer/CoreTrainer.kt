@@ -38,9 +38,16 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
         size = shuffledWords.size
     }
 
-    fun handleAnswer(word: LearnableDefinition, scoreEF: Int): Boolean {
+    suspend fun handleAnswer(word: LearnableDefinition, scoreEF: Int): Boolean {
         word.changeEFBasedOnNewGrade(scoreEF, trainerWeight)
         val isRight = scoreEF >= LearnableDefinition.PASSING_GRADE
+        learnableDefinitionsRepository.updateLearnableDefinition(word)
+//        if (isRight) {
+//
+//        } else {
+//            repeatWordsSet.add(word)
+//        }
+
         if (!isRight) {
             repeatWordsSet.add(word)
         }
@@ -61,5 +68,5 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
 
     /* checks user userInput and calls the methods
     'handleTrueAnswer()' and 'handleFalseAnswer()' inside itself */
-    public abstract fun checkUserInput(userInput: CheckInputType): Boolean
+    public abstract suspend fun checkUserInput(userInput: CheckInputType): Boolean
 }
