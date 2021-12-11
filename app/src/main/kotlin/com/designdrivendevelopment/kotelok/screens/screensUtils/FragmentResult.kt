@@ -15,7 +15,10 @@ object FragmentResult {
         const val RESULT_SAVE_MODE_KEY = "result_save_mode_key"
     }
 
-    object RecognizeTab
+    object RecognizeTab {
+        const val OPEN_RECOGNIZED_TEXT_DIALOG = "fragment_open_recognized_text_dialog_key"
+        const val RESULT_TEXT_KEY = "result_text_key"
+    }
 
     object ProfileTab {
         const val OPEN_STATISTICS_KEY = "fragment_result_open_statistics_key"
