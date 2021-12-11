@@ -7,39 +7,58 @@
     android:background="@color/light_gray_background_main"
     tools:context=".screens.trainers.TrainWriteFragment">
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/shape_flashcard_background"
-        android:elevation="12dp"
+    <LinearLayout
         android:id="@+id/flashcard"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
         android:gravity="center"
-        android:text="@string/default_word"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="56dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintDimensionRatio = "5:3"
+        android:layout_marginTop="36dp"
         android:layout_marginHorizontal="24dp"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:padding="12dp"
+        android:elevation="12dp"
+        android:background="@drawable/shape_flashcard_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintDimensionRatio = "5:3" >
+
+        <TextView
+            android:id="@+id/word_writing_ru"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/default_word"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/word_example_ru"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="24sp"
+            tools:text="Нет слов"/>
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/input_word"
-        android:layout_width="346dp"
+        android:layout_width="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="8dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/flashcard"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/flashcard">
+        app:layout_constraintStart_toStartOf="@id/flashcard"
+        app:layout_constraintTop_toBottomOf="@+id/flashcard"
+        app:layout_constraintEnd_toEndOf="@id/flashcard">
 
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="53dp"
+            android:layout_height="wrap_content"
             android:hint="@string/enter_word"
             android:maxLines="1"
-            android:inputType="text"/>
+            android:inputType="text" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -96,17 +115,15 @@
         app:layout_constraintTop_toBottomOf="@+id/input_word"
         android:layout_marginTop="12dp" />
 
-    <ImageButton
-        android:background="@drawable/repeat_dict_icon"
+    <Button
+        android:text="@string/repeat_train"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/repeatDict"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="invisible"
-        android:clickable="false" />
-
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="28dp"
+        android:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,10 +20,12 @@ class TrainWriteFragment : Fragment() {
     private var inputText: TextInputLayout? = null
     private var checkButton: Button? = null
     private var textCompleted: TextView? = null
-    private var flashcard: TextView? = null
+    private var flashcard: LinearLayout? = null
     private var correctWord: TextView? = null
     private var nextWordButton: Button? = null
-    private var repeatDict: ImageButton? = null
+    private var repeatDict: Button? = null
+    private var wordWriting: TextView? = null
+    private var wordExample: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_train_write, container, false)
@@ -41,6 +43,8 @@ class TrainWriteFragment : Fragment() {
         nextWordButton?.setOnClickListener(listener)
         repeatDict = view.findViewById(R.id.repeatDict)
         repeatDict?.setOnClickListener(listener)
+        wordExample = view.findViewById(R.id.word_example_ru)
+        wordWriting = view.findViewById(R.id.word_writing_ru)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainWriteViewModelFactory(
@@ -53,7 +57,14 @@ class TrainWriteFragment : Fragment() {
         viewModel.currentWord.observe(
             viewLifecycleOwner,
             {
-                flashcard?.text = viewModel.currentWord.value?.mainTranslation
+                wordWriting?.text = viewModel.currentWord.value?.mainTranslation
+                if (viewModel.currentWord.value?.examples?.isNotEmpty() == true) {
+                    wordExample?.text = viewModel.currentWord.value?.examples?.get(0)?.translatedText
+                    wordExample?.isVisible = true
+                } else {
+                    wordExample?.text = ""
+                    wordExample?.isVisible = false
+                }
             }
         )
 
