@@ -1,7 +1,12 @@
 package com.designdrivendevelopment.kotelok.screens
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
@@ -53,6 +58,21 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         bottomNavigator.onBackPressed()
         super.onBackPressed()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_CODE) {
+            if (allPermissionsGranted(this)) {
+                bottomNavigator.selectTab(bottomNavigator.getTabByName(RECOGNIZE_TAB))
+                val item = bottomNavigationView?.menu?.findItem(R.id.recognition_tab)
+                item?.isChecked = true
+            }
+        }
     }
 
     private fun setupDictionariesFragmentResultListeners() {
@@ -171,8 +191,17 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.recognition_tab -> {
-                    bottomNavigator.selectTab(bottomNavigator.getTabByName(RECOGNIZE_TAB))
-                    true
+                    if (allPermissionsGranted(this)) {
+                        bottomNavigator.selectTab(bottomNavigator.getTabByName(RECOGNIZE_TAB))
+                        true
+                    } else {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            REQUIRED_PERMISSIONS,
+                            PERMISSIONS_CODE
+                        )
+                        false
+                    }
                 }
                 R.id.profile_tab -> {
                     bottomNavigator.selectTab(bottomNavigator.getTabByName(PROFILE_TAB))
@@ -211,9 +240,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun allPermissionsGranted(context: Context): Boolean {
+        return REQUIRED_PERMISSIONS.all { permission ->
+            ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
     companion object {
         private const val DICTIONARIES_TAB = "DICTIONARIES"
         private const val RECOGNIZE_TAB = "RECOGNIZE"
         private const val PROFILE_TAB = "PROFILE"
+        private const val PERMISSIONS_CODE = 42
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }
