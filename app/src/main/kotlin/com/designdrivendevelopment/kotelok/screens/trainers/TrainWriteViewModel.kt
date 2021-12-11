@@ -6,18 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.CardsLearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.trainer.ChangeStatisticsRepository
 import com.designdrivendevelopment.kotelok.trainer.TrainerWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TrainWriteViewModel(
     dictionaryId: Long,
-    cardsLearnDefRepository: CardsLearnableDefinitionsRepository
+    cardsLearnDefRepository: CardsLearnableDefinitionsRepository,
+    changeStatisticsRepository: ChangeStatisticsRepository,
 ) : ViewModel() {
     private var dictId: Long = 0
     private val _viewState = MutableLiveData(TrainWriteFragment.State.NOT_GUESSED)
     val viewState: LiveData<TrainWriteFragment.State> = _viewState
-    val trainerWriter: TrainerWriter = TrainerWriter(cardsLearnDefRepository)
+    val trainerWriter: TrainerWriter = TrainerWriter(cardsLearnDefRepository, changeStatisticsRepository)
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
     val currentWord: LiveData<LearnableDefinition> = _currentWord
 
@@ -48,9 +50,10 @@ class TrainWriteViewModel(
 
     fun onGuess(guess: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val res = trainerWriter.checkUserInput(guess)
-            _viewState.value = if (res) TrainWriteFragment.State.GUESSED_CORRECT
-            else TrainWriteFragment.State.GUESSED_INCORRECT
+            val res: Boolean = trainerWriter.checkUserInput(guess)
+            _viewState.postValue(
+                if (res) TrainWriteFragment.State.GUESSED_CORRECT
+                else TrainWriteFragment.State.GUESSED_INCORRECT)
         }
     }
 }

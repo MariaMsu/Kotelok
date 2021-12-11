@@ -6,16 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.CardsLearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.trainer.ChangeStatisticsRepository
 import com.designdrivendevelopment.kotelok.trainer.TrainerCards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TrainFlashcardsViewModel(
     dictionaryId: Long,
-    cardsLearnDefRepository: CardsLearnableDefinitionsRepository
+    cardsLearnDefRepository: CardsLearnableDefinitionsRepository,
+    changeStatisticsRepository: ChangeStatisticsRepository,
 ) : ViewModel() {
     private val _viewState = MutableLiveData(TrainFlashcardsFragment.State.NOT_GUESSED)
-    val trainerCards: TrainerCards = TrainerCards(cardsLearnDefRepository)
+    val trainerCards: TrainerCards = TrainerCards(cardsLearnDefRepository, changeStatisticsRepository)
     val viewState: LiveData<TrainFlashcardsFragment.State> = _viewState
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
     val currentWord: LiveData<LearnableDefinition> = _currentWord

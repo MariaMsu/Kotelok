@@ -50,7 +50,9 @@ class TrainWriteFragment : Fragment() {
         val factory = TrainWriteViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)
-                .appComponent.cardsLearnDefRepository
+                .appComponent.cardsLearnDefRepository,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.changeStatisticsRepositoryImpl
         )
         viewModel = ViewModelProvider(this, factory).get(TrainWriteViewModel::class.java)
 

@@ -5,10 +5,12 @@ import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitions
 
 abstract class IteratorTrainerSingle<CheckInputType>(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
+    changeStatisticsRepository: ChangeStatisticsRepository,
     trainerWeight: Float,
 ) :
     CoreTrainer<LearnableDefinition, CheckInputType>(
         learnableDefinitionsRepository,
+        changeStatisticsRepository,
         trainerWeight
     ) {
     public override fun getNext(): LearnableDefinition {

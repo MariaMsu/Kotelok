@@ -67,7 +67,9 @@ class TrainFlashcardsFragment : Fragment() {
         val factory = TrainFlashcardsViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)
-                .appComponent.cardsLearnDefRepository
+                .appComponent.cardsLearnDefRepository,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.changeStatisticsRepositoryImpl
         )
         viewModel = ViewModelProvider(this, factory).get(TrainFlashcardsViewModel::class.java)
         viewModel.viewState.observe(

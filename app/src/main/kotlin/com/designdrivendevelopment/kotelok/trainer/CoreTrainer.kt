@@ -6,6 +6,7 @@ import java.util.Calendar
 
 abstract class CoreTrainer<NextOutType, CheckInputType>(
     private val learnableDefinitionsRepository: LearnableDefinitionsRepository,
+    private val changeStatisticsRepository: ChangeStatisticsRepository,
     private val trainerWeight: Float,
 ) {
     var currentIdx = 0
@@ -42,13 +43,10 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
         word.changeEFBasedOnNewGrade(scoreEF, trainerWeight)
         val isRight = scoreEF >= LearnableDefinition.PASSING_GRADE
         learnableDefinitionsRepository.updateLearnableDefinition(word)
-//        if (isRight) {
-//
-//        } else {
-//            repeatWordsSet.add(word)
-//        }
-
-        if (!isRight) {
+        if (isRight) {
+            changeStatisticsRepository.addSuccessfulResultToWordDef(word.definitionId)
+        } else {
+            changeStatisticsRepository.addFailedResultToWordDef(word.definitionId)
             repeatWordsSet.add(word)
         }
 

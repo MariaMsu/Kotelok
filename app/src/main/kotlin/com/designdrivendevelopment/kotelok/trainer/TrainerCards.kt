@@ -7,8 +7,10 @@ const val CARDS_WEIGHT = 0.01f
 
 class TrainerCards(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
+    changeStatisticsRepository: ChangeStatisticsRepository,
 ) :
-    IteratorTrainerSingle<Boolean>(learnableDefinitionsRepository, CARDS_WEIGHT) {
+    IteratorTrainerSingle<Boolean>(learnableDefinitionsRepository,
+        changeStatisticsRepository, CARDS_WEIGHT) {
 
     override fun rateEF(expectedWord: LearnableDefinition, userInput: Boolean): Int {
         return if (userInput) {

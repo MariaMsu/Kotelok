@@ -8,10 +8,11 @@ const val PAIR_WEIGHT = 0.1f
 
 class TrainerPair(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
+    changeStatisticsRepository: ChangeStatisticsRepository,
     private val setSize: Int = 5,
 ) :
     CoreTrainer<Pair<List<String>, List<LearnableDefinition>>,
-        PairCheckInput>(learnableDefinitionsRepository, PAIR_WEIGHT) {
+        PairCheckInput>(learnableDefinitionsRepository,  changeStatisticsRepository, PAIR_WEIGHT) {
 
     private var currentWordSubList = listOf<LearnableDefinition>()
 
