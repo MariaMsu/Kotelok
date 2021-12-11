@@ -69,4 +69,6 @@
     <string name="cards_trainer_title">Карточки</string>
     <string name="writer_trainer_title">Написание слов</string>
     <string name="recognize_button_text">Распознать</string>
+    <string name="text_edit_recognized_text_field_description">Перед тем, как продолжить, Вы можете отредактировать распозанный текст:</string>
+    <string name="button_continue_recognize_text">Продолжить</string>
 </resources>
