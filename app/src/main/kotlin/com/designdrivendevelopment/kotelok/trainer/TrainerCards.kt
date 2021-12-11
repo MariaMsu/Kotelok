@@ -9,8 +9,11 @@ class TrainerCards(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
     changeStatisticsRepository: ChangeStatisticsRepository,
 ) :
-    IteratorTrainerSingle<Boolean>(learnableDefinitionsRepository,
-        changeStatisticsRepository, CARDS_WEIGHT) {
+    IteratorTrainerSingle<Boolean>(
+        learnableDefinitionsRepository,
+        changeStatisticsRepository,
+        CARDS_WEIGHT
+    ) {
 
     override fun rateEF(expectedWord: LearnableDefinition, userInput: Boolean): Int {
         return if (userInput) {

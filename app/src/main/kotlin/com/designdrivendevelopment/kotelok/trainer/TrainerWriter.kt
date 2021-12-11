@@ -12,8 +12,11 @@ class TrainerWriter(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
     changeStatisticsRepository: ChangeStatisticsRepository,
 ) :
-    IteratorTrainerSingle<String>(learnableDefinitionsRepository,
-        changeStatisticsRepository, WRITE_WEIGHT) {
+    IteratorTrainerSingle<String>(
+        learnableDefinitionsRepository,
+        changeStatisticsRepository,
+        WRITE_WEIGHT
+    ) {
 
     /*
     expectedStr: cats

@@ -53,7 +53,8 @@ class TrainWriteViewModel(
             val res: Boolean = trainerWriter.checkUserInput(guess)
             _viewState.postValue(
                 if (res) TrainWriteFragment.State.GUESSED_CORRECT
-                else TrainWriteFragment.State.GUESSED_INCORRECT)
+                else TrainWriteFragment.State.GUESSED_INCORRECT
+            )
         }
     }
 }

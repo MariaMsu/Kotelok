@@ -12,7 +12,7 @@ class TrainerPair(
     private val setSize: Int = 5,
 ) :
     CoreTrainer<Pair<List<String>, List<LearnableDefinition>>,
-        PairCheckInput>(learnableDefinitionsRepository,  changeStatisticsRepository, PAIR_WEIGHT) {
+        PairCheckInput>(learnableDefinitionsRepository, changeStatisticsRepository, PAIR_WEIGHT) {
 
     private var currentWordSubList = listOf<LearnableDefinition>()
 
