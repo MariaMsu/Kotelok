@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".screens.recognize.RecognizedWordsFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/recognized_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="12dp"
+        android:gravity="start|top"
+        android:hint="@string/hint_recognized_text"
+        android:enabled="false"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:hintAnimationEnabled="false"
+        app:endIconMode="clear_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:gravity="start|top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="?attr/titleColor" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recognized_words_list"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        />
+</LinearLayout>
