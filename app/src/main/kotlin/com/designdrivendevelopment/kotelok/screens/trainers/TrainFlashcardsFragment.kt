@@ -19,7 +19,7 @@ class TrainFlashcardsFragment : Fragment() {
 
     private var yesButton: ImageButton? = null
     private var noButton: ImageButton? = null
-    private var flashcardButton: LinearLayout? = null
+    private var flashcardButtonOrig: LinearLayout? = null
     private var textCompleted: TextView? = null
     private var repeatDict: Button? = null
     private var wordText: TextView? = null
@@ -32,16 +32,18 @@ class TrainFlashcardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         textCompleted = view.findViewById(R.id.text_completed)
-        flashcardButton = view.findViewById(R.id.flashcardButton)
-        flashcardButton?.setOnClickListener(listener)
+        flashcardButtonOrig = view.findViewById(R.id.flashcardButton_orig)
+        flashcardButtonOrig?.setOnClickListener {
+            viewModel.onCardPressed(viewModel.viewState.value!!)
+        }
         yesButton = view.findViewById(R.id.yesButton)
         yesButton?.setOnClickListener(listener)
         noButton = view.findViewById(R.id.noButton)
         noButton?.setOnClickListener(listener)
         repeatDict = view.findViewById(R.id.repeatDict)
         repeatDict?.setOnClickListener(listener)
-        wordText = view.findViewById(R.id.word_writing)
-        wordExample = view.findViewById(R.id.word_example)
+        wordText = view.findViewById(R.id.word_writing_orig)
+        wordExample = view.findViewById(R.id.word_example_orig)
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         val factory = TrainFlashcardsViewModelFactory(
@@ -71,9 +73,9 @@ class TrainFlashcardsFragment : Fragment() {
 
     private val listener = View.OnClickListener { view ->
         when (view.id) {
-            R.id.flashcardButton -> {
-                viewModel.onCardPressed(viewModel.viewState.value!!)
-            }
+//            R.id.flashcardButton -> {
+//                viewModel.onCardPressed(viewModel.viewState.value!!)
+//            }
             R.id.yesButton -> {
                 pressGuessButton(true)
             }
@@ -96,7 +98,7 @@ class TrainFlashcardsFragment : Fragment() {
 
     private fun completedVisibility(isCompleted: Boolean) {
         textCompleted?.isVisible = isCompleted
-        flashcardButton?.isClickable = !isCompleted
+        flashcardButtonOrig?.isClickable = !isCompleted
         repeatDict?.isVisible = isCompleted
         repeatDict?.isClickable = isCompleted
     }
