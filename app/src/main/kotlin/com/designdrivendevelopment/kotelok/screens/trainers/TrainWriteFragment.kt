@@ -54,6 +54,7 @@ class TrainWriteFragment : Fragment() {
         )
         viewModel = ViewModelProvider(this, factory).get(TrainWriteViewModel::class.java)
 
+        requireActivity().title = getString(R.string.writer_trainer_title)
         viewModel.currentWord.observe(
             viewLifecycleOwner,
             {
