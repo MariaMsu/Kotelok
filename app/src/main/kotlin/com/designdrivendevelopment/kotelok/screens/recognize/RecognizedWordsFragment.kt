@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.StringsDiffCallback
 import com.google.android.flexbox.AlignItems
@@ -19,7 +21,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.google.android.material.textfield.TextInputLayout
 
-class RecognizedWordsFragment : Fragment() {
+class RecognizedWordsFragment : Fragment(), WordClickListener {
     private var recognizedText: TextInputLayout? = null
     private var recognizedWords: RecyclerView? = null
     private var applyChangesBtn: Button? = null
@@ -44,7 +46,7 @@ class RecognizedWordsFragment : Fragment() {
 
         recognizedText?.editText?.setText(text)
 
-        val adapter = WordsAdapter(context, emptyList())
+        val adapter = WordsAdapter(context, wordClickListener = this, emptyList())
         val layoutManager = FlexboxLayoutManager(context).apply {
             flexDirection = FlexDirection.ROW
             flexWrap = FlexWrap.WRAP
@@ -63,6 +65,13 @@ class RecognizedWordsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
+    }
+
+    override fun onWordClicked(word: Word) {
+        val bundle = Bundle().apply {
+            putString(LookupWordDefinitionsFragment.LOOKUP_WORD_KEY, word.writing)
+        }
+        setFragmentResult(FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY, bundle)
     }
 
     private fun setupListeners() {
