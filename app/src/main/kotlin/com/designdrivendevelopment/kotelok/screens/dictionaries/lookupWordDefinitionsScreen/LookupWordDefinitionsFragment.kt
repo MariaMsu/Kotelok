@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.DefinitionClickListener
 import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
@@ -89,7 +90,7 @@ class LookupWordDefinitionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
+        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: Dictionary.DEFAULT_DICT_ID
         val word = arguments?.getString(LOOKUP_WORD_KEY)
         dictId = dictionaryId
 
@@ -126,7 +127,7 @@ class LookupWordDefinitionsFragment :
         setupListeners(lookupViewModel)
 
 //        Запретить возможность выбора в случае, сели словарь не определен
-        if (dictionaryId != DEFAULT_DICT_ID) {
+        if (dictionaryId != Dictionary.DEFAULT_DICT_ID) {
             setupSelection(adapter, savedInstanceState)
         }
 
@@ -435,7 +436,6 @@ class LookupWordDefinitionsFragment :
         private const val SCROLL_START_POSITION = 0
         private const val SCROLL_POS_KEY = "position"
         private const val DISPLAY_PARTS_NUMBER = 4
-        const val DEFAULT_DICT_ID = 1L
         const val DICT_ID_KEY = "dictionary_id"
         const val LOOKUP_WORD_KEY = "word_id"
 
