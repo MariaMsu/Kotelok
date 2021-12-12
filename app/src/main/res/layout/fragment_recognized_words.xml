@@ -31,6 +31,7 @@
         android:hint="@string/hint_recognized_text"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:hintAnimationEnabled="false"
+        app:errorEnabled="true"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -62,6 +63,7 @@
         android:textColor="?attr/subheadingColor"
         android:background="@drawable/background_with_underline"
         android:text="@string/text_choose_recognized_word"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recognized_words_list"
