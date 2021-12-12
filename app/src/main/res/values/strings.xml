@@ -75,4 +75,5 @@
     <string name="button_apply_changes_text">Применить изменения</string>
     <string name="text_choose_recognized_word">Нажмите на слово, чтобы больше узнать о нем:</string>
     <string name="title_recognized_words">Распознанные слова</string>
+    <string name="title_recognize_text">Распознать текст</string>
 </resources>

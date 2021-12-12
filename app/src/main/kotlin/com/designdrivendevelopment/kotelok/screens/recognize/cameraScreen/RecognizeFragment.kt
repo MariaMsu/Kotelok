@@ -39,6 +39,7 @@ class RecognizeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
+        requireActivity().title = getString(R.string.title_recognize_text)
         val context = requireContext()
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context).configureCamera(
@@ -111,7 +112,7 @@ class RecognizeFragment : Fragment() {
             val bundle = Bundle().apply {
                 putString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, lastRecognizedText)
             }
-            setFragmentResult(FragmentResult.RecognizeTab.OPEN_RECOGNIZED_TEXT_DIALOG, bundle)
+            setFragmentResult(FragmentResult.RecognizeTab.OPEN_RECOGNIZED_WORDS_FRAGMENT_KEY, bundle)
         }
     }
 
