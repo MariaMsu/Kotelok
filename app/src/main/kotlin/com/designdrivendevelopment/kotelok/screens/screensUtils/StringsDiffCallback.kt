@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen
+package com.designdrivendevelopment.kotelok.screens.screensUtils
 
 import androidx.recyclerview.widget.DiffUtil
 
