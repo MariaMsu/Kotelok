@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.DictionariesRepository
@@ -30,10 +31,12 @@ class DefDetailsViewModel(
     private val _isDeleteTrButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isDeleteSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isDeleteExButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _dictionaries: MutableLiveData<List<Dictionary>> = MutableLiveData()
     private val _messageEvents = MutableLiveData<UiEvent.ShowMessage>()
 
     init {
         setInitialState()
+        loadDictionaries()
     }
 
     val displayedDefinition: LiveData<WordDefinition>
@@ -54,6 +57,8 @@ class DefDetailsViewModel(
         get() = _isDeleteExButtonVisible
     val messageEvents: LiveData<UiEvent.ShowMessage>
         get() = _messageEvents
+    val dictionaries: LiveData<List<Dictionary>>
+        get() = _dictionaries
 
     override fun onCleared() {
         sharedWordDefProvider.sharedWordDefinition = null
@@ -273,6 +278,12 @@ class DefDetailsViewModel(
         )
     }
 
+    private fun loadDictionaries() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val loadedDictionaries = dictionariesRepository.getAllDictionaries()
+            _dictionaries.postValue(loadedDictionaries)
+        }
+    }
     companion object {
         private const val INDEX_AT_INSERT = 0
         private const val SIZE_EMPTY = 0
