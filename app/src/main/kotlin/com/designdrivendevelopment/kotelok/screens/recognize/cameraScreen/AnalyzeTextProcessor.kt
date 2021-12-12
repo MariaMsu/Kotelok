@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.screens.recognize
+package com.designdrivendevelopment.kotelok.screens.recognize.cameraScreen
 
 import android.annotation.SuppressLint
 import androidx.camera.core.ImageAnalysis

@@ -1,4 +1,4 @@
-package com.designdrivendevelopment.kotelok.screens.recognize
+package com.designdrivendevelopment.kotelok.screens.recognize.cameraScreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

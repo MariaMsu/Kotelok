@@ -16,7 +16,7 @@ import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNaviga
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.Tab
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.DictionariesFragment
 import com.designdrivendevelopment.kotelok.screens.profile.ProfileFragment
-import com.designdrivendevelopment.kotelok.screens.recognize.RecognizeFragment
+import com.designdrivendevelopment.kotelok.screens.recognize.cameraScreen.RecognizeFragment
 import com.designdrivendevelopment.kotelok.screens.sharedWordDefProvider.SharedWordDefProviderImpl
 import com.designdrivendevelopment.kotelok.yandexDictApi.RetrofitModule
 import kotlinx.coroutines.CoroutineScope
