@@ -11,6 +11,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 
 class WordsAdapter(
     private val context: Context,
+    private val wordClickListener: WordClickListener,
     var words: List<Word>
 ) : RecyclerView.Adapter<WordsAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -33,6 +34,9 @@ class WordsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val word = words[position]
         holder.bind(word)
+        holder.wordButton.setOnClickListener {
+            wordClickListener.onWordClicked(word)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -42,4 +46,8 @@ class WordsAdapter(
     companion object {
         private const val FLEXBOX_PARAM_FLEX_GROW = 1f
     }
+}
+
+interface WordClickListener {
+    fun onWordClicked(word: Word)
 }

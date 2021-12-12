@@ -127,9 +127,13 @@ class MainActivity : AppCompatActivity() {
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
                 this@MainActivity
             ) { _, bundle ->
-                val dictionaryId = bundle.getLong(DictionaryDetailsFragment.RESULT_DATA_KEY)
+                val dictionaryId = bundle.getLong(
+                    DictionaryDetailsFragment.RESULT_DATA_KEY,
+                    LookupWordDefinitionsFragment.DEFAULT_DICT_ID
+                )
+                val word = bundle.getString(LookupWordDefinitionsFragment.LOOKUP_WORD_KEY, "")
                 replaceFragment(
-                    fragment = LookupWordDefinitionsFragment.newInstance(dictionaryId),
+                    fragment = LookupWordDefinitionsFragment.newInstance(dictionaryId, word),
                     tag = "Lookup_word_def_fragment",
                     transactionName = "open_lookup_word_def_fragment"
                 )

@@ -90,6 +90,7 @@ class LookupWordDefinitionsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
+        val word = arguments?.getString(LOOKUP_WORD_KEY)
         dictId = dictionaryId
 
         initViews(view)
@@ -161,7 +162,12 @@ class LookupWordDefinitionsFragment :
         )
 
         if (savedInstanceState == null) {
-            enterWritingTextField?.editText?.focusAndShowKeyboard()
+            if (word != null) {
+                enterWritingTextField?.editText?.setText(word)
+                lookupViewModel?.lookupByWriting(word)
+            } else {
+                enterWritingTextField?.editText?.focusAndShowKeyboard()
+            }
         }
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -424,11 +430,15 @@ class LookupWordDefinitionsFragment :
         private const val DISPLAY_PARTS_NUMBER = 4
         private const val DEFAULT_DICT_ID = 1L
         const val DICT_ID_KEY = "dictionary_id"
+        const val LOOKUP_WORD_KEY = "word_id"
 
         @JvmStatic
-        fun newInstance(dictionaryId: Long) = LookupWordDefinitionsFragment().apply {
+        fun newInstance(dictionaryId: Long, word: String = "") = LookupWordDefinitionsFragment().apply {
             arguments = Bundle().apply {
                 putLong(DICT_ID_KEY, dictionaryId)
+                if (word.isNotEmpty()) {
+                    putString(LOOKUP_WORD_KEY, word)
+                }
             }
         }
     }
