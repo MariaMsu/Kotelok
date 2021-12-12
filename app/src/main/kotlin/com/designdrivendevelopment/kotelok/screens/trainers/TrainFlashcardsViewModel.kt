@@ -6,28 +6,36 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.CardsLearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.trainer.ChangeStatisticsRepository
 import com.designdrivendevelopment.kotelok.trainer.TrainerCards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TrainFlashcardsViewModel(
     dictionaryId: Long,
-    cardsLearnDefRepository: CardsLearnableDefinitionsRepository
+    cardsLearnDefRepository: CardsLearnableDefinitionsRepository,
+    changeStatisticsRepository: ChangeStatisticsRepository,
 ) : ViewModel() {
     private val _viewState = MutableLiveData(TrainFlashcardsFragment.State.NOT_GUESSED)
-    val trainerCards: TrainerCards = TrainerCards(cardsLearnDefRepository)
-    val viewState: LiveData<TrainFlashcardsFragment.State> = _viewState
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
-    val currentWord: LiveData<LearnableDefinition> = _currentWord
+    private val _isTrainerDone: MutableLiveData<Boolean> = MutableLiveData()
     private var dictId: Long = 0
+    val trainerCards: TrainerCards = TrainerCards(cardsLearnDefRepository, changeStatisticsRepository)
+    val viewState: LiveData<TrainFlashcardsFragment.State> = _viewState
+    val currentWord: LiveData<LearnableDefinition> = _currentWord
+    val isTrainerDone: LiveData<Boolean>
+        get() = _isTrainerDone
 
     init {
         dictId = dictionaryId
         viewModelScope.launch(Dispatchers.IO) {
             // в onlyNotLearned ошибка, он работает наоборот
             trainerCards.loadDictionary(dictionaryId, onlyNotLearned = false)
-            val learnableDefinition = trainerCards.getNext()
-            _currentWord.postValue(learnableDefinition)
+            val isDone = trainerCards.isDone
+            _isTrainerDone.postValue(isDone)
+            if (!isDone) {
+                _currentWord.postValue(trainerCards.getNext())
+            }
         }
     }
 
@@ -49,10 +57,15 @@ class TrainFlashcardsViewModel(
     }
 
     fun onGuessPressed(guess: Boolean) {
-        trainerCards.checkUserInput(guess)
-        _viewState.value = TrainFlashcardsFragment.State.NOT_GUESSED
-        if (!trainerCards.isDone) {
-            _currentWord.value = trainerCards.getNext()
+        viewModelScope.launch(Dispatchers.IO) {
+            trainerCards.checkUserInput(guess)
+
+            _viewState.postValue(TrainFlashcardsFragment.State.NOT_GUESSED)
+            val isDone = trainerCards.isDone
+            _isTrainerDone.postValue(isDone)
+            if (!isDone) {
+                _currentWord.postValue(trainerCards.getNext())
+            }
         }
     }
 }

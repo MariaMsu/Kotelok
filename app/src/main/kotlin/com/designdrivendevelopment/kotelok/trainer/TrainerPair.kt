@@ -8,10 +8,11 @@ const val PAIR_WEIGHT = 0.1f
 
 class TrainerPair(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
+    changeStatisticsRepository: ChangeStatisticsRepository,
     private val setSize: Int = 5,
 ) :
     CoreTrainer<Pair<List<String>, List<LearnableDefinition>>,
-        PairCheckInput>(learnableDefinitionsRepository, PAIR_WEIGHT) {
+        PairCheckInput>(learnableDefinitionsRepository, changeStatisticsRepository, PAIR_WEIGHT) {
 
     private var currentWordSubList = listOf<LearnableDefinition>()
 
@@ -22,7 +23,7 @@ class TrainerPair(
         return Pair(words, currentWordSubList)
     }
 
-    public override fun checkUserInput(userInput: PairCheckInput): Boolean {
+    public override suspend fun checkUserInput(userInput: PairCheckInput): Boolean {
         // we don't really need to use a map instead of a list to search a word
         // because the list has a small length
         val learnableWorld = currentWordSubList.first { it.writing == userInput.writing }

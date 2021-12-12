@@ -50,13 +50,15 @@ class TrainWriteFragment : Fragment() {
         val factory = TrainWriteViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)
-                .appComponent.cardsLearnDefRepository
+                .appComponent.cardsLearnDefRepository,
+            (requireActivity().application as KotelokApplication)
+                .appComponent.changeStatisticsRepositoryImpl
         )
         viewModel = ViewModelProvider(this, factory).get(TrainWriteViewModel::class.java)
 
         requireActivity().title = getString(R.string.writer_trainer_title)
         viewModel.currentWord.observe(
-            viewLifecycleOwner,
+            this,
             {
                 wordWriting?.text = viewModel.currentWord.value?.mainTranslation
                 if (viewModel.currentWord.value?.examples?.isNotEmpty() == true) {
@@ -69,25 +71,34 @@ class TrainWriteFragment : Fragment() {
             }
         )
 
-        viewModel.viewState.observe(
-            viewLifecycleOwner,
-            {
-                onStateChanged(viewModel.viewState.value)
-            }
-        )
+        viewModel.viewState.observe(this) { state ->
+            onStateChanged(state)
+        }
     }
 
     private fun onStateChanged(state: State?) {
-        if (state == State.NOT_GUESSED) {
-            inputText?.editText?.text?.clear()
-            checkedVisibility(false)
-        } else {
-            checkedVisibility(true)
-            if (state == State.GUESSED_CORRECT) {
+        when (state) {
+            State.NOT_GUESSED -> {
+                inputText?.editText?.text?.clear()
+                completedVisibility(false)
+                checkedVisibility(false)
+            }
+
+            State.GUESSED_CORRECT -> {
+                completedVisibility(false)
+                checkedVisibility(true)
                 correctWord?.text = getString(R.string.correct_guess)
-            } else {
+            }
+
+            State.GUESSED_INCORRECT -> {
+                completedVisibility(false)
+                checkedVisibility(true)
                 correctWord?.text =
                     String.format(getString(R.string.incorrect_guess), viewModel.currentWord.value?.writing)
+            }
+
+            State.DONE -> {
+                completedVisibility(true)
             }
         }
     }
@@ -96,10 +107,6 @@ class TrainWriteFragment : Fragment() {
         when (view.id) {
             R.id.check_button -> {
                 viewModel.onGuess(inputText?.editText?.text.toString())
-                if (viewModel.trainerWriter.isDone) {
-                    checkedVisibility(false)
-                    completedVisibility(true)
-                }
             }
             R.id.next_word_button -> {
                 viewModel.onPressNext()
@@ -121,6 +128,9 @@ class TrainWriteFragment : Fragment() {
     }
 
     private fun completedVisibility(isCompleted: Boolean) {
+        inputText?.isVisible = !isCompleted
+        flashcard?.isVisible = !isCompleted
+
         inputText?.isEnabled = !isCompleted
         checkButton?.isVisible = !isCompleted
         checkButton?.isClickable = !isCompleted
@@ -141,6 +151,6 @@ class TrainWriteFragment : Fragment() {
     }
 
     enum class State {
-        NOT_GUESSED, GUESSED_CORRECT, GUESSED_INCORRECT
+        NOT_GUESSED, GUESSED_CORRECT, GUESSED_INCORRECT, DONE
     }
 }

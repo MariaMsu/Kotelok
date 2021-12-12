@@ -5,17 +5,19 @@ import com.designdrivendevelopment.kotelok.screens.trainers.LearnableDefinitions
 
 abstract class IteratorTrainerSingle<CheckInputType>(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
+    changeStatisticsRepository: ChangeStatisticsRepository,
     trainerWeight: Float,
 ) :
     CoreTrainer<LearnableDefinition, CheckInputType>(
         learnableDefinitionsRepository,
+        changeStatisticsRepository,
         trainerWeight
     ) {
     public override fun getNext(): LearnableDefinition {
         return shuffledWords[this.currentIdx]
     }
 
-    public override fun checkUserInput(userInput: CheckInputType): Boolean {
+    public override suspend fun checkUserInput(userInput: CheckInputType): Boolean {
         val currWord = shuffledWords[this.currentIdx]
         val scoreEF = rateEF(currWord, userInput)
         return handleAnswer(currWord, scoreEF)

@@ -3,6 +3,7 @@ package com.designdrivendevelopment.kotelok.application
 import android.content.Context
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.persistence.database.KotelokDatabase
+import com.designdrivendevelopment.kotelok.repositoryImplementations.changeStatisticsRepository.ChangeStatisticsRepositoryImpl
 import com.designdrivendevelopment.kotelok.repositoryImplementations.dictionariesRepository.DictionariesRepositoryImpl
 import com.designdrivendevelopment.kotelok.repositoryImplementations.dictionaryWordDefinitionsRepository.DictWordDefinitionRepositoryImpl
 import com.designdrivendevelopment.kotelok.repositoryImplementations.editWordDefnititionsRepository.EditWordDefRepositoryImpl
@@ -52,6 +53,9 @@ class AppComponent(applicationContext: Context) {
     }
     val pairsLearnDefRepository by lazy {
         PairsLearnableDefinitionsRepository(db.pairsLearnableDefDao)
+    }
+    val changeStatisticsRepositoryImpl by lazy {
+        ChangeStatisticsRepositoryImpl(db.statisticsDao)
     }
     val statisticsRepository by lazy { GetStatisticsRepositoryImpl(db.statisticsDao) }
     val lookupWordDefRepository by lazy {

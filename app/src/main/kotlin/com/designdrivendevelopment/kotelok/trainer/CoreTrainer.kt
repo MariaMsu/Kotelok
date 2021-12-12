@@ -6,6 +6,7 @@ import java.util.Calendar
 
 abstract class CoreTrainer<NextOutType, CheckInputType>(
     private val learnableDefinitionsRepository: LearnableDefinitionsRepository,
+    private val changeStatisticsRepository: ChangeStatisticsRepository,
     private val trainerWeight: Float,
 ) {
     var currentIdx = 0
@@ -14,7 +15,7 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
         get() = currentIdx >= shuffledWords.size
 
     var shuffledWords = emptyList<LearnableDefinition>()
-    private var repeatWordsSet = mutableSetOf<LearnableDefinition>()
+    private val repeatWordsSet = mutableSetOf<LearnableDefinition>()
 
     suspend fun loadDictionary(dictionaryId: Long, onlyNotLearned: Boolean) {
         shuffledWords = if (onlyNotLearned) {
@@ -31,25 +32,29 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
                     }
                 )
         }
-        shuffledWords.shuffled()
-        repeatWordsSet = mutableSetOf<LearnableDefinition>()
+        shuffledWords = shuffledWords.shuffled()
+        repeatWordsSet.clear()
 
         currentIdx = 0
         size = shuffledWords.size
     }
 
-    fun handleAnswer(word: LearnableDefinition, scoreEF: Int): Boolean {
+    suspend fun handleAnswer(word: LearnableDefinition, scoreEF: Int): Boolean {
         word.changeEFBasedOnNewGrade(scoreEF, trainerWeight)
         val isRight = scoreEF >= LearnableDefinition.PASSING_GRADE
-        if (!isRight) {
+        learnableDefinitionsRepository.updateLearnableDefinition(word)
+        if (isRight) {
+            changeStatisticsRepository.addSuccessfulResultToWordDef(word.definitionId)
+        } else {
+            changeStatisticsRepository.addFailedResultToWordDef(word.definitionId)
             repeatWordsSet.add(word)
         }
 
         currentIdx += 1
-        if (currentIdx >= shuffledWords.size) {
+        if ((currentIdx >= shuffledWords.size) && (repeatWordsSet.isNotEmpty())) {
             // begin to iterate over words which were guessed incorrectly
-            shuffledWords = repeatWordsSet.toList()
-            repeatWordsSet = mutableSetOf<LearnableDefinition>()
+            shuffledWords = repeatWordsSet.toList().shuffled()
+            repeatWordsSet.clear()
             currentIdx = 0
         }
 
@@ -57,9 +62,9 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
     }
 
     /* returns the data for training */
-    public abstract fun getNext(): NextOutType
+    abstract fun getNext(): NextOutType
 
     /* checks user userInput and calls the methods
     'handleTrueAnswer()' and 'handleFalseAnswer()' inside itself */
-    public abstract fun checkUserInput(userInput: CheckInputType): Boolean
+    abstract suspend fun checkUserInput(userInput: CheckInputType): Boolean
 }
