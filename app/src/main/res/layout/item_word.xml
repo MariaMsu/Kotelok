@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:id="@+id/word_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="2dp"
+    android:minHeight="0dp"
+    android:minWidth="0dp"
+    android:background="@drawable/ripple_recog_word_background"
+    app:backgroundTint="@null"
+    android:maxLines="1"
+    android:focusable="true"
+    android:clickable="true"
+    android:textSize="@dimen/title_size"
+    android:textAllCaps="false"
+    android:textColor="?attr/colorPrimaryBackground"
+    tools:text="Spread" />
+
