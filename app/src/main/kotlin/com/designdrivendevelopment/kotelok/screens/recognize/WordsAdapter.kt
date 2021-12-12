@@ -11,7 +11,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 
 class WordsAdapter(
     private val context: Context,
-    private val words: List<Word>
+    var words: List<Word>
 ) : RecyclerView.Adapter<WordsAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val wordButton: TextView = view.findViewById(R.id.word_button)
