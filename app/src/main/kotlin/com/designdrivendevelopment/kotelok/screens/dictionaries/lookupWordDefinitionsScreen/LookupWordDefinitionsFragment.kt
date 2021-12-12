@@ -125,41 +125,10 @@ class LookupWordDefinitionsFragment :
         setupWordDefinitionsList(resultList, context, adapter)
         setupListeners(lookupViewModel)
 
-        tracker = SelectionTracker.Builder(
-            DEFINITIONS_SELECTION_ID,
-            resultList!!,
-            DefinitionsKeyProvider(adapter),
-            ItemWithTypeDetailsLookup(resultList!!),
-            StorageStrategy.createStringStorage()
-        ).build()
-        tracker?.onRestoreInstanceState(savedInstanceState)
-        tracker?.addObserver(
-            object : SelectionTracker.SelectionObserver<String>() {
-                override fun onItemStateChanged(key: String, selected: Boolean) {
-                    if (key.contains(DefinitionsKeyProvider.HEADER_KEY_SUBSTRING)) {
-//                        Костыль, который позволяется избежать крэша из-за того,
-//                        что deselect выполнится во время touchEvent`a
-                        lifecycleScope.launch {
-                            delay(HEADER_DESELECTION_DELAY)
-                            tracker?.deselect(key)
-                        }
-                    } else {
-                        lookupViewModel?.onItemSelectionChanged(key, selected)
-                    }
-                }
-
-                override fun onSelectionChanged() {
-                    val selectionSize = tracker?.selection?.size()
-                    if (selectionSize != null) {
-                        lookupViewModel?.onSelectionSizeChanged(selectionSize)
-                    }
-                }
-
-                override fun onSelectionCleared() {
-                    lookupViewModel?.onSelectionCleared()
-                }
-            }
-        )
+//        Запретить возможность выбора в случае, сели словарь не определен
+        if (dictionaryId != DEFAULT_DICT_ID) {
+            setupSelection(adapter, savedInstanceState)
+        }
 
         if (savedInstanceState == null) {
             if (word != null) {
@@ -304,6 +273,44 @@ class LookupWordDefinitionsFragment :
         }
     }
 
+    private fun setupSelection(adapter: ItemWithTypesAdapter, savedInstanceState: Bundle?) {
+        tracker = SelectionTracker.Builder(
+            DEFINITIONS_SELECTION_ID,
+            resultList!!,
+            DefinitionsKeyProvider(adapter),
+            ItemWithTypeDetailsLookup(resultList!!),
+            StorageStrategy.createStringStorage()
+        ).build()
+        tracker?.onRestoreInstanceState(savedInstanceState)
+        tracker?.addObserver(
+            object : SelectionTracker.SelectionObserver<String>() {
+                override fun onItemStateChanged(key: String, selected: Boolean) {
+                    if (key.contains(DefinitionsKeyProvider.HEADER_KEY_SUBSTRING)) {
+//                        Костыль, который позволяется избежать крэша из-за того,
+//                        что deselect выполнится во время touchEvent`a
+                        lifecycleScope.launch {
+                            delay(HEADER_DESELECTION_DELAY)
+                            tracker?.deselect(key)
+                        }
+                    } else {
+                        lookupViewModel?.onItemSelectionChanged(key, selected)
+                    }
+                }
+
+                override fun onSelectionChanged() {
+                    val selectionSize = tracker?.selection?.size()
+                    if (selectionSize != null) {
+                        lookupViewModel?.onSelectionSizeChanged(selectionSize)
+                    }
+                }
+
+                override fun onSelectionCleared() {
+                    lookupViewModel?.onSelectionCleared()
+                }
+            }
+        )
+    }
+
     private fun setupListeners(lookupViewModel: LookupViewModel?) {
         lookupButton?.setOnClickListener { button ->
             loadingProgressBar?.isVisible = true
@@ -428,7 +435,7 @@ class LookupWordDefinitionsFragment :
         private const val SCROLL_START_POSITION = 0
         private const val SCROLL_POS_KEY = "position"
         private const val DISPLAY_PARTS_NUMBER = 4
-        private const val DEFAULT_DICT_ID = 1L
+        const val DEFAULT_DICT_ID = 1L
         const val DICT_ID_KEY = "dictionary_id"
         const val LOOKUP_WORD_KEY = "word_id"
 
