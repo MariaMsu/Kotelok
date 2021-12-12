@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
-import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.StringsDiffCallback
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -20,6 +22,7 @@ import com.google.android.material.textfield.TextInputLayout
 class RecognizedWordsFragment : Fragment() {
     private var recognizedText: TextInputLayout? = null
     private var recognizedWords: RecyclerView? = null
+    private var applyChangesBtn: Button? = null
     private val viewModel: RecognizedWordsViewModel by viewModels()
 
     override fun onCreateView(
@@ -34,25 +37,27 @@ class RecognizedWordsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews(view)
+        val activity = requireActivity()
+        activity.title = getString(R.string.title_recognized_words)
+        val context = requireContext()
         val text = arguments?.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY) ?: ""
+
         recognizedText?.editText?.setText(text)
+
+        val adapter = WordsAdapter(context, emptyList())
+        val layoutManager = FlexboxLayoutManager(context).apply {
+            flexDirection = FlexDirection.ROW
+            flexWrap = FlexWrap.WRAP
+            justifyContent = JustifyContent.FLEX_START
+            alignItems = AlignItems.STRETCH
+        }
+        setupWordsList(adapter, layoutManager)
 
         viewModel.breakTextIntoWords(text)
         viewModel.recognizedWords.observe(this) { words ->
-            recognizedWords?.adapter = WordsAdapter(requireContext(), words)
-            recognizedWords?.addItemDecoration(
-                MarginItemDecoration(
-                    marginHorizontal = 2,
-                    marginVertical = 4
-                )
-            )
-            recognizedWords?.layoutManager = FlexboxLayoutManager(context).apply {
-                flexDirection = FlexDirection.ROW
-                flexWrap = FlexWrap.WRAP
-                justifyContent = JustifyContent.FLEX_START
-                alignItems = AlignItems.STRETCH
-            }
+            onWordsChanged(words, adapter)
         }
+        setupListeners()
     }
 
     override fun onDestroyView() {
@@ -60,14 +65,42 @@ class RecognizedWordsFragment : Fragment() {
         clearViews()
     }
 
+    private fun setupListeners() {
+        applyChangesBtn?.setOnClickListener {
+            val text = recognizedText?.editText?.text?.toString().orEmpty()
+            recognizedText?.error = null
+            if (text.isEmpty()) {
+                recognizedText?.error = getString(R.string.error_field_required)
+                return@setOnClickListener
+            }
+            viewModel.breakTextIntoWords(text)
+        }
+    }
+
+    private fun setupWordsList(adapter: WordsAdapter, layoutManager: FlexboxLayoutManager) {
+        recognizedWords?.adapter = adapter
+        recognizedWords?.layoutManager = layoutManager
+    }
+
+    private fun onWordsChanged(newWords: List<Word>, adapter: WordsAdapter) {
+        val diffCallback = StringsDiffCallback(
+            newList = newWords.map { it.writing },
+            oldList = adapter.words.map { it.writing }
+        )
+        DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
+        adapter.words = newWords
+    }
+
     private fun initViews(view: View) {
         recognizedText = view.findViewById(R.id.recognized_text)
         recognizedWords = view.findViewById(R.id.recognized_words_list)
+        applyChangesBtn = view.findViewById(R.id.apply_changes_button)
     }
 
     private fun clearViews() {
         recognizedText = null
         recognizedWords = null
+        applyChangesBtn = null
     }
 
     companion object {
