@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.setFragmentResult
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -41,11 +42,16 @@ class RecognizedTextBottomSheet : BottomSheetDialogFragment() {
     private fun setupListeners() {
         recognizedTextField?.error = null
         continueButton?.setOnClickListener {
-            if (recognizedTextField?.editText?.text.isNullOrEmpty()) {
+            val text = recognizedTextField?.editText?.text?.toString().orEmpty()
+            if (text.isEmpty()) {
                 recognizedTextField?.error = getString(R.string.error_field_required)
                 return@setOnClickListener
             }
-
+            val bundle = Bundle().apply {
+                putString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, text)
+            }
+            setFragmentResult(FragmentResult.RecognizeTab.OPEN_RECOGNIZED_WORDS_FRAGMENT_KEY, bundle)
+            dismiss()
         }
         recognizedTextField?.editText?.setOnTouchListener { v, event ->
             v.parent.requestDisallowInterceptTouchEvent(true)

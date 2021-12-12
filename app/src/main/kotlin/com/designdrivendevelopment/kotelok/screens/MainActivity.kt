@@ -19,6 +19,7 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScre
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
 import com.designdrivendevelopment.kotelok.screens.recognize.RecognizedTextBottomSheet
+import com.designdrivendevelopment.kotelok.screens.recognize.RecognizedWordsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.statistics.StatisticFragment
 import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsFragment
@@ -193,6 +194,15 @@ class MainActivity : AppCompatActivity() {
                 val text = bundle.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, "")
                 val recognizedTextBottomSheet = RecognizedTextBottomSheet.newInstance(text)
                 recognizedTextBottomSheet.show(this, null)
+            }
+        }
+        supportFragmentManager.apply {
+            setFragmentResultListener(
+                FragmentResult.RecognizeTab.OPEN_RECOGNIZED_WORDS_FRAGMENT_KEY,
+                this@MainActivity
+            ) { _, bundle ->
+                val text = bundle.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, "")
+                replaceFragment(RecognizedWordsFragment.newInstance(text), "recognized_words_fragment")
             }
         }
     }
