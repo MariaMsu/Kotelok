@@ -51,7 +51,7 @@ abstract class CoreTrainer<NextOutType, CheckInputType>(
         }
 
         currentIdx += 1
-        if (currentIdx >= shuffledWords.size) {
+        if ((currentIdx >= shuffledWords.size) && (repeatWordsSet.isNotEmpty())) {
             // begin to iterate over words which were guessed incorrectly
             shuffledWords = repeatWordsSet.toList().shuffled()
             repeatWordsSet.clear()
