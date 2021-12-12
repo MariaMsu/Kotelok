@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
 import com.designdrivendevelopment.kotelok.screens.dictionaries.addDictionaryScreen.AddDictionaryFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
@@ -129,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             ) { _, bundle ->
                 val dictionaryId = bundle.getLong(
                     DictionaryDetailsFragment.RESULT_DATA_KEY,
-                    LookupWordDefinitionsFragment.DEFAULT_DICT_ID
+                    Dictionary.DEFAULT_DICT_ID
                 )
                 val word = bundle.getString(LookupWordDefinitionsFragment.LOOKUP_WORD_KEY, "")
                 replaceFragment(

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
@@ -67,7 +68,7 @@ class DefinitionDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
+        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: Dictionary.DEFAULT_DICT_ID
         val saveMode = arguments?.getInt(SAVE_MODE_KEY) ?: SAVE_MODE_COPY
         initViews(view)
 
@@ -590,7 +591,6 @@ class DefinitionDetailsFragment :
         private const val CHANGE_EDITABLE_ANIMATION_DURATION = 150L
         private const val DICT_ID_KEY = "dictionary_id_key"
         private const val SAVE_MODE_KEY = "save_mode_key"
-        private const val DEFAULT_DICT_ID = 1L
         const val SAVE_MODE_UPDATE = 1
         const val SAVE_MODE_COPY = 2
 
