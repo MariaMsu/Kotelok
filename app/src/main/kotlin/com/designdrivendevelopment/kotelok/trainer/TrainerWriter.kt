@@ -6,7 +6,7 @@ import com.designdrivendevelopment.kotelok.trainer.utils.WordChangeArray
 import com.designdrivendevelopment.kotelok.trainer.utils.levenshteinDifference
 import kotlin.math.roundToInt
 
-const val WRITE_WEIGHT = 0.15f
+const val WRITE_WEIGHT = 1f
 
 class TrainerWriter(
     learnableDefinitionsRepository: LearnableDefinitionsRepository,
@@ -23,7 +23,7 @@ class TrainerWriter(
     userStr: cut
     curWordChange: [(c, KEEP), (a, REPLACE), (t, KEEP), (s, INSERT)]
      */
-    public var curWordChange: WordChangeArray = emptyArray()
+    var curWordChange: WordChangeArray = emptyArray()
         private set
 
     override fun rateEF(expectedWord: LearnableDefinition, userInput: String): Int {
