@@ -33,7 +33,7 @@ class DefDetailsViewModel(
     private val _messageEvents = MutableLiveData<UiEvent.ShowMessage>()
 
     init {
-        setInitialState(_displayedDefinition.value)
+        setInitialState()
     }
 
     val displayedDefinition: LiveData<WordDefinition>
@@ -227,8 +227,8 @@ class DefDetailsViewModel(
         }
     }
 
-    private fun setInitialState(definition: WordDefinition?) {
-        _isEditable.value = definition?.writing?.isEmpty() == true
+    private fun setInitialState() {
+        _isEditable.value = saveMode == DefinitionDetailsFragment.SAVE_MODE_COPY
 
         updateAddTrButtonVisibility()
         updateAddSynButtonVisibility()
