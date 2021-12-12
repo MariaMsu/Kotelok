@@ -17,25 +17,22 @@ class TrainWriteViewModel(
     changeStatisticsRepository: ChangeStatisticsRepository,
 ) : ViewModel() {
     private var dictId: Long = 0
-    private val _viewState = MutableLiveData(TrainWriteFragment.State.NOT_GUESSED)
+    private val _viewState = MutableLiveData<TrainWriteFragment.State>()
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
-    private val _isTrainerDone: MutableLiveData<Boolean> = MutableLiveData()
     val viewState: LiveData<TrainWriteFragment.State> = _viewState
     val trainerWriter: TrainerWriter = TrainerWriter(cardsLearnDefRepository, changeStatisticsRepository)
     val currentWord: LiveData<LearnableDefinition> = _currentWord
-    val isTrainerDone: LiveData<Boolean>
-        get() = _isTrainerDone
 
     init {
         dictId = dictionaryId
         viewModelScope.launch(Dispatchers.IO) {
             trainerWriter.loadDictionary(dictionaryId, onlyNotLearned = false)
-//            val learnableDefinition = trainerWriter.getNext()
-//            _currentWord.postValue(learnableDefinition)
             val isDone = trainerWriter.isDone
-            _isTrainerDone.postValue(isDone)
-            if (!isDone) {
+            if (isDone) {
+                _viewState.postValue(TrainWriteFragment.State.DONE)
+            } else {
                 _currentWord.postValue(trainerWriter.getNext())
+                _viewState.postValue(TrainWriteFragment.State.NOT_GUESSED)
             }
         }
     }
@@ -50,14 +47,12 @@ class TrainWriteViewModel(
     }
 
     fun onPressNext() {
-        _viewState.value = TrainWriteFragment.State.NOT_GUESSED
-//        if (!trainerWriter.isDone) {
-//            _currentWord.value = trainerWriter.getNext()
-//        }
         val isDone = trainerWriter.isDone
-        _isTrainerDone.postValue(isDone)
-        if (!isDone) {
+        if (isDone) {
+            _viewState.value = TrainWriteFragment.State.DONE
+        } else {
             _currentWord.value = trainerWriter.getNext()
+            _viewState.value = TrainWriteFragment.State.NOT_GUESSED
         }
     }
 

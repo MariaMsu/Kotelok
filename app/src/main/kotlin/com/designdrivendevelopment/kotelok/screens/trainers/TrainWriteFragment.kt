@@ -71,30 +71,34 @@ class TrainWriteFragment : Fragment() {
             }
         )
 
-        viewModel.viewState.observe(
-            this,
-            {
-                onStateChanged(viewModel.viewState.value)
-            }
-        )
-        viewModel.isTrainerDone.observe(this) { isDone ->
-            if (isDone) {
-                completedVisibility(true)
-            }
+        viewModel.viewState.observe(this) { state ->
+            onStateChanged(state)
         }
     }
 
     private fun onStateChanged(state: State?) {
-        if (state == State.NOT_GUESSED) {
-            inputText?.editText?.text?.clear()
-            checkedVisibility(false)
-        } else {
-            checkedVisibility(true)
-            if (state == State.GUESSED_CORRECT) {
+        when (state) {
+            State.NOT_GUESSED -> {
+                inputText?.editText?.text?.clear()
+                completedVisibility(false)
+                checkedVisibility(false)
+            }
+
+            State.GUESSED_CORRECT -> {
+                completedVisibility(false)
+                checkedVisibility(true)
                 correctWord?.text = getString(R.string.correct_guess)
-            } else {
+            }
+
+            State.GUESSED_INCORRECT -> {
+                completedVisibility(false)
+                checkedVisibility(true)
                 correctWord?.text =
                     String.format(getString(R.string.incorrect_guess), viewModel.currentWord.value?.writing)
+            }
+
+            State.DONE -> {
+                completedVisibility(true)
             }
         }
     }
@@ -113,12 +117,6 @@ class TrainWriteFragment : Fragment() {
             }
         }
     }
-
-//    private fun completedVisibility() {
-//        flashcard?.isVisible = false
-//        inputText?.isVisible = false
-//        checkButton?.isVisible = false
-//    }
 
     private fun checkedVisibility(isChecked: Boolean) {
         inputText?.isEnabled = !isChecked
@@ -153,6 +151,6 @@ class TrainWriteFragment : Fragment() {
     }
 
     enum class State {
-        NOT_GUESSED, GUESSED_CORRECT, GUESSED_INCORRECT
+        NOT_GUESSED, GUESSED_CORRECT, GUESSED_INCORRECT, DONE
     }
 }
