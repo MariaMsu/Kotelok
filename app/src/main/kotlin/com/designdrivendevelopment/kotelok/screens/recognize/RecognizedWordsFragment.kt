@@ -5,14 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
+import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.google.android.material.textfield.TextInputLayout
 
 class RecognizedWordsFragment : Fragment() {
     private var recognizedText: TextInputLayout? = null
     private var recognizedWords: RecyclerView? = null
+    private val viewModel: RecognizedWordsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,8 +34,25 @@ class RecognizedWordsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews(view)
-        val text = arguments?.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, "")
+        val text = arguments?.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY) ?: ""
         recognizedText?.editText?.setText(text)
+
+        viewModel.breakTextIntoWords(text)
+        viewModel.recognizedWords.observe(this) { words ->
+            recognizedWords?.adapter = WordsAdapter(requireContext(), words)
+            recognizedWords?.addItemDecoration(
+                MarginItemDecoration(
+                    marginHorizontal = 2,
+                    marginVertical = 4
+                )
+            )
+            recognizedWords?.layoutManager = FlexboxLayoutManager(context).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+                justifyContent = JustifyContent.FLEX_START
+                alignItems = AlignItems.STRETCH
+            }
+        }
     }
 
     override fun onDestroyView() {
