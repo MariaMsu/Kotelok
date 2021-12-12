@@ -17,19 +17,25 @@ class TrainFlashcardsViewModel(
     changeStatisticsRepository: ChangeStatisticsRepository,
 ) : ViewModel() {
     private val _viewState = MutableLiveData(TrainFlashcardsFragment.State.NOT_GUESSED)
+    private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
+    private val _isTrainerDone: MutableLiveData<Boolean> = MutableLiveData()
+    private var dictId: Long = 0
     val trainerCards: TrainerCards = TrainerCards(cardsLearnDefRepository, changeStatisticsRepository)
     val viewState: LiveData<TrainFlashcardsFragment.State> = _viewState
-    private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
     val currentWord: LiveData<LearnableDefinition> = _currentWord
-    private var dictId: Long = 0
+    val isTrainerDone: LiveData<Boolean>
+        get() = _isTrainerDone
 
     init {
         dictId = dictionaryId
         viewModelScope.launch(Dispatchers.IO) {
             // в onlyNotLearned ошибка, он работает наоборот
             trainerCards.loadDictionary(dictionaryId, onlyNotLearned = false)
-            val learnableDefinition = trainerCards.getNext()
-            _currentWord.postValue(learnableDefinition)
+            val isDone = trainerCards.isDone
+            _isTrainerDone.postValue(isDone)
+            if (!isDone) {
+                _currentWord.postValue(trainerCards.getNext())
+            }
         }
     }
 
@@ -53,10 +59,13 @@ class TrainFlashcardsViewModel(
     fun onGuessPressed(guess: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             trainerCards.checkUserInput(guess)
-        }
-        _viewState.value = TrainFlashcardsFragment.State.NOT_GUESSED
-        if (!trainerCards.isDone) {
-            _currentWord.value = trainerCards.getNext()
+
+            _viewState.postValue(TrainFlashcardsFragment.State.NOT_GUESSED)
+            val isDone = trainerCards.isDone
+            _isTrainerDone.postValue(isDone)
+            if (!isDone) {
+                _currentWord.postValue(trainerCards.getNext())
+            }
         }
     }
 }

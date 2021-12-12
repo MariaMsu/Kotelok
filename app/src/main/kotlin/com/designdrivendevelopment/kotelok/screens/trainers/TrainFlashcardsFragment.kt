@@ -73,7 +73,7 @@ class TrainFlashcardsFragment : Fragment() {
         )
         viewModel = ViewModelProvider(this, factory).get(TrainFlashcardsViewModel::class.java)
         viewModel.viewState.observe(
-            viewLifecycleOwner,
+            this,
             {
                 updateFlashcard()
                 if (viewModel.viewState.value != State.NOT_GUESSED) {
@@ -84,11 +84,19 @@ class TrainFlashcardsFragment : Fragment() {
             }
         )
         viewModel.currentWord.observe(
-            viewLifecycleOwner,
+            this,
             {
                 updateFlashcard()
             }
         )
+
+        viewModel.isTrainerDone.observe(this) { isDone ->
+            if (isDone) {
+                completedVisibility(true)
+            } else {
+                updateFlashcard()
+            }
+        }
     }
 
     override fun onStop() {
@@ -133,6 +141,8 @@ class TrainFlashcardsFragment : Fragment() {
     }
 
     private fun completedVisibility(isCompleted: Boolean) {
+        flashcardButtonOrig?.isVisible = false
+        flashcardButtonRu?.isVisible = false
         textCompleted?.isVisible = isCompleted
         flashcardButtonOrig?.isClickable = !isCompleted
         repeatDict?.isVisible = isCompleted
@@ -204,11 +214,6 @@ class TrainFlashcardsFragment : Fragment() {
 
     private fun pressGuessButton(guess: Boolean) {
         viewModel.onGuessPressed(guess)
-        if (!viewModel.trainerCards.isDone) {
-            updateFlashcard()
-        } else {
-            completedVisibility(true)
-        }
     }
 
     private fun flip(context: Context, startView: View?, endView: View?) {
