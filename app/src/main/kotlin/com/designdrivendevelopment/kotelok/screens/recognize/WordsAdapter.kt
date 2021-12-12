@@ -4,10 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
+import com.google.android.flexbox.FlexboxLayoutManager
 
 class WordsAdapter(
     private val context: Context,
@@ -18,6 +18,10 @@ class WordsAdapter(
 
         fun bind(word: Word) {
             wordButton.text = word.writing
+            val layoutParams = wordButton.layoutParams
+            if (layoutParams is FlexboxLayoutManager.LayoutParams) {
+                layoutParams.flexGrow = FLEXBOX_PARAM_FLEX_GROW
+            }
         }
     }
 
@@ -33,5 +37,9 @@ class WordsAdapter(
 
     override fun getItemCount(): Int {
         return words.size
+    }
+
+    companion object {
+        private const val FLEXBOX_PARAM_FLEX_GROW = 1f
     }
 }
