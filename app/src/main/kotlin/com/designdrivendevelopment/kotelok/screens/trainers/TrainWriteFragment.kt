@@ -58,7 +58,7 @@ class TrainWriteFragment : Fragment() {
 
         requireActivity().title = getString(R.string.writer_trainer_title)
         viewModel.currentWord.observe(
-            viewLifecycleOwner,
+            this,
             {
                 wordWriting?.text = viewModel.currentWord.value?.mainTranslation
                 if (viewModel.currentWord.value?.examples?.isNotEmpty() == true) {
@@ -72,11 +72,16 @@ class TrainWriteFragment : Fragment() {
         )
 
         viewModel.viewState.observe(
-            viewLifecycleOwner,
+            this,
             {
                 onStateChanged(viewModel.viewState.value)
             }
         )
+        viewModel.isTrainerDone.observe(this) { isDone ->
+            if (isDone) {
+                completedVisibility(true)
+            }
+        }
     }
 
     private fun onStateChanged(state: State?) {
@@ -98,10 +103,6 @@ class TrainWriteFragment : Fragment() {
         when (view.id) {
             R.id.check_button -> {
                 viewModel.onGuess(inputText?.editText?.text.toString())
-                if (viewModel.trainerWriter.isDone) {
-                    checkedVisibility(false)
-                    completedVisibility(true)
-                }
             }
             R.id.next_word_button -> {
                 viewModel.onPressNext()
@@ -113,6 +114,12 @@ class TrainWriteFragment : Fragment() {
         }
     }
 
+//    private fun completedVisibility() {
+//        flashcard?.isVisible = false
+//        inputText?.isVisible = false
+//        checkButton?.isVisible = false
+//    }
+
     private fun checkedVisibility(isChecked: Boolean) {
         inputText?.isEnabled = !isChecked
         checkButton?.isVisible = !isChecked
@@ -123,6 +130,9 @@ class TrainWriteFragment : Fragment() {
     }
 
     private fun completedVisibility(isCompleted: Boolean) {
+        inputText?.isVisible = !isCompleted
+        flashcard?.isVisible = !isCompleted
+
         inputText?.isEnabled = !isCompleted
         checkButton?.isVisible = !isCompleted
         checkButton?.isClickable = !isCompleted
