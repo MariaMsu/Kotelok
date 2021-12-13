@@ -22,7 +22,6 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefini
 import com.designdrivendevelopment.kotelok.screens.recognize.RecognizedTextBottomSheet
 import com.designdrivendevelopment.kotelok.screens.recognize.RecognizedWordsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
-import com.designdrivendevelopment.kotelok.screens.statistics.StatisticFragment
 import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsFragment
 import com.designdrivendevelopment.kotelok.screens.trainers.TrainWriteFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -43,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         setupDictionariesFragmentResultListeners()
         setupDefinitionsResultListeners()
         setupTrainersDialogResultListeners()
-        setupProfileResultListeners()
         setupRecognizeResultListener()
 
         if (savedInstanceState == null) {
@@ -175,17 +173,6 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity
             ) { _, _ ->
                 replaceFragment(TrainWriteFragment.newInstance(trainedDictionaryId ?: 1))
-            }
-        }
-    }
-
-    private fun setupProfileResultListeners() {
-        supportFragmentManager.apply {
-            setFragmentResultListener(
-                FragmentResult.ProfileTab.OPEN_STATISTICS_KEY,
-                this@MainActivity
-            ) { _, _ ->
-                replaceFragment(StatisticFragment())
             }
         }
     }

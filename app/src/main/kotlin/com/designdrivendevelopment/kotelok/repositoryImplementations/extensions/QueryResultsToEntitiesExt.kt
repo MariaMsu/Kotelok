@@ -1,11 +1,15 @@
 package com.designdrivendevelopment.kotelok.repositoryImplementations.extensions
 
+import com.designdrivendevelopment.kotelok.entities.AnswersStatistic
 import com.designdrivendevelopment.kotelok.entities.DictionaryStat
+import com.designdrivendevelopment.kotelok.entities.DictionaryStatistic
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.entities.WordDefinitionStat
+import com.designdrivendevelopment.kotelok.persistence.queryResults.AnswersStatisticQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
+import com.designdrivendevelopment.kotelok.persistence.queryResults.DictionaryStatisticQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.LearnableDefQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
@@ -67,5 +71,21 @@ fun WordDefinitionStatQuery.toWordDefinitionStat(): WordDefinitionStat {
         skillLevel = this.skillLevel,
         numOfCompletedTrainings = this.numOfCompletedTrainings,
         numOfSuccessfullyTrainings = this.numOfSuccessfullyTrainings
+    )
+}
+
+fun DictionaryStatisticQueryResult.toDictionaryStatistic(): DictionaryStatistic {
+    return DictionaryStatistic(
+        id = this.id,
+        label = this.label,
+        size = this.size,
+        averageSkillLevel = this.averageSkillLevel
+    )
+}
+
+fun AnswersStatisticQueryResult.toAnswersStatistic(): AnswersStatistic {
+    return AnswersStatistic(
+        totalAnswers = totalAnswersNum,
+        successfullyAnswers = successfullyAnswersNum
     )
 }

@@ -18,6 +18,8 @@
         <item name="colorPrimaryBackground">@color/white</item>
         <item name="actionModeBackground">@color/light_purple_main</item>
         <item name="actionModeCloseDrawable">@drawable/ic_close</item>
+        <item name="donutRightColor">@color/green</item>
+        <item name="donutWrongColor">@color/red</item>
 
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
     </style>
