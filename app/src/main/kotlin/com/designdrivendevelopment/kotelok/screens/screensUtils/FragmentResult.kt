@@ -18,6 +18,7 @@ object FragmentResult {
     object RecognizeTab {
         const val OPEN_RECOGNIZED_TEXT_DIALOG = "fragment_open_recognized_text_dialog_key"
         const val OPEN_RECOGNIZED_WORDS_FRAGMENT_KEY = "fragment_open_recognized_words_key"
+        const val OPEN_SELECT_DICTIONARIES_KEY = "fragment_select_dictionaries_key"
         const val RESULT_TEXT_KEY = "result_text_key"
     }
 

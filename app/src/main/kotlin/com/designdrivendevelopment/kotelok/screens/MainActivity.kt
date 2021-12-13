@@ -200,8 +200,6 @@ class MainActivity : AppCompatActivity() {
                 val recognizedTextBottomSheet = RecognizedTextBottomSheet.newInstance(text)
                 recognizedTextBottomSheet.show(this, null)
             }
-        }
-        supportFragmentManager.apply {
             setFragmentResultListener(
                 FragmentResult.RecognizeTab.OPEN_RECOGNIZED_WORDS_FRAGMENT_KEY,
                 this@MainActivity
