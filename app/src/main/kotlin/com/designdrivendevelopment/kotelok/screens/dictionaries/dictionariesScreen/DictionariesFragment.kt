@@ -19,6 +19,7 @@ import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 @Suppress("TooManyFunctions")
 class DictionariesFragment :
@@ -123,6 +124,14 @@ class DictionariesFragment :
     }
 
     override fun onLearnClicked(dictionaryId: Long) {
+        if (dictionariesViewModel?.dictionaries?.value?.first { it.id == dictionaryId }?.size == 0) {
+            Snackbar.make(
+                view!!,
+                "Чтобы изучать словарь, добавьте в него хотя бы одно определение",
+                Snackbar.LENGTH_LONG
+            ).show()
+            return
+        }
         val bundle = Bundle().apply { putLong(DICT_ID_KEY, dictionaryId) }
         setFragmentResult(FragmentResult.DictionariesTab.OPEN_TRAINERS_DIALOG_KEY, bundle)
     }
