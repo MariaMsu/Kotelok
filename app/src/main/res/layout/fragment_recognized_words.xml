@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".screens.recognize.RecognizedWordsFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="12dp"
+        android:paddingBottom="4dp"
+        android:gravity="start"
+        android:textSize="@dimen/subheading_size"
+        android:textColor="?attr/subheadingColor"
+        android:background="@drawable/background_with_underline"
+        android:text="@string/text_edit_recognized_text_field_description"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/recognized_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="12dp"
+        android:gravity="start|top"
+        android:hint="@string/hint_recognized_text"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:hintAnimationEnabled="false"
+        app:errorEnabled="true"
+        app:endIconMode="clear_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:gravity="start|top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="?attr/titleColor" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/apply_changes_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="6dp"
+        android:text="@string/button_apply_changes_text"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:paddingBottom="4dp"
+        android:gravity="start"
+        android:textSize="@dimen/subheading_size"
+        android:textColor="?attr/subheadingColor"
+        android:background="@drawable/background_with_underline"
+        android:text="@string/text_choose_recognized_word"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recognized_words_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_weight="9" />
+</LinearLayout>

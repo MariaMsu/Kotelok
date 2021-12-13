@@ -68,4 +68,14 @@
     <string name="repeat_train">Повторить тренировку</string>
     <string name="cards_trainer_title">Карточки</string>
     <string name="writer_trainer_title">Написание слов</string>
+    <string name="recognize_button_text">Распознать</string>
+    <string name="text_edit_recognized_text_field_description">Вы можете отредактировать распозанный текст:</string>
+    <string name="button_continue_recognize_text">Продолжить</string>
+    <string name="hint_recognized_text">Распознанный текст</string>
+    <string name="button_apply_changes_text">Применить изменения</string>
+    <string name="text_choose_recognized_word">Нажмите на слово, чтобы больше узнать о нем:</string>
+    <string name="title_recognized_words">Распознанные слова</string>
+    <string name="title_recognize_text">Распознать текст</string>
+    <string name="button_change_dictionaries_text">Изменить</string>
+    <string name="text_selected_dictionaries_description">Словари, в которые будет добавлено слово:</string>
 </resources>

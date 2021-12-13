@@ -106,15 +106,67 @@
                 app:layout_constraintEnd_toStartOf="@id/end_border" />
 
             <TextView
-                android:id="@+id/additional_fields_text"
+                android:id="@+id/dictionaries_chips_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/header_text_additional_fields"
+                android:text="@string/text_selected_dictionaries_description"
                 android:textColor="?attr/subheadingColor"
                 android:textSize="@dimen/subheading_size"
                 android:background="@drawable/background_with_underline"
                 app:layout_constraintTop_toBottomOf="@id/translation_text_field"
+                app:layout_constraintStart_toEndOf="@id/start_border"
+                app:layout_constraintEnd_toStartOf="@id/end_border" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/dictionaries_chip_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:chipSpacingHorizontal="6dp"
+                app:chipSpacingVertical="8dp"
+                app:ensureMinTouchTargetSize="false"
+                style="@style/Widget.MaterialComponents.ChipGroup"
+                app:layout_constraintTop_toBottomOf="@id/dictionaries_chips_text"
+                app:layout_constraintStart_toEndOf="@id/start_border"
+                app:layout_constraintEnd_toStartOf="@id/end_border"
+                />
+
+            <Button
+                android:id="@+id/change_dictionaries_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/button_change_dictionaries_text"
+                android:textSize="12sp"
+                android:padding="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                app:icon="@drawable/ic_edit"
+                app:iconSize="16dp"
+                app:layout_constraintHorizontal_bias="0"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                app:layout_constraintTop_toBottomOf="@id/dictionaries_chip_group"
+                app:layout_constraintStart_toEndOf="@id/start_border"
+                app:layout_constraintEnd_toStartOf="@id/end_border" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/dictionaries_group"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:constraint_referenced_ids="dictionaries_chips_text, dictionaries_chip_group, change_dictionaries_button" />
+
+            <TextView
+                android:id="@+id/additional_fields_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/header_text_additional_fields"
+                android:textColor="?attr/subheadingColor"
+                android:textSize="@dimen/subheading_size"
+                android:background="@drawable/background_with_underline"
+                app:layout_constraintTop_toBottomOf="@id/change_dictionaries_button"
                 app:layout_constraintStart_toEndOf="@id/start_border"
                 app:layout_constraintEnd_toStartOf="@id/end_border" />
 

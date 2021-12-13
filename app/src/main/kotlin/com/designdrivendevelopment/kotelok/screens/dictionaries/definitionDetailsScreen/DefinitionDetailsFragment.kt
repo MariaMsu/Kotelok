@@ -3,6 +3,8 @@ package com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetai
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -11,20 +13,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.ExampleOfDefinitionUse
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.SelectDictionaryDialog
+import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.StringsDiffCallback
 import com.designdrivendevelopment.kotelok.screens.screensUtils.dpToPx
 import com.designdrivendevelopment.kotelok.screens.screensUtils.focusAndShowKeyboard
 import com.designdrivendevelopment.kotelok.screens.screensUtils.toNullIfEmpty
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -54,6 +67,12 @@ class DefinitionDetailsFragment :
     private var trAdapter: TranslationsAdapter? = null
     private var synAdapter: SynonymsAdapter? = null
     private var exAdapter: ExamplesAdapter? = null
+    private var dictionariesChips: ChipGroup? = null
+    private var changeDictionaries: Button? = null
+    private var dictionariesGroup: Group? = null
+    private var dicitonaries: List<Dictionary> = emptyList()
+    private var fm: FragmentManager? = null
+    private var saveMode = SAVE_MODE_COPY
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,9 +85,11 @@ class DefinitionDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
-        val saveMode = arguments?.getInt(SAVE_MODE_KEY) ?: SAVE_MODE_COPY
+        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: Dictionary.DEFAULT_DICT_ID
+        saveMode = arguments?.getInt(SAVE_MODE_KEY) ?: SAVE_MODE_COPY
         initViews(view)
+        fm = childFragmentManager
+        dictionariesGroup?.isVisible = saveMode == SAVE_MODE_COPY
 
         val activity = requireActivity()
         val context = requireContext()
@@ -96,6 +117,15 @@ class DefinitionDetailsFragment :
         viewModel = ViewModelProvider(this, factory)[DefDetailsViewModel::class.java]
         setupViewModel(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter, view)
         setupListeners(viewModel, translationsAdapter, synonymsAdapter, examplesAdapter)
+
+        fm?.setFragmentResultListener(
+            FragmentResult.RecognizeTab.OPEN_SELECT_DICTIONARIES_KEY,
+            this
+        ) { _, bundle ->
+            val selectedDictionariesIds = bundle.getLongArray(SelectDictionaryDialog.IDS_KEY)
+                ?.toList() ?: listOf()
+            viewModel?.changeSelectedDictionaries(selectedDictionariesIds)
+        }
     }
 
     override fun onResume() {
@@ -155,6 +185,7 @@ class DefinitionDetailsFragment :
             synonymsAdapter.isEditable = isEditable
             examplesAdapter.isEditable = isEditable
             changeEditableStateForFields(isEditable)
+            changeDictionaries?.isVisible = isEditable && (saveMode == SAVE_MODE_COPY)
         }
         viewModel?.isAddTrButtonVisible?.observe(this) { isVisible ->
             changeViewVisibility(addTranslationBtn, isVisible, isNeedAnimate)
@@ -175,9 +206,46 @@ class DefinitionDetailsFragment :
             changeVisibilityForDeleteExButtons(isVisible)
         }
         viewModel?.messageEvents?.observe(this) { event ->
-            sendMessage(rootView, event.message)
-            viewModel.notifyToEventIsHandled(event)
+            if (!event.isHandled) {
+                sendMessage(rootView, event.message)
+                viewModel.notifyToEventIsHandled(event)
+            }
         }
+
+        val backgroundColorId = rootView.context.getThemeColor(R.attr.colorPrimary)
+        val textColorId = rootView.context.getThemeColor(R.attr.colorPrimaryBackground)
+        viewModel?.selectedDictionaries?.observe(this) { selectedDictionaries ->
+            dictionariesChips?.removeAllViews()
+            for (dictionary in selectedDictionaries) {
+                val chip = createDictChip(rootView.context, dictionary, textColorId, backgroundColorId)
+                dictionariesChips?.addView(chip)
+            }
+        }
+        viewModel?.allDictionariesLiveData?.observe(this) { allDictionaries ->
+            dicitonaries = allDictionaries
+        }
+    }
+
+    private fun createDictChip(
+        context: Context,
+        dictionary: Dictionary,
+        @ColorInt textColorId: Int,
+        @ColorInt backgroundColorId: Int
+    ): Chip {
+        return Chip(context).apply {
+            text = dictionary.label
+            chipBackgroundColor = ColorStateList.valueOf(backgroundColorId)
+            setTextColor(textColorId)
+            setEnsureMinTouchTargetSize(false)
+        }
+    }
+
+    @ColorInt
+    private fun Context.getThemeColor(@AttrRes attribute: Int): Int {
+        val typedArray = theme.obtainStyledAttributes(intArrayOf(attribute))
+        val color = typedArray.getColor(DEFAULT, DEFAULT)
+        typedArray.recycle()
+        return color
     }
 
     private fun changeFabsVisibility(isEditable: Boolean, isNeedAnimate: Boolean) {
@@ -360,33 +428,51 @@ class DefinitionDetailsFragment :
             val isWritingEmpty = writingField?.editText?.text?.toString().isNullOrEmpty()
             val isTranslationEmpty =
                 translationField?.editText?.text?.toString().isNullOrEmpty()
-            return@setOnClickListener when {
-                isWritingEmpty && isTranslationEmpty -> {
-                    writingField?.error = getString(R.string.error_field_required)
-                    translationField?.error = getString(R.string.error_field_required)
-                    writingField?.editText?.focusAndShowKeyboard()
-                    Unit
-                }
 
-                isWritingEmpty -> {
-                    writingField?.error = getString(R.string.error_field_required)
-                    writingField?.editText?.focusAndShowKeyboard()
-                    Unit
-                }
-
-                isTranslationEmpty -> {
-                    translationField?.error = getString(R.string.error_field_required)
-                    translationField?.editText?.focusAndShowKeyboard()
-                    Unit
-                }
-
-                else -> {
-                    viewModel?.disableEditableMode()
-                    val definition = readDefinitionFromFields()
-                    viewModel?.saveChanges(definition)
-                    Unit
-                }
+            if (isFieldsCorrect(isWritingEmpty, isTranslationEmpty)) {
+                viewModel?.disableEditableMode()
+                val definition = readDefinitionFromFields()
+                viewModel?.saveChanges(definition)
             }
+        }
+        changeDictionaries?.setOnClickListener {
+            val ids = dicitonaries.map { it.id }.toLongArray()
+            val labels = dicitonaries.map { it.label }.toTypedArray()
+            val selected = dicitonaries.map {
+                it in viewModel?.selectedDictionaries?.value ?: emptyList()
+            }.toBooleanArray()
+            val dialog = SelectDictionaryDialog.newInstance(ids, labels, selected)
+            fm?.let { fragmentManager ->
+                dialog.show(fragmentManager, "select_dictionaries_dialog")
+            }
+        }
+    }
+
+    private fun isFieldsCorrect(
+        isWritingIncorrect: Boolean,
+        isTranslationIncorrect: Boolean
+    ): Boolean {
+        return when {
+            isWritingIncorrect && isTranslationIncorrect -> {
+                writingField?.error = getString(R.string.error_field_required)
+                translationField?.error = getString(R.string.error_field_required)
+                writingField?.editText?.focusAndShowKeyboard()
+                false
+            }
+
+            isWritingIncorrect -> {
+                writingField?.error = getString(R.string.error_field_required)
+                writingField?.editText?.focusAndShowKeyboard()
+                false
+            }
+
+            isTranslationIncorrect -> {
+                translationField?.error = getString(R.string.error_field_required)
+                translationField?.editText?.focusAndShowKeyboard()
+                false
+            }
+
+            else -> true
         }
     }
 
@@ -561,6 +647,9 @@ class DefinitionDetailsFragment :
         saveDefinitionFab = view.findViewById(R.id.save_definition_fab)
         yandexDictHyperlink = view.findViewById(R.id.yandex_dict_api_hyperlink)
         yandexDictHyperlink?.movementMethod = LinkMovementMethod.getInstance()
+        dictionariesChips = view.findViewById(R.id.dictionaries_chip_group)
+        changeDictionaries = view.findViewById(R.id.change_dictionaries_button)
+        dictionariesGroup = view.findViewById(R.id.dictionaries_group)
     }
 
     private fun clearViews() {
@@ -577,9 +666,13 @@ class DefinitionDetailsFragment :
         editDefinitionFab = null
         saveDefinitionFab = null
         yandexDictHyperlink = null
+        dictionariesChips = null
+        changeDictionaries = null
+        dictionariesGroup = null
     }
 
     companion object {
+        private const val DEFAULT = 0
         private const val POSITION_DEFAULT = 0f
         private const val POSITION_OUT_OF_EDGE = -400
         private const val SIZE_EMPTY = 0
@@ -589,7 +682,6 @@ class DefinitionDetailsFragment :
         private const val CHANGE_EDITABLE_ANIMATION_DURATION = 150L
         private const val DICT_ID_KEY = "dictionary_id_key"
         private const val SAVE_MODE_KEY = "save_mode_key"
-        private const val DEFAULT_DICT_ID = 1L
         const val SAVE_MODE_UPDATE = 1
         const val SAVE_MODE_COPY = 2
 

@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.DefinitionClickListener
 import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
@@ -89,7 +90,8 @@ class LookupWordDefinitionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: DEFAULT_DICT_ID
+        val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: Dictionary.DEFAULT_DICT_ID
+        val word = arguments?.getString(LOOKUP_WORD_KEY)
         dictId = dictionaryId
 
         initViews(view)
@@ -124,44 +126,18 @@ class LookupWordDefinitionsFragment :
         setupWordDefinitionsList(resultList, context, adapter)
         setupListeners(lookupViewModel)
 
-        tracker = SelectionTracker.Builder(
-            DEFINITIONS_SELECTION_ID,
-            resultList!!,
-            DefinitionsKeyProvider(adapter),
-            ItemWithTypeDetailsLookup(resultList!!),
-            StorageStrategy.createStringStorage()
-        ).build()
-        tracker?.onRestoreInstanceState(savedInstanceState)
-        tracker?.addObserver(
-            object : SelectionTracker.SelectionObserver<String>() {
-                override fun onItemStateChanged(key: String, selected: Boolean) {
-                    if (key.contains(DefinitionsKeyProvider.HEADER_KEY_SUBSTRING)) {
-//                        Костыль, который позволяется избежать крэша из-за того,
-//                        что deselect выполнится во время touchEvent`a
-                        lifecycleScope.launch {
-                            delay(HEADER_DESELECTION_DELAY)
-                            tracker?.deselect(key)
-                        }
-                    } else {
-                        lookupViewModel?.onItemSelectionChanged(key, selected)
-                    }
-                }
-
-                override fun onSelectionChanged() {
-                    val selectionSize = tracker?.selection?.size()
-                    if (selectionSize != null) {
-                        lookupViewModel?.onSelectionSizeChanged(selectionSize)
-                    }
-                }
-
-                override fun onSelectionCleared() {
-                    lookupViewModel?.onSelectionCleared()
-                }
-            }
-        )
+//        Запретить возможность выбора в случае, сели словарь не определен
+        if (dictionaryId != Dictionary.DEFAULT_DICT_ID) {
+            setupSelection(adapter, savedInstanceState)
+        }
 
         if (savedInstanceState == null) {
-            enterWritingTextField?.editText?.focusAndShowKeyboard()
+            if (word != null) {
+                enterWritingTextField?.editText?.setText(word)
+                lookupViewModel?.lookupByWriting(word)
+            } else {
+                enterWritingTextField?.editText?.focusAndShowKeyboard()
+            }
         }
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -298,6 +274,44 @@ class LookupWordDefinitionsFragment :
         }
     }
 
+    private fun setupSelection(adapter: ItemWithTypesAdapter, savedInstanceState: Bundle?) {
+        tracker = SelectionTracker.Builder(
+            DEFINITIONS_SELECTION_ID,
+            resultList!!,
+            DefinitionsKeyProvider(adapter),
+            ItemWithTypeDetailsLookup(resultList!!),
+            StorageStrategy.createStringStorage()
+        ).build()
+        tracker?.onRestoreInstanceState(savedInstanceState)
+        tracker?.addObserver(
+            object : SelectionTracker.SelectionObserver<String>() {
+                override fun onItemStateChanged(key: String, selected: Boolean) {
+                    if (key.contains(DefinitionsKeyProvider.HEADER_KEY_SUBSTRING)) {
+//                        Костыль, который позволяется избежать крэша из-за того,
+//                        что deselect выполнится во время touchEvent`a
+                        lifecycleScope.launch {
+                            delay(HEADER_DESELECTION_DELAY)
+                            tracker?.deselect(key)
+                        }
+                    } else {
+                        lookupViewModel?.onItemSelectionChanged(key, selected)
+                    }
+                }
+
+                override fun onSelectionChanged() {
+                    val selectionSize = tracker?.selection?.size()
+                    if (selectionSize != null) {
+                        lookupViewModel?.onSelectionSizeChanged(selectionSize)
+                    }
+                }
+
+                override fun onSelectionCleared() {
+                    lookupViewModel?.onSelectionCleared()
+                }
+            }
+        )
+    }
+
     private fun setupListeners(lookupViewModel: LookupViewModel?) {
         lookupButton?.setOnClickListener { button ->
             loadingProgressBar?.isVisible = true
@@ -422,13 +436,16 @@ class LookupWordDefinitionsFragment :
         private const val SCROLL_START_POSITION = 0
         private const val SCROLL_POS_KEY = "position"
         private const val DISPLAY_PARTS_NUMBER = 4
-        private const val DEFAULT_DICT_ID = 1L
         const val DICT_ID_KEY = "dictionary_id"
+        const val LOOKUP_WORD_KEY = "word_id"
 
         @JvmStatic
-        fun newInstance(dictionaryId: Long) = LookupWordDefinitionsFragment().apply {
+        fun newInstance(dictionaryId: Long, word: String = "") = LookupWordDefinitionsFragment().apply {
             arguments = Bundle().apply {
                 putLong(DICT_ID_KEY, dictionaryId)
+                if (word.isNotEmpty()) {
+                    putString(LOOKUP_WORD_KEY, word)
+                }
             }
         }
     }

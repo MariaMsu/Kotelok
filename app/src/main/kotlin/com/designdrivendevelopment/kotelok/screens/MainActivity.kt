@@ -1,11 +1,17 @@
 package com.designdrivendevelopment.kotelok.screens
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.screens.bottomNavigation.BottomNavigator
 import com.designdrivendevelopment.kotelok.screens.dictionaries.addDictionaryScreen.AddDictionaryFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetailsScreen.DefinitionDetailsFragment
@@ -13,6 +19,8 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScre
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen.TrainersBottomSheet
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryDetailsFragment
 import com.designdrivendevelopment.kotelok.screens.dictionaries.lookupWordDefinitionsScreen.LookupWordDefinitionsFragment
+import com.designdrivendevelopment.kotelok.screens.recognize.RecognizedTextBottomSheet
+import com.designdrivendevelopment.kotelok.screens.recognize.RecognizedWordsFragment
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.statistics.StatisticFragment
 import com.designdrivendevelopment.kotelok.screens.trainers.TrainFlashcardsFragment
@@ -36,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         setupDefinitionsResultListeners()
         setupTrainersDialogResultListeners()
         setupProfileResultListeners()
+        setupRecognizeResultListener()
 
         if (savedInstanceState == null) {
             val item = bottomNavigationView?.menu?.findItem(R.id.dictionary_tab)
@@ -53,6 +62,21 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         bottomNavigator.onBackPressed()
         super.onBackPressed()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_CODE) {
+            if (allPermissionsGranted(this)) {
+                bottomNavigator.selectTab(bottomNavigator.getTabByName(RECOGNIZE_TAB))
+                val item = bottomNavigationView?.menu?.findItem(R.id.recognition_tab)
+                item?.isChecked = true
+            }
+        }
     }
 
     private fun setupDictionariesFragmentResultListeners() {
@@ -104,9 +128,13 @@ class MainActivity : AppCompatActivity() {
                 FragmentResult.DictionariesTab.OPEN_LOOKUP_WORD_DEF_FRAGMENT_KEY,
                 this@MainActivity
             ) { _, bundle ->
-                val dictionaryId = bundle.getLong(DictionaryDetailsFragment.RESULT_DATA_KEY)
+                val dictionaryId = bundle.getLong(
+                    DictionaryDetailsFragment.RESULT_DATA_KEY,
+                    Dictionary.DEFAULT_DICT_ID
+                )
+                val word = bundle.getString(LookupWordDefinitionsFragment.LOOKUP_WORD_KEY, "")
                 replaceFragment(
-                    fragment = LookupWordDefinitionsFragment.newInstance(dictionaryId),
+                    fragment = LookupWordDefinitionsFragment.newInstance(dictionaryId, word),
                     tag = "Lookup_word_def_fragment",
                     transactionName = "open_lookup_word_def_fragment"
                 )
@@ -162,6 +190,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupRecognizeResultListener() {
+        supportFragmentManager.apply {
+            setFragmentResultListener(
+                FragmentResult.RecognizeTab.OPEN_RECOGNIZED_TEXT_DIALOG,
+                this@MainActivity
+            ) { _, bundle ->
+                val text = bundle.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, "")
+                val recognizedTextBottomSheet = RecognizedTextBottomSheet.newInstance(text)
+                recognizedTextBottomSheet.show(this, null)
+            }
+            setFragmentResultListener(
+                FragmentResult.RecognizeTab.OPEN_RECOGNIZED_WORDS_FRAGMENT_KEY,
+                this@MainActivity
+            ) { _, bundle ->
+                val text = bundle.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, "")
+                replaceFragment(RecognizedWordsFragment.newInstance(text), "recognized_words_fragment")
+            }
+        }
+    }
+
     private fun initViews() {
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
         bottomNavigationView?.setOnItemSelectedListener { tab ->
@@ -171,8 +219,17 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.recognition_tab -> {
-                    bottomNavigator.selectTab(bottomNavigator.getTabByName(RECOGNIZE_TAB))
-                    true
+                    if (allPermissionsGranted(this)) {
+                        bottomNavigator.selectTab(bottomNavigator.getTabByName(RECOGNIZE_TAB))
+                        true
+                    } else {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            REQUIRED_PERMISSIONS,
+                            PERMISSIONS_CODE
+                        )
+                        false
+                    }
                 }
                 R.id.profile_tab -> {
                     bottomNavigator.selectTab(bottomNavigator.getTabByName(PROFILE_TAB))
@@ -211,9 +268,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun allPermissionsGranted(context: Context): Boolean {
+        return REQUIRED_PERMISSIONS.all { permission ->
+            ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
     companion object {
         private const val DICTIONARIES_TAB = "DICTIONARIES"
         private const val RECOGNIZE_TAB = "RECOGNIZE"
         private const val PROFILE_TAB = "PROFILE"
+        private const val PERMISSIONS_CODE = 42
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }
