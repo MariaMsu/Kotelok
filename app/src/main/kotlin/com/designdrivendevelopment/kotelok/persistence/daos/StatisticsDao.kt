@@ -2,9 +2,9 @@ package com.designdrivendevelopment.kotelok.persistence.daos
 
 import androidx.room.Dao
 import androidx.room.Query
+import com.designdrivendevelopment.kotelok.persistence.queryResults.AnswersStatisticQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictionaryStatisticQueryResult
-import com.designdrivendevelopment.kotelok.persistence.queryResults.AnswersStatisticQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
 import kotlinx.coroutines.flow.Flow
 

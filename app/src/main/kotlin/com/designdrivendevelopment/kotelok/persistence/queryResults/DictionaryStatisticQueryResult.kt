@@ -12,4 +12,3 @@ data class DictionaryStatisticQueryResult(
     @ColumnInfo(name = "size")
     val size: Int
 )
-
