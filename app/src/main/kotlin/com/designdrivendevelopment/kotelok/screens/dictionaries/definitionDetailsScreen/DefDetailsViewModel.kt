@@ -31,8 +31,10 @@ class DefDetailsViewModel(
     private val _isDeleteTrButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isDeleteSynButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
     private val _isDeleteExButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val _dictionaries: MutableLiveData<List<Dictionary>> = MutableLiveData()
+    private val _selectedDictionaries: MutableLiveData<List<Dictionary>> = MutableLiveData()
     private val _messageEvents = MutableLiveData<UiEvent.ShowMessage>()
+    private val _dictionaries = MutableLiveData<List<Dictionary>>()
+    private var loadedDictionaries: List<Dictionary> = emptyList()
 
     init {
         setInitialState()
@@ -57,7 +59,9 @@ class DefDetailsViewModel(
         get() = _isDeleteExButtonVisible
     val messageEvents: LiveData<UiEvent.ShowMessage>
         get() = _messageEvents
-    val dictionaries: LiveData<List<Dictionary>>
+    val selectedDictionaries: LiveData<List<Dictionary>>
+        get() = _selectedDictionaries
+    val allDictionariesLiveData: LiveData<List<Dictionary>>
         get() = _dictionaries
 
     override fun onCleared() {
@@ -99,17 +103,43 @@ class DefDetailsViewModel(
             examples = definition.examples.filter { it.originalText.isNotEmpty() }
         )
         viewModelScope.launch(Dispatchers.IO) {
-            val dictionary = dictionariesRepository.getDictionaryById(dictionaryId)
+            val dictionaries = selectedDictionaries.value ?: emptyList()
+            if (dictionaries.isEmpty()) {
+                _messageEvents.postValue(
+                    UiEvent.ShowMessage("Словари не выбраны, невозможно сохранить определение")
+                )
+                return@launch
+            }
             if (saveMode == DefinitionDetailsFragment.SAVE_MODE_COPY) {
-                editWordDefRepository.copyDefinitionToDictionary(addedDefinition, dictionary)
-                _messageEvents
-                    .postValue(UiEvent.ShowMessage("Сохранено в \"${dictionary.label}\""))
+                if (dictionaries.size == 1) {
+                    val dictionary = dictionaries.first()
+                    editWordDefRepository.copyDefinitionToDictionary(addedDefinition, dictionary)
+                    _messageEvents.postValue(
+                        UiEvent.ShowMessage("Сохранено в \"${dictionary.label}\"")
+                    )
+                } else {
+                    dictionaries.forEach { dictionary ->
+                        editWordDefRepository.copyDefinitionToDictionary(addedDefinition, dictionary)
+                    }
+                    _messageEvents.postValue(
+                        UiEvent.ShowMessage("Сохранено в выбранные словари")
+                    )
+                }
             } else {
                 _messageEvents.postValue(UiEvent.ShowMessage("Изменения сохранены"))
-                editWordDefRepository.addNewWordDefinitionWithDictionaries(
-                    addedDefinition,
-                    listOf(dictionary)
-                )
+                editWordDefRepository
+                    .addNewWordDefinitionWithDictionaries(addedDefinition, dictionaries)
+            }
+        }
+    }
+
+    fun changeSelectedDictionaries(dictionariesIds: List<Long>) {
+        if (dictionariesIds.isEmpty()) {
+            _messageEvents.value =
+                UiEvent.ShowMessage("Ошибка: Вы должны выбрать хотя бы 1 словарь для сохранения")
+        } else {
+            _selectedDictionaries.value = loadedDictionaries.filter {
+                it.id in dictionariesIds
             }
         }
     }
@@ -280,8 +310,21 @@ class DefDetailsViewModel(
 
     private fun loadDictionaries() {
         viewModelScope.launch(Dispatchers.IO) {
-            val loadedDictionaries = dictionariesRepository.getAllDictionaries()
-            _dictionaries.postValue(loadedDictionaries)
+            val allDictionaries = dictionariesRepository.getAllDictionaries()
+            if (allDictionaries.isEmpty()) {
+                _messageEvents.postValue(
+                    UiEvent.ShowMessage("У Вас отсутствуют словари, сохранение слов бессмысленно")
+                )
+                _isEditable.postValue(false)
+                return@launch
+            }
+            loadedDictionaries = allDictionaries
+            _dictionaries.postValue(allDictionaries)
+            if (dictionaryId == Dictionary.DEFAULT_DICT_ID) {
+                _selectedDictionaries.postValue(listOf(loadedDictionaries.first()))
+            } else {
+                _selectedDictionaries.postValue(listOf(loadedDictionaries.first { it.id == dictionaryId }))
+            }
         }
     }
     companion object {
