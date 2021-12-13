@@ -3,7 +3,10 @@ package com.designdrivendevelopment.kotelok.persistence.daos
 import androidx.room.Dao
 import androidx.room.Query
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
+import com.designdrivendevelopment.kotelok.persistence.queryResults.DictionaryStatisticQueryResult
+import com.designdrivendevelopment.kotelok.persistence.queryResults.TrainersStatisticQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StatisticsDao {
@@ -58,4 +61,24 @@ interface StatisticsDao {
         wordDefinitionId: Long,
         isTrainingResultSuccess: Int
     )
+
+    @Query(
+        """
+        SELECT d.id AS id, d.label AS label,  IFNULL(AVG(w_d.easiness_factor), 0) AS average_skill_level,
+        COUNT(w_d.def_id) AS size
+        FROM dictionaries AS d LEFT OUTER JOIN dictionary_word_def_cross_refs AS c_r
+        ON (d.id = c_r.dict_id)
+        LEFT OUTER JOIN word_definitions AS w_d ON (c_r.word_def_id = w_d.def_id)
+        GROUP BY d.id
+    """
+    )
+    fun getDictionariesStatistic(): Flow<List<DictionaryStatisticQueryResult>>
+
+    @Query(
+        """
+        SELECT SUM(completed_trainings_number) AS completed_num, SUM(successfully_trainings_number) AS successfully_num
+        FROM word_definitions
+    """
+    )
+    fun getTrainingsStatistic(): Flow<TrainersStatisticQueryResult>
 }
