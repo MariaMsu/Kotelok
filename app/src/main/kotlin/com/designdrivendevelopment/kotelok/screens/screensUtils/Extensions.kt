@@ -1,9 +1,12 @@
 package com.designdrivendevelopment.kotelok.screens.screensUtils
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -62,4 +65,14 @@ fun String.capitalizeFirstChar(): String {
     return this.replaceFirstChar { firstChar ->
         if (firstChar.isLowerCase()) firstChar.titlecase() else firstChar.toString()
     }
+}
+
+@ColorInt
+fun Context.getColorFromAttr(
+    @AttrRes attrColor: Int,
+    typedValue: TypedValue = TypedValue(),
+    resolveRefs: Boolean = true
+): Int {
+    theme.resolveAttribute(attrColor, typedValue, resolveRefs)
+    return typedValue.data
 }
