@@ -38,16 +38,16 @@ class ProfileViewModel(
                     val bestBySize = dictionariesStat
                         .filter { it.size > SIZE_EMPTY }
                         .sortedBy { it.size }
-                        .take(SHOWED_DICT_NUM)
+                        .takeLast(SHOWED_DICT_NUM)
                         .map { dictionaryStat ->
-                            dictionaryStat.label.reduceLengthTo(MAX_LABEL_LEN) to dictionaryStat.size.toFloat()
+                            dictionaryStat.label.lengthTo(MAX_LABEL_LEN) to dictionaryStat.size.toFloat()
                         }
                     val bestBySkill = dictionariesStat
                         .filter { it.size > SIZE_EMPTY }
                         .sortedBy { it.averageSkillLevel }
-                        .take(SHOWED_DICT_NUM)
+                        .takeLast(SHOWED_DICT_NUM)
                         .map { dictionaryStat ->
-                            dictionaryStat.label.reduceLengthTo(MAX_LABEL_LEN) to dictionaryStat.averageSkillLevel
+                            dictionaryStat.label.lengthTo(MAX_LABEL_LEN) to dictionaryStat.averageSkillLevel
                         }
 
                     _bestBySkillStat.postValue(bestBySkill)
@@ -57,8 +57,8 @@ class ProfileViewModel(
         }
     }
 
-    private fun String.reduceLengthTo(length: Int): String {
-        return this.take(length) + if (this.length > length) "..." else ""
+    private fun String.lengthTo(length: Int): String {
+        return this.take(length) + if (this.length > length) "..." else " ".repeat((length - this.length))
     }
 
     companion object {
