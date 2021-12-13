@@ -30,8 +30,9 @@ interface DictionariesDao {
 
     @Query(
         """
-        SELECT d.id as dict_id, d.label AS label, d.is_favorite AS is_favorite, COUNT(*) AS size
-        FROM dictionaries AS d JOIN dictionary_word_def_cross_refs as cross_refs ON (d.id = cross_refs.dict_id)
+        SELECT d.id as dict_id, d.label AS label, d.is_favorite AS is_favorite, COUNT(cross_refs.dict_id) AS size
+        FROM dictionaries AS d
+        LEFT OUTER JOIN dictionary_word_def_cross_refs as cross_refs ON (d.id = cross_refs.dict_id)
         GROUP BY d.id
         """
     )
