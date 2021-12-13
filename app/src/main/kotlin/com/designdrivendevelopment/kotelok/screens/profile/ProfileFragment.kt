@@ -12,7 +12,6 @@ import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setFragmentResult(FragmentResult.ProfileTab.OPEN_STATISTICS_KEY, Bundle())
     }
 
     override fun onCreateView(

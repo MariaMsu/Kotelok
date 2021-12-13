@@ -22,7 +22,5 @@ object FragmentResult {
         const val RESULT_TEXT_KEY = "result_text_key"
     }
 
-    object ProfileTab {
-        const val OPEN_STATISTICS_KEY = "fragment_result_open_statistics_key"
-    }
+    object ProfileTab
 }
