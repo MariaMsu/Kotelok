@@ -3,4 +3,6 @@
     <attr name="colorPrimaryBackground" format="reference|color" />
     <attr name="titleColor" format="reference|color" />
     <attr name="subheadingColor" format="reference|color" />
+    <attr name="donutRightColor" format="reference|color" />
+    <attr name="donutWrongColor" format="reference|color" />
 </resources>

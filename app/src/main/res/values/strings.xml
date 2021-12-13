@@ -78,4 +78,14 @@
     <string name="title_recognize_text">Распознать текст</string>
     <string name="button_change_dictionaries_text">Изменить</string>
     <string name="text_selected_dictionaries_description">Словари, в которые будет добавлено слово:</string>
+    <string name="text_best_dictionaries">Лучшие словари:</string>
+    <string name="text_best_by_skill">По уровню владения:</string>
+    <string name="text_best_by_size">По размеру:</string>
+    <string name="text_trainings_result">Результаты тренировок:</string>
+    <string name="text_answers_relation">Соотношение правильных/неправильных ответов</string>
+    <string name="text_right_answers_legend">правильные ответы</string>
+    <string name="text_wrong_answers_legen">ошибочные ответы</string>
+    <string name="title_statistic">Статистика</string>
+    <string name="total_answers">Всего ответов:  %1$d</string>
+    <string name="right_answers">Правильных ответов: %1$d</string>
 </resources>

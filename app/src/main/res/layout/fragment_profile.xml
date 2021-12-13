@@ -1,21 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorPrimaryBackground"
+    android:layout_height="wrap_content"
     tools:context=".screens.profile.ProfileFragment">
 
-    <TextView
-        android:id="@+id/profile_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/profile_ru" />
+        android:padding="12dp"
+        android:background="?attr/colorPrimaryBackground"
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:gravity="center"
+            android:text="@string/text_best_dictionaries"
+            android:textSize="@dimen/title_size"
+            android:background="@drawable/background_with_underline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="4dp"
+            android:gravity="center"
+            android:text="@string/text_best_by_skill"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="@dimen/subheading_size" />
+
+        <com.db.williamchart.view.HorizontalBarChartView
+            android:id="@+id/skill_chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginVertical="4dp"
+            app:chart_barsRadius="6dp"
+            app:chart_spacing="20dp"
+            app:chart_axis="y"
+            app:chart_barsColor="?attr/colorAccent"
+            app:chart_barsBackgroundColor="@color/light_gray_background_main"
+            app:chart_labelsSize="@dimen/subheading_size"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="4dp"
+            android:gravity="center"
+            android:text="@string/text_best_by_size"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="@dimen/subheading_size" />
+
+        <com.db.williamchart.view.HorizontalBarChartView
+            android:id="@+id/size_chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginVertical="4dp"
+            app:chart_spacing="20dp"
+            app:chart_barsRadius="6dp"
+            app:chart_axis="y"
+            app:chart_barsColor="?attr/colorPrimaryVariant"
+            app:chart_barsBackgroundColor="@color/light_gray_background_main"
+            app:chart_labelsSize="@dimen/subheading_size"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/text_trainings_result"
+            android:textSize="@dimen/title_size"
+            android:background="@drawable/background_with_underline" />
+
+        <TextView
+            android:id="@+id/total_answers_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:text="Всего ответов: 131"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="@dimen/subheading_size" />
+
+        <TextView
+            android:id="@+id/right_answers_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="12dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/background_with_underline"
+            tools:text="Правильных ответов: 75"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="@dimen/subheading_size" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:gravity="center"
+            android:text="@string/text_answers_relation"
+            android:textColor="?attr/subheadingColor"
+            android:textSize="@dimen/subheading_size" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="36dp"
+            android:includeFontPadding="false"
+            android:text="@string/text_right_answers_legend"
+            android:textColor="?attr/subheadingColor"
+            android:textSize="@dimen/subheading_size"
+            android:drawablePadding="8dp"
+            app:drawableStartCompat="@drawable/ic_circle_legend"
+            app:drawableTint="?attr/donutRightColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:layout_marginStart="36dp"
+            android:includeFontPadding="false"
+            android:text="@string/text_wrong_answers_legen"
+            android:textColor="?attr/subheadingColor"
+            android:textSize="@dimen/subheading_size"
+            android:drawablePadding="8dp"
+            app:drawableStartCompat="@drawable/ic_circle_legend"
+            app:drawableTint="?attr/donutWrongColor" />
+
+        <com.db.williamchart.view.DonutChartView
+            android:id="@+id/answers_chart"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:layout_marginVertical="20dp"
+            app:chart_donutBackgroundColor="@color/light_gray_background_main"
+            app:chart_donutRoundCorners="false"
+            app:chart_donutThickness="60dp"
+            />
+    </LinearLayout>
+</ScrollView>
