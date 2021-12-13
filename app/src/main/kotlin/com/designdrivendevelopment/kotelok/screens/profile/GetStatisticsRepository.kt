@@ -1,10 +1,11 @@
 package com.designdrivendevelopment.kotelok.screens.profile
 
-import com.designdrivendevelopment.kotelok.entities.TotalDictionaryStat
-import com.designdrivendevelopment.kotelok.entities.TotalStat
+import com.designdrivendevelopment.kotelok.entities.AnswersStatistic
+import com.designdrivendevelopment.kotelok.entities.DictionaryStatistic
+import kotlinx.coroutines.flow.Flow
 
 interface GetStatisticsRepository {
-    suspend fun getStatisticsForAllDict(): TotalStat
+    fun getStatisticsForAllDict(): Flow<List<DictionaryStatistic>>
 
-    suspend fun getStatisticsForDictionary(dictionaryId: Long): TotalDictionaryStat
+    fun getAnswersStatistic(): Flow<AnswersStatistic>
 }

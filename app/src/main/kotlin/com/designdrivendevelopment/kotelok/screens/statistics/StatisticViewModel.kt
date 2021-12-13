@@ -17,7 +17,7 @@ class StatisticViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _totalStat.postValue(getStatisticsRepository.getStatisticsForAllDict())
+//            _totalStat.postValue(getStatisticsRepository.getStatisticsForAllDict())
         }
     }
 }

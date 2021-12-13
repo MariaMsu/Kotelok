@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictionaryStatisticQueryResult
-import com.designdrivendevelopment.kotelok.persistence.queryResults.TrainersStatisticQueryResult
+import com.designdrivendevelopment.kotelok.persistence.queryResults.AnswersStatisticQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
 import kotlinx.coroutines.flow.Flow
 
@@ -80,5 +80,5 @@ interface StatisticsDao {
         FROM word_definitions
     """
     )
-    fun getTrainingsStatistic(): Flow<TrainersStatisticQueryResult>
+    fun getAnswersStatistic(): Flow<AnswersStatisticQueryResult>
 }

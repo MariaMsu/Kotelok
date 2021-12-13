@@ -10,7 +10,7 @@ import com.designdrivendevelopment.kotelok.entities.WordDefinitionStat
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictStatQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.DictionaryStatisticQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.LearnableDefQueryResult
-import com.designdrivendevelopment.kotelok.persistence.queryResults.TrainersStatisticQueryResult
+import com.designdrivendevelopment.kotelok.persistence.queryResults.AnswersStatisticQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionQueryResult
 import com.designdrivendevelopment.kotelok.persistence.queryResults.WordDefinitionStatQuery
 
@@ -83,7 +83,7 @@ fun DictionaryStatisticQueryResult.toDictionaryStatistic(): DictionaryStatistic 
     )
 }
 
-fun TrainersStatisticQueryResult.toAnswersStatistic(): AnswersStatistic {
+fun AnswersStatisticQueryResult.toAnswersStatistic(): AnswersStatistic {
     return AnswersStatistic(
         totalAnswers = totalAnswersNum,
         successfullyAnswers = successfullyAnswersNum
