@@ -88,4 +88,5 @@
     <string name="title_statistic">Статистика</string>
     <string name="total_answers">Всего ответов:  %1$d</string>
     <string name="right_answers">Правильных ответов: %1$d</string>
+    <string name="statistics_ru">Статистика</string>
 </resources>
