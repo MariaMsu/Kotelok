@@ -50,7 +50,7 @@ class TrainWriteFragment : Fragment() {
         val factory = TrainWriteViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)
-                .appComponent.cardsLearnDefRepository,
+                .appComponent.writerLearnDefRepository,
             (requireActivity().application as KotelokApplication)
                 .appComponent.changeStatisticsRepositoryImpl
         )

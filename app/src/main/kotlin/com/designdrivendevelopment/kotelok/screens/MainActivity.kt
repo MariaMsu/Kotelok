@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         setupDictionariesFragmentResultListeners()
         setupDefinitionsResultListeners()
         setupTrainersDialogResultListeners()
-        setupProfileResultListeners()
         setupRecognizeResultListener()
 
         if (savedInstanceState == null) {
@@ -176,10 +175,6 @@ class MainActivity : AppCompatActivity() {
                 replaceFragment(TrainWriteFragment.newInstance(trainedDictionaryId ?: 1))
             }
         }
-    }
-
-    private fun setupProfileResultListeners() {
-
     }
 
     private fun setupRecognizeResultListener() {

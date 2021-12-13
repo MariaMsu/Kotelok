@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
-import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.CardsLearnableDefinitionsRepository
+import com.designdrivendevelopment.kotelok.repositoryImplementations.learnableDefinitionsRepository.WriterLearnableDefinitionsRepository
 import com.designdrivendevelopment.kotelok.trainer.ChangeStatisticsRepository
 import com.designdrivendevelopment.kotelok.trainer.TrainerWriter
 import kotlinx.coroutines.Dispatchers
@@ -13,14 +14,14 @@ import kotlinx.coroutines.launch
 
 class TrainWriteViewModel(
     dictionaryId: Long,
-    cardsLearnDefRepository: CardsLearnableDefinitionsRepository,
+    writerLearnDefRepository: WriterLearnableDefinitionsRepository,
     changeStatisticsRepository: ChangeStatisticsRepository,
 ) : ViewModel() {
-    private var dictId: Long = 0
+    private var dictId: Long = Dictionary.NEW_DICTIONARY_ID
     private val _viewState = MutableLiveData<TrainWriteFragment.State>()
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
     val viewState: LiveData<TrainWriteFragment.State> = _viewState
-    val trainerWriter: TrainerWriter = TrainerWriter(cardsLearnDefRepository, changeStatisticsRepository)
+    val trainerWriter: TrainerWriter = TrainerWriter(writerLearnDefRepository, changeStatisticsRepository)
     val currentWord: LiveData<LearnableDefinition> = _currentWord
 
     init {
