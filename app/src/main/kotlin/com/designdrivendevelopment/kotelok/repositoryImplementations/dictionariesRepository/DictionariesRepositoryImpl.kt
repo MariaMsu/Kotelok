@@ -76,6 +76,11 @@ class DictionariesRepositoryImpl(
 //        dictionaryWordDefCrossRefDao.deleteByDictionaryId(dictionary.id)
     }
 
+    override suspend fun deleteDictionaries(dictionaries: List<Dictionary>) {
+        dictionariesDao.deleteByIds(dictionaries.map { it.id })
+        dictionaryWordDefCrossRefDao.deleteCrossRefByDictIds(dictionaries.map { it.id })
+    }
+
     override suspend fun deleteWordDefinitionFromDictionary(
         dictionary: Dictionary,
         wordDefinition: WordDefinition

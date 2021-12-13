@@ -22,6 +22,9 @@ interface DictionariesDao {
     @Query("DELETE FROM dictionaries WHERE (id = :dictionaryId)")
     suspend fun deleteById(dictionaryId: Long)
 
+    @Query("DELETE FROM dictionaries WHERE (id IN (:dictionaryIds))")
+    suspend fun deleteByIds(dictionaryIds: List<Long>)
+
     @Query("SELECT * FROM dictionaries")
     suspend fun getAll(): List<DictionaryEntity>
 

@@ -39,6 +39,15 @@ interface DictionaryWordDefCrossRefDao {
         """
         DELETE
         FROM dictionary_word_def_cross_refs
+        WHERE (dict_id IN (:dictionariesIds))
+        """
+    )
+    suspend fun deleteCrossRefByDictIds(dictionariesIds: List<Long>)
+
+    @Query(
+        """
+        DELETE
+        FROM dictionary_word_def_cross_refs
         WHERE (word_def_id = :wordDefinitionId) AND (dict_id NOT IN (:newDictionariesIds))
         """
     )
