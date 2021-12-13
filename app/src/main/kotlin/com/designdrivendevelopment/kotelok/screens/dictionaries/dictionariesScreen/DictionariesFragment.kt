@@ -10,7 +10,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
@@ -61,7 +60,6 @@ class DictionariesFragment :
             dictionaryClickListener = this,
             isFavoriteListener = this,
             learnButtonListener = this,
-            emptyList()
         )
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         setupDictionariesList(dictionariesList, adapter, layoutManager)
@@ -138,7 +136,7 @@ class DictionariesFragment :
 
     private fun setupViewModel(viewModel: DictionariesViewModel?, adapter: DictionariesAdapter) {
         viewModel?.dictionaries?.observe(this) { dictionaries ->
-            onDictionariesChanged(dictionaries, adapter)
+            adapter.submitList(dictionaries)
         }
     }
 
@@ -161,18 +159,6 @@ class DictionariesFragment :
         addDictionaryFab?.setOnClickListener {
             setFragmentResult(FragmentResult.DictionariesTab.OPEN_ADD_DICTIONARY_KEY, Bundle())
         }
-    }
-
-    private fun onDictionariesChanged(
-        newDictionaries: List<Dictionary>,
-        adapter: DictionariesAdapter
-    ) {
-        val diffCallback = DictionariesDiffCallback(
-            oldDictionaries = adapter.dictionaries,
-            newDictionaries = newDictionaries
-        )
-        DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
-        adapter.dictionaries = newDictionaries
     }
 
     private fun initViews(view: View) {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.entities.Dictionary
@@ -16,8 +17,9 @@ class DictionariesAdapter(
     private val dictionaryClickListener: DictionaryClickListener,
     private val isFavoriteListener: IsFavoriteListener,
     private val learnButtonListener: LearnButtonListener,
-    var dictionaries: List<Dictionary>
-) : RecyclerView.Adapter<DictionariesAdapter.ViewHolder>() {
+) : ListAdapter<Dictionary, DictionariesAdapter.ViewHolder>(
+    DictionariesDiffUtil()
+) {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val label: TextView = view.findViewById(R.id.dictionary_title)
         private val dictionarySize: TextView = view.findViewById(R.id.dictionary_size_text)
@@ -47,28 +49,18 @@ class DictionariesAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val dictionary = dictionaries[position]
+        val dictionary = getItem(position)
         holder.bind(dictionary)
         holder.itemView.setOnClickListener {
             dictionaryClickListener.onDictionaryClicked(dictionary)
         }
+
         holder.isFavoriteCheckBox.setOnClickListener {
-            dictionaries.toMutableList().mapIndexed { index, dictionary ->
-                if (index == holder.adapterPosition) {
-                    dictionary.copy(isFavorite = holder.isFavoriteCheckBox.isChecked)
-                } else {
-                    dictionary
-                }
-            }
             isFavoriteListener.onIsFavoriteChanged(dictionary.id, holder.isFavoriteCheckBox.isChecked)
         }
         holder.learnButton.setOnClickListener {
             learnButtonListener.onLearnClicked(dictionary.id)
         }
-    }
-
-    override fun getItemCount(): Int {
-        return dictionaries.size
     }
 
     companion object {
