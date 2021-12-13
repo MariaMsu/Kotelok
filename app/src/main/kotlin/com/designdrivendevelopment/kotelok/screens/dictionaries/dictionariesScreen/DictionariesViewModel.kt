@@ -15,6 +15,7 @@ class DictionariesViewModel(
 ) : ViewModel() {
     private val _dictionaries = MutableLiveData<List<Dictionary>>(emptyList())
     private var unfilteredDictionaries: List<Dictionary> = emptyList()
+    private var filteredDictionaries: List<Dictionary> = emptyList()
     val dictionaries: LiveData<List<Dictionary>>
         get() = _dictionaries
 
@@ -22,7 +23,11 @@ class DictionariesViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             dictionariesRepository.getAllDictionariesFlow().collect { dictionaries ->
                 unfilteredDictionaries = dictionaries.sortedByDescending { it.isFavorite }
-                _dictionaries.postValue(unfilteredDictionaries)
+                if (filteredDictionaries.isEmpty()) {
+                    _dictionaries.postValue(unfilteredDictionaries)
+                } else {
+                    _dictionaries.postValue(filteredDictionaries)
+                }
             }
         }
     }
@@ -35,9 +40,10 @@ class DictionariesViewModel(
 
     fun filter(text: String) {
         if (text.isEmpty()) {
+            filteredDictionaries = emptyList()
             _dictionaries.value = unfilteredDictionaries
         } else {
-            val filteredDictionaries = unfilteredDictionaries.filter { dictionary ->
+            filteredDictionaries = unfilteredDictionaries.filter { dictionary ->
                 dictionary.label.startsWith(text, ignoreCase = true)
             }
             _dictionaries.value = filteredDictionaries
