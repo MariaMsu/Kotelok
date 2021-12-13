@@ -76,4 +76,6 @@
     <string name="text_choose_recognized_word">Нажмите на слово, чтобы больше узнать о нем:</string>
     <string name="title_recognized_words">Распознанные слова</string>
     <string name="title_recognize_text">Распознать текст</string>
+    <string name="button_change_dictionaries_text">Изменить</string>
+    <string name="text_selected_dictionaries_description">Словари, в которые будет добавлено слово:</string>
 </resources>
