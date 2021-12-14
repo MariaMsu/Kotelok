@@ -1,6 +1,7 @@
 package com.designdrivendevelopment.kotelok.repositoryImplementations.dictionaryWordDefinitionsRepository
 
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
+import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
 import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toWordDefinition
 import com.designdrivendevelopment.kotelok.screens.dictionaries.dictionaryDetailsScreen.DictionaryWordDefinitionsRepository
@@ -10,7 +11,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class DictWordDefinitionRepositoryImpl(
-    private val wordDefinitionsDao: WordDefinitionsDao
+    private val wordDefinitionsDao: WordDefinitionsDao,
+    private val crossRefDao: DictionaryWordDefCrossRefDao
 ) : DictionaryWordDefinitionsRepository {
     override suspend fun getDefinitionsByDictionaryId(
         dictionaryId: Long
@@ -38,8 +40,13 @@ class DictWordDefinitionRepositoryImpl(
         wordDefinitionsDao.getDefinitionById(wordDefinitionId)?.toWordDefinition()
     }
 
-//    override suspend fun deleteWordDefinitionById(wordDefinitionId: Long) {
-//        wordDefinitionsDao.deleteWordDefinitionById(wordDefinitionId)
-//        wordDefCrossRefDao.deleteByWordDefinitionId(wordDefinitionId)
-//    }
+    override suspend fun deleteDefinitionsFromDictionary(
+        dictionaryId: Long,
+        definitions: List<WordDefinition>
+    ) = withContext(Dispatchers.IO) {
+        crossRefDao.deleteCrossRefsByIds(
+            dictionaryId,
+            definitions.map { it.id }
+        )
+    }
 }
