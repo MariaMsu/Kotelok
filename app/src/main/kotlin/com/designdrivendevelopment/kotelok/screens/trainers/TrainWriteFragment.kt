@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.google.android.material.textfield.TextInputLayout
 
 class TrainWriteFragment : Fragment() {
     lateinit var viewModel: TrainWriteViewModel
-
     private var inputText: TextInputLayout? = null
     private var checkButton: Button? = null
     private var textCompleted: TextView? = null
@@ -24,6 +24,7 @@ class TrainWriteFragment : Fragment() {
     private var correctWord: TextView? = null
     private var nextWordButton: Button? = null
     private var repeatDict: Button? = null
+    private var backToDictionariesButton: Button? = null
     private var wordWriting: TextView? = null
     private var wordExample: TextView? = null
 
@@ -45,8 +46,10 @@ class TrainWriteFragment : Fragment() {
         repeatDict?.setOnClickListener(listener)
         wordExample = view.findViewById(R.id.word_example_ru)
         wordWriting = view.findViewById(R.id.word_writing_ru)
+        backToDictionariesButton = view.findViewById(R.id.to_dictionaries_button)
+        backToDictionariesButton?.setOnClickListener { requireActivity().onBackPressed() }
 
-        val dictionaryId = arguments?.getLong("id") ?: 1
+        val dictionaryId = arguments?.getLong("id") ?: Dictionary.DEFAULT_DICT_ID
         val factory = TrainWriteViewModelFactory(
             dictionaryId,
             (requireActivity().application as KotelokApplication)
@@ -74,6 +77,20 @@ class TrainWriteFragment : Fragment() {
         viewModel.viewState.observe(this) { state ->
             onStateChanged(state)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        textCompleted = null
+        inputText = null
+        checkButton = null
+        flashcard = null
+        correctWord = null
+        nextWordButton = null
+        repeatDict = null
+        wordExample = null
+        wordWriting = null
+        backToDictionariesButton = null
     }
 
     private fun onStateChanged(state: State?) {
@@ -121,10 +138,8 @@ class TrainWriteFragment : Fragment() {
     private fun checkedVisibility(isChecked: Boolean) {
         inputText?.isEnabled = !isChecked
         checkButton?.isVisible = !isChecked
-        checkButton?.isClickable = !isChecked
         correctWord?.isVisible = isChecked
         nextWordButton?.isVisible = isChecked
-        nextWordButton?.isClickable = isChecked
     }
 
     private fun completedVisibility(isCompleted: Boolean) {
@@ -140,6 +155,7 @@ class TrainWriteFragment : Fragment() {
         textCompleted?.isVisible = isCompleted
         repeatDict?.isVisible = isCompleted
         repeatDict?.isClickable = isCompleted
+        backToDictionariesButton?.isVisible = isCompleted
     }
 
     companion object {
