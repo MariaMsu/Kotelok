@@ -41,7 +41,7 @@ class TrainWriteFragment : Fragment() {
         correctWord = view.findViewById(R.id.correct_word)
         nextWordButton = view.findViewById(R.id.next_word_button)
         nextWordButton?.setOnClickListener(listener)
-        repeatDict = view.findViewById(R.id.repeatDict)
+        repeatDict = view.findViewById(R.id.repeat_button)
         repeatDict?.setOnClickListener(listener)
         wordExample = view.findViewById(R.id.word_example_ru)
         wordWriting = view.findViewById(R.id.word_writing_ru)
@@ -111,7 +111,7 @@ class TrainWriteFragment : Fragment() {
             R.id.next_word_button -> {
                 viewModel.onPressNext()
             }
-            R.id.repeatDict -> {
+            R.id.repeat_button -> {
                 completedVisibility(false)
                 viewModel.restartDict()
             }

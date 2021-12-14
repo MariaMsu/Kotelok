@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
@@ -18,16 +17,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TrainFlashcardsFragment : Fragment() {
     lateinit var viewModel: TrainFlashcardsViewModel
 
-    private var yesButton: ImageButton? = null
-    private var noButton: ImageButton? = null
+    private var yesButton: FloatingActionButton? = null
+    private var noButton: FloatingActionButton? = null
     private var flashcardButtonOrig: LinearLayout? = null
     private var flashcardButtonRu: LinearLayout? = null
     private var textCompleted: TextView? = null
     private var repeatDict: Button? = null
+    private var backToDictionariesBtn: Button? = null
     private var origWordText: TextView? = null
     private var origWordExample: TextView? = null
     private var ruWordText: TextView? = null
@@ -55,12 +56,14 @@ class TrainFlashcardsFragment : Fragment() {
         yesButton?.setOnClickListener(listener)
         noButton = view.findViewById(R.id.noButton)
         noButton?.setOnClickListener(listener)
-        repeatDict = view.findViewById(R.id.repeatDict)
+        repeatDict = view.findViewById(R.id.repeat_button)
         repeatDict?.setOnClickListener(listener)
         origWordText = view.findViewById(R.id.word_writing_orig)
         origWordExample = view.findViewById(R.id.word_example_orig)
         ruWordText = view.findViewById(R.id.word_writing_ru)
         ruWordExample = view.findViewById(R.id.word_example_ru)
+        backToDictionariesBtn = view.findViewById(R.id.to_dictionaries_button)
+        backToDictionariesBtn?.setOnClickListener { requireActivity().onBackPressed() }
 
         val dictionaryId = arguments?.getLong("id") ?: 1
         requireActivity().title = getString(R.string.cards_trainer_title)
@@ -116,6 +119,7 @@ class TrainFlashcardsFragment : Fragment() {
         origWordExample = null
         ruWordText = null
         ruWordExample = null
+        backToDictionariesBtn = null
     }
 
     private val listener = View.OnClickListener { view ->
@@ -126,7 +130,7 @@ class TrainFlashcardsFragment : Fragment() {
             R.id.noButton -> {
                 pressGuessButton(false)
             }
-            R.id.repeatDict -> {
+            R.id.repeat_button -> {
                 completedVisibility(false)
                 viewModel.restartDict()
             }
@@ -143,6 +147,7 @@ class TrainFlashcardsFragment : Fragment() {
     private fun completedVisibility(isCompleted: Boolean) {
         flashcardButtonOrig?.isVisible = false
         flashcardButtonRu?.isVisible = false
+        backToDictionariesBtn?.isVisible = isCompleted
         textCompleted?.isVisible = isCompleted
         flashcardButtonOrig?.isClickable = !isCompleted
         repeatDict?.isVisible = isCompleted
