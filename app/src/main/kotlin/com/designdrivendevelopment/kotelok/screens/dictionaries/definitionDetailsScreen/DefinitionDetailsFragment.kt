@@ -9,6 +9,8 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -84,6 +86,7 @@ class DefinitionDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         val dictionaryId = arguments?.getLong(DICT_ID_KEY) ?: Dictionary.DEFAULT_DICT_ID
         saveMode = arguments?.getInt(SAVE_MODE_KEY) ?: SAVE_MODE_COPY
@@ -162,6 +165,11 @@ class DefinitionDetailsFragment :
         val definition = readDefinitionFromFields()
         exAdapter?.examples = definition.examples
         viewModel?.deleteExample(position, definition)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
     }
 
     private fun setupViewModel(
