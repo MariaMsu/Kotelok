@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.designdrivendevelopment.kotelok.R
 import com.designdrivendevelopment.kotelok.application.KotelokApplication
+import com.designdrivendevelopment.kotelok.entities.Dictionary
+import com.designdrivendevelopment.kotelok.entities.LearnableDefinition
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TrainFlashcardsFragment : Fragment() {
@@ -65,7 +67,7 @@ class TrainFlashcardsFragment : Fragment() {
         backToDictionariesBtn = view.findViewById(R.id.to_dictionaries_button)
         backToDictionariesBtn?.setOnClickListener { requireActivity().onBackPressed() }
 
-        val dictionaryId = arguments?.getLong("id") ?: 1
+        val dictionaryId = arguments?.getLong("id") ?: Dictionary.DEFAULT_DICT_ID
         requireActivity().title = getString(R.string.cards_trainer_title)
         val factory = TrainFlashcardsViewModelFactory(
             dictionaryId,
@@ -75,30 +77,11 @@ class TrainFlashcardsFragment : Fragment() {
                 .appComponent.changeStatisticsRepositoryImpl
         )
         viewModel = ViewModelProvider(this, factory).get(TrainFlashcardsViewModel::class.java)
-        viewModel.viewState.observe(
-            this,
-            {
-                updateFlashcard()
-                if (viewModel.viewState.value != State.NOT_GUESSED) {
-                    updateButtonVisibility(true)
-                } else {
-                    updateButtonVisibility(false)
-                }
-            }
-        )
-        viewModel.currentWord.observe(
-            this,
-            {
-                updateFlashcard()
-            }
-        )
-
-        viewModel.isTrainerDone.observe(this) { isDone ->
-            if (isDone) {
-                completedVisibility(true)
-            } else {
-                updateFlashcard()
-            }
+        viewModel.viewState.observe(this) { state ->
+            handleState(state)
+        }
+        viewModel.currentWord.observe(this) { definition ->
+            setWord(definition)
         }
     }
 
@@ -137,36 +120,20 @@ class TrainFlashcardsFragment : Fragment() {
         }
     }
 
-    private fun updateButtonVisibility(isActive: Boolean) {
-        yesButton?.isVisible = isActive
-        yesButton?.isClickable = isActive
-        noButton?.isVisible = isActive
-        noButton?.isClickable = isActive
+    private fun setWord(learnableDefinition: LearnableDefinition) {
+        val example = if (learnableDefinition.examples.isEmpty()) null else learnableDefinition.examples.first()
+        origWordText?.text = learnableDefinition.writing
+        ruWordText?.text = learnableDefinition.mainTranslation
+        origWordExample?.isVisible = example != null
+        ruWordExample?.isVisible = example != null
+        origWordExample?.text = example?.originalText.orEmpty()
+        ruWordExample?.text = example?.translatedText.orEmpty()
     }
 
-    private fun completedVisibility(isCompleted: Boolean) {
-        flashcardButtonOrig?.isVisible = false
-        flashcardButtonRu?.isVisible = false
-        backToDictionariesBtn?.isVisible = isCompleted
-        textCompleted?.isVisible = isCompleted
-        flashcardButtonOrig?.isClickable = !isCompleted
-        repeatDict?.isVisible = isCompleted
-        repeatDict?.isClickable = isCompleted
-    }
-
-    private fun updateFlashcard() {
-        when (viewModel.viewState.value) {
+    private fun handleState(state: State) {
+        when (state) {
             State.NOT_GUESSED -> {
-                origWordText?.text = viewModel.currentWord.value?.writing
-                val examples = viewModel.currentWord.value?.examples
-                if (examples?.isNotEmpty() == true) {
-                    origWordExample?.text = examples.first().originalText
-                    origWordExample?.isVisible = true
-                } else {
-                    origWordExample?.isVisible = false
-                    origWordExample?.text = ""
-                }
-
+                updateButtonVisibility(false)
                 flipAnimations.forEach { it.cancel() }
                 ObjectAnimator.ofFloat(
                     flashcardButtonOrig,
@@ -191,30 +158,31 @@ class TrainFlashcardsFragment : Fragment() {
             }
 
             State.GUESSED_TRANSLATION -> {
-                ruWordText?.text = viewModel.currentWord.value?.mainTranslation
-                val translatedExamples =
-                    viewModel.currentWord.value?.examples?.map { it.translatedText }
-                if (translatedExamples?.isNotEmpty() == true) {
-                    ruWordExample?.text = translatedExamples.first()
-                    ruWordExample?.isVisible = true
-                } else {
-                    ruWordExample?.isVisible = false
-                    ruWordExample?.text = ""
-                }
+                updateButtonVisibility(true)
             }
 
             State.GUESSED_WORD -> {
-                origWordText?.text = viewModel.currentWord.value?.writing
-                val examples = viewModel.currentWord.value?.examples
-                if (examples?.isNotEmpty() == true) {
-                    origWordExample?.text = examples.first().originalText
-                    origWordExample?.isVisible = true
-                } else {
-                    origWordExample?.isVisible = false
-                    origWordExample?.text = ""
-                }
+                updateButtonVisibility(true)
+            }
+
+            State.DONE -> {
+                updateButtonVisibility(isVisible = false)
+                completedVisibility(isCompleted = true)
             }
         }
+    }
+
+    private fun updateButtonVisibility(isVisible: Boolean) {
+        yesButton?.isVisible = isVisible
+        noButton?.isVisible = isVisible
+    }
+
+    private fun completedVisibility(isCompleted: Boolean) {
+        flashcardButtonOrig?.isVisible = !isCompleted
+        flashcardButtonRu?.isVisible = !isCompleted
+        backToDictionariesBtn?.isVisible = isCompleted
+        textCompleted?.isVisible = isCompleted
+        repeatDict?.isVisible = isCompleted
     }
 
     private fun pressGuessButton(guess: Boolean) {
@@ -252,7 +220,7 @@ class TrainFlashcardsFragment : Fragment() {
     }
 
     enum class State {
-        NOT_GUESSED, GUESSED_TRANSLATION, GUESSED_WORD
+        NOT_GUESSED, GUESSED_TRANSLATION, GUESSED_WORD, DONE
     }
 
     companion object {
