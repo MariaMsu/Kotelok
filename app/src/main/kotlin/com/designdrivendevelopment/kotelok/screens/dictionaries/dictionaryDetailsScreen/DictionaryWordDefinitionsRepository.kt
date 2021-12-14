@@ -11,4 +11,9 @@ interface DictionaryWordDefinitionsRepository {
     suspend fun getAllDefinitions(): List<WordDefinition>
 
     suspend fun getWordDefinitionById(wordDefinitionId: Long): WordDefinition?
+
+    suspend fun deleteDefinitionsFromDictionary(
+        dictionaryId: Long,
+        definitions: List<WordDefinition>
+    )
 }

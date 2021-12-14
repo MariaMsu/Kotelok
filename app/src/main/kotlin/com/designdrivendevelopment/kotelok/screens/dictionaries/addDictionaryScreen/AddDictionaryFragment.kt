@@ -29,6 +29,7 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
     private var dictionaryLabelField: TextInputLayout? = null
     private var definitionsList: RecyclerView? = null
     private var addDictViewModel: AddDictViewModel? = null
+    private var searchQuery = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +42,7 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        searchQuery = savedInstanceState?.getString(SEARCH_QUERY_KEY) ?: ""
 
         setHasOptionsMenu(true)
         initViews(view)
@@ -67,6 +69,11 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
         setupListeners()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_QUERY_KEY, searchQuery)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         addDictViewModel = null
@@ -81,7 +88,12 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
         inflater.inflate(R.menu.menu_search, menu)
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        if (searchQuery.isNotEmpty()) {
+            searchItem.expandActionView()
+            searchView.setQuery(searchQuery, true)
+        }
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -89,6 +101,7 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    searchQuery = newText.orEmpty()
                     if (newText.orEmpty().isEmpty()) {
                         definitionsList?.scrollToPosition(SCROLL_START_POSITION)
                     }
@@ -167,6 +180,7 @@ class AddDictionaryFragment : Fragment(), DefinitionSelectionListener {
     }
 
     companion object {
+        private const val SEARCH_QUERY_KEY = "search_query_key"
         private const val SCROLL_START_POSITION = 0
         private const val NOT_EXIST_DICT_ID = 0L
         const val DICT_ID_KEY = "dictionary_id_key"

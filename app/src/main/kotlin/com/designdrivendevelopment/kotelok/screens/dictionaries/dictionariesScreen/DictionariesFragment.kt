@@ -10,7 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
@@ -18,6 +18,7 @@ import com.designdrivendevelopment.kotelok.application.KotelokApplication
 import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
+import com.designdrivendevelopment.kotelok.screens.screensUtils.SwipeToDelete
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
@@ -30,7 +31,9 @@ class DictionariesFragment :
     private var dictionariesList: RecyclerView? = null
     private var addDictionaryFab: FloatingActionButton? = null
     private var dictionariesViewModel: DictionariesViewModel? = null
+    private var adapter: DictionariesAdapter? = null
     private var searchQuery = ""
+    private val currentDictionaries: MutableList<Dictionary> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,22 +59,23 @@ class DictionariesFragment :
         )
         dictionariesViewModel = ViewModelProvider(this, factory)[DictionariesViewModel::class.java]
 
-        val adapter = DictionariesAdapter(
+        adapter = DictionariesAdapter(
             context,
             dictionaryClickListener = this,
             isFavoriteListener = this,
             learnButtonListener = this,
-            emptyList()
         )
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         setupDictionariesList(dictionariesList, adapter, layoutManager)
         setupViewModel(dictionariesViewModel, adapter)
         setupListeners()
+        setupSwipeToDelete()
     }
 
     override fun onStop() {
         super.onStop()
         dictionariesViewModel?.saveIsFavoriteStatus()
+        dictionariesViewModel?.deleteDictionaries()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -81,6 +85,9 @@ class DictionariesFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
+        currentDictionaries.clear()
+        dictionariesViewModel = null
+        adapter = null
         clearViews()
     }
 
@@ -136,15 +143,36 @@ class DictionariesFragment :
         setFragmentResult(FragmentResult.DictionariesTab.OPEN_TRAINERS_DIALOG_KEY, bundle)
     }
 
-    private fun setupViewModel(viewModel: DictionariesViewModel?, adapter: DictionariesAdapter) {
+    private fun setupViewModel(viewModel: DictionariesViewModel?, adapter: DictionariesAdapter?) {
         viewModel?.dictionaries?.observe(this) { dictionaries ->
-            onDictionariesChanged(dictionaries, adapter)
+            currentDictionaries.clear()
+            currentDictionaries.addAll(dictionaries)
+            adapter?.submitList(dictionaries)
         }
+    }
+
+    private fun setupSwipeToDelete() {
+        val onItemSwipedToDelete = { positionForRemove: Int ->
+            val removedDictionary = currentDictionaries[positionForRemove]
+            currentDictionaries.removeAt(positionForRemove)
+            dictionariesViewModel?.deleteDictionary(positionForRemove)
+            showRestoreItemSnackbar(positionForRemove, removedDictionary)
+        }
+        val swipeToDeleteCallback = SwipeToDelete(onItemSwipedToDelete)
+        ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(dictionariesList)
+    }
+
+    private fun showRestoreItemSnackbar(position: Int, dictionary: Dictionary) {
+        Snackbar.make(view!!, "Словарь удален", Snackbar.LENGTH_LONG)
+            .setAction("Отмена") {
+                currentDictionaries.add(position, dictionary)
+                dictionariesViewModel?.restoreDictionary(position, dictionary)
+            }.show()
     }
 
     private fun setupDictionariesList(
         dictionariesList: RecyclerView?,
-        adapter: DictionariesAdapter,
+        adapter: DictionariesAdapter?,
         layoutManager: LinearLayoutManager
     ) {
         dictionariesList?.addItemDecoration(
@@ -161,18 +189,6 @@ class DictionariesFragment :
         addDictionaryFab?.setOnClickListener {
             setFragmentResult(FragmentResult.DictionariesTab.OPEN_ADD_DICTIONARY_KEY, Bundle())
         }
-    }
-
-    private fun onDictionariesChanged(
-        newDictionaries: List<Dictionary>,
-        adapter: DictionariesAdapter
-    ) {
-        val diffCallback = DictionariesDiffCallback(
-            oldDictionaries = adapter.dictionaries,
-            newDictionaries = newDictionaries
-        )
-        DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo(adapter)
-        adapter.dictionaries = newDictionaries
     }
 
     private fun initViews(view: View) {

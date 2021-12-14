@@ -1,6 +1,10 @@
 package com.designdrivendevelopment.kotelok.screens.screensUtils
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
@@ -75,4 +79,21 @@ fun Context.getColorFromAttr(
 ): Int {
     theme.resolveAttribute(attrColor, typedValue, resolveRefs)
     return typedValue.data
+}
+
+fun Drawable.toBitmap(width: Int, height: Int): Bitmap {
+    if (this is BitmapDrawable) {
+        return this.bitmap
+    }
+
+    val bitmap = Bitmap.createBitmap(
+        if (intrinsicWidth > 0) intrinsicWidth else width,
+        if (intrinsicHeight > 0) intrinsicHeight else height,
+        Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    this.setBounds(0, 0, canvas.width, canvas.height)
+    this.draw(canvas)
+
+    return bitmap
 }

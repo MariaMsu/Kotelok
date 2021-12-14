@@ -65,11 +65,6 @@ class WordDefinitionsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(wordDefinitions[position])
         val playSoundBtn: Button = holder.itemView.findViewById(R.id.play_speech_btn)
-        // Воспроизводимый текст необходимо сохранить в переменную, а затем её уже передать в
-        // setOnClickListener. В обратном случае в ClickListener`е будет сохранена позиция.
-        // Тогда в случае, если позиция item`а будет изменена без вызова onBind, то в листенере
-        // будет сохранено старое значение позиции, а массив wordDefinitions при этом
-        // будет новый. Поэтому будет впоспроизведен неправильный текст.
         val text = wordDefinitions[position].writing
         playSoundBtn.setOnClickListener {
             playSoundBtnClickListener.onPlayBtnClick(text)
