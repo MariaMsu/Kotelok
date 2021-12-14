@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.db.williamchart.view.DonutChartView
@@ -20,6 +22,8 @@ class ProfileFragment : Fragment() {
     private var answersDonutChart: DonutChartView? = null
     private var totalAnswersText: TextView? = null
     private var rightAnswersText: TextView? = null
+    private var placeholder: TextView? = null
+    private var statisticGroup: LinearLayout? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +56,9 @@ class ProfileFragment : Fragment() {
             totalAnswersText?.text = getString(R.string.total_answers, values[2].toInt())
             rightAnswersText?.text = getString(R.string.right_answers, values[1].toInt())
         }
+        viewModel.isChartVisible.observe(this) { isVisible ->
+            statisticGroup?.isVisible = isVisible
+        }
     }
 
     override fun onDestroyView() {
@@ -60,20 +67,34 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupSkillChart(values: List<Pair<String, Float>>) {
-        skillChart?.show(values)
+        val valuesToDraw = if (values.size == SIZE_TO_SHOW_DEFAULT) {
+            values.toMutableList().apply {
+                add(INDEX_FOR_DEFAULT, getString(R.string.chart_label_default) to DEFAULT_EF)
+            }
+        } else values
+        skillChart?.show(valuesToDraw)
     }
 
     private fun setupSizeChart(values: List<Pair<String, Float>>) {
-        sizeChart?.show(values)
+        val valuesToDraw = if (values.size == SIZE_TO_SHOW_DEFAULT) {
+            values.toMutableList().apply {
+                add(INDEX_FOR_DEFAULT, getString(R.string.chart_label_default) to DEFAULT_SIZE)
+            }
+        } else values
+        sizeChart?.show(valuesToDraw)
     }
 
     private fun setupAnswersChart(values: List<Float>, context: Context) {
-        answersDonutChart?.donutTotal = values.last()
+        val valuesToDraw = if (values.all { it == EMPTY_VALUE }) {
+            listOf(DEFAULT_DONUT_TOTAL / 2, DEFAULT_DONUT_TOTAL / 2, DEFAULT_DONUT_TOTAL)
+        } else values
+
+        answersDonutChart?.donutTotal = valuesToDraw.last()
         answersDonutChart?.donutColors = intArrayOf(
             context.getColorFromAttr(R.attr.donutWrongColor),
             context.getColorFromAttr(R.attr.donutRightColor),
         )
-        answersDonutChart?.show(values.take(DONUT_SECTION_NUMBER))
+        answersDonutChart?.show(valuesToDraw.take(DONUT_SECTION_NUMBER))
     }
 
     private fun initViews(view: View) {
@@ -82,6 +103,8 @@ class ProfileFragment : Fragment() {
         skillChart = view.findViewById(R.id.skill_chart)
         totalAnswersText = view.findViewById(R.id.total_answers_num)
         rightAnswersText = view.findViewById(R.id.right_answers_num)
+        placeholder = view.findViewById(R.id.placeholder)
+        statisticGroup = view.findViewById(R.id.statistics_group)
     }
 
     private fun clearViews() {
@@ -90,9 +113,17 @@ class ProfileFragment : Fragment() {
         skillChart = null
         totalAnswersText = null
         rightAnswersText = null
+        placeholder = null
+        statisticGroup = null
     }
 
     companion object {
+        const val DEFAULT_DONUT_TOTAL = 2f
+        const val EMPTY_VALUE = 0f
+        const val INDEX_FOR_DEFAULT = 0
+        const val SIZE_TO_SHOW_DEFAULT = 1
+        const val DEFAULT_EF = 2.5f
+        const val DEFAULT_SIZE = 12f
         const val DONUT_SECTION_NUMBER = 2
         const val OPEN_PROFILE_TAG = "open_profile"
 
