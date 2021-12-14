@@ -20,8 +20,8 @@ class TrainWriteViewModel(
     private var dictId: Long = Dictionary.NEW_DICTIONARY_ID
     private val _viewState = MutableLiveData<TrainWriteFragment.State>()
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
+    private val trainerWriter: TrainerWriter = TrainerWriter(writerLearnDefRepository, changeStatisticsRepository)
     val viewState: LiveData<TrainWriteFragment.State> = _viewState
-    val trainerWriter: TrainerWriter = TrainerWriter(writerLearnDefRepository, changeStatisticsRepository)
     val currentWord: LiveData<LearnableDefinition> = _currentWord
 
     init {

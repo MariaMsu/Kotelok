@@ -8,24 +8,23 @@
     tools:context=".screens.trainers.TrainFlashcardsFragment">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/start_border"
+        android:id="@+id/top_border"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="24dp" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="12dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/end_border"
+        android:id="@+id/bottom_border"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="24dp" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="12dp" />
 
     <LinearLayout
         android:id="@+id/flashcardButton_orig"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="36dp"
         android:layout_marginHorizontal="24dp"
         android:padding="12dp"
         android:gravity="center"
@@ -34,9 +33,11 @@
         android:background="@drawable/shape_flashcard_background"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_border"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/answers_buttons_barrier"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintDimensionRatio = "5:3">
 
     <TextView
@@ -59,9 +60,8 @@
 
     <LinearLayout
         android:id="@+id/flashcardButton_ru"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="36dp"
         android:layout_marginHorizontal="24dp"
         android:padding="12dp"
         android:gravity="center"
@@ -70,10 +70,11 @@
         android:background="@drawable/shape_flashcard_background"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_border"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/answers_buttons_barrier"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintDimensionRatio = "5:3">
 
         <TextView
@@ -98,38 +99,50 @@
         android:id="@+id/flashcard_barrier"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:barrierDirection="bottom"
+        app:barrierDirection="end"
         app:constraint_referenced_ids="flashcardButton_orig, flashcardButton_ru" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/noButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="36dp"
         android:layout_marginStart="32dp"
         android:visibility="invisible"
         app:srcCompat="@drawable/ic_close"
         app:tint="?attr/colorPrimaryBackground"
         tools:visibility="visible"
         app:backgroundTint="?attr/donutWrongColor"
-        app:layout_constraintTop_toBottomOf="@+id/flashcard_barrier"
-        app:layout_constraintStart_toStartOf="@+id/start_border"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_border"
+        app:layout_constraintTop_toBottomOf="@+id/yesButton"
+        app:layout_constraintStart_toEndOf="@+id/flashcard_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/text_negative_answer_button_description" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/yesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginStart="32dp"
         android:visibility="invisible"
         tools:visibility="visible"
+        app:layout_constraintVertical_chainStyle="spread"
         app:srcCompat="@drawable/ic_accept"
         app:tint="?attr/colorPrimaryBackground"
         app:backgroundTint="?attr/donutRightColor"
-        app:layout_constraintTop_toBottomOf="@+id/flashcard_barrier"
-        app:layout_constraintEnd_toEndOf="@+id/end_border"
+        app:layout_constraintTop_toTopOf="@+id/top_border"
+        app:layout_constraintBottom_toTopOf="@id/noButton"
+        app:layout_constraintStart_toStartOf="@+id/flashcard_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/text_positive_answer_button_description" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/answers_buttons_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="noButton, yesButton" />
 
     <TextView
         android:id="@+id/text_completed"
@@ -137,15 +150,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:visibility="invisible"
         android:text="@string/dict_completed"
         android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/title_size"
+        android:visibility="invisible"
         android:textStyle="italic"
         tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/flashcard_barrier"
-        app:layout_constraintStart_toStartOf="@+id/start_border"
-        app:layout_constraintEnd_toEndOf="@+id/end_border" />
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/repeat_button"
@@ -157,8 +170,8 @@
         tools:visibility="visible"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:strokeColor="?attr/colorPrimary"
-        app:layout_constraintStart_toStartOf="@id/start_border"
-        app:layout_constraintEnd_toEndOf="@id/end_border"
+        app:layout_constraintStart_toEndOf="@id/to_dictionaries_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_completed" />
 
     <Button
@@ -171,7 +184,7 @@
         tools:visibility="visible"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:strokeColor="?attr/colorPrimary"
-        app:layout_constraintStart_toStartOf="@id/start_border"
-        app:layout_constraintEnd_toEndOf="@id/end_border"
-        app:layout_constraintTop_toBottomOf="@id/repeat_button" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/repeat_button"
+        app:layout_constraintTop_toBottomOf="@id/text_completed" />
 </androidx.constraintlayout.widget.ConstraintLayout>

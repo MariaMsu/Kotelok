@@ -18,29 +18,26 @@ class TrainFlashcardsViewModel(
 ) : ViewModel() {
     private val _viewState = MutableLiveData(TrainFlashcardsFragment.State.NOT_GUESSED)
     private val _currentWord: MutableLiveData<LearnableDefinition> = MutableLiveData()
-    private val _isTrainerDone: MutableLiveData<Boolean> = MutableLiveData()
     private var dictId: Long = 0
-    val trainerCards: TrainerCards = TrainerCards(cardsLearnDefRepository, changeStatisticsRepository)
+    private val trainerCards: TrainerCards = TrainerCards(cardsLearnDefRepository, changeStatisticsRepository)
     val viewState: LiveData<TrainFlashcardsFragment.State> = _viewState
     val currentWord: LiveData<LearnableDefinition> = _currentWord
-    val isTrainerDone: LiveData<Boolean>
-        get() = _isTrainerDone
 
     init {
         dictId = dictionaryId
         viewModelScope.launch(Dispatchers.IO) {
             // в onlyNotLearned ошибка, он работает наоборот
             trainerCards.loadDictionary(dictionaryId, onlyNotLearned = false)
-            val isDone = trainerCards.isDone
-            _isTrainerDone.postValue(isDone)
-            if (!isDone) {
+            if (trainerCards.isDone) {
+                _viewState.postValue(TrainFlashcardsFragment.State.DONE)
+            } else {
                 _currentWord.postValue(trainerCards.getNext())
             }
         }
     }
 
     fun restartDict() {
-        _viewState.postValue(TrainFlashcardsFragment.State.NOT_GUESSED)
+        _viewState.value = TrainFlashcardsFragment.State.NOT_GUESSED
         viewModelScope.launch(Dispatchers.IO) {
             trainerCards.loadDictionary(dictId, onlyNotLearned = true)
             val learnableDefinition = trainerCards.getNext()
@@ -53,6 +50,7 @@ class TrainFlashcardsViewModel(
             TrainFlashcardsFragment.State.NOT_GUESSED -> TrainFlashcardsFragment.State.GUESSED_TRANSLATION
             TrainFlashcardsFragment.State.GUESSED_TRANSLATION -> TrainFlashcardsFragment.State.GUESSED_WORD
             TrainFlashcardsFragment.State.GUESSED_WORD -> TrainFlashcardsFragment.State.GUESSED_TRANSLATION
+            TrainFlashcardsFragment.State.DONE -> TrainFlashcardsFragment.State.NOT_GUESSED
         }
     }
 
@@ -60,10 +58,10 @@ class TrainFlashcardsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             trainerCards.checkUserInput(guess)
 
-            _viewState.postValue(TrainFlashcardsFragment.State.NOT_GUESSED)
-            val isDone = trainerCards.isDone
-            _isTrainerDone.postValue(isDone)
-            if (!isDone) {
+            if (trainerCards.isDone) {
+                _viewState.postValue(TrainFlashcardsFragment.State.DONE)
+            } else {
+                _viewState.postValue(TrainFlashcardsFragment.State.NOT_GUESSED)
                 _currentWord.postValue(trainerCards.getNext())
             }
         }

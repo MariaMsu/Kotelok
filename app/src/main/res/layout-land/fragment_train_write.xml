@@ -7,23 +7,38 @@
     android:background="@color/light_gray_background_main"
     tools:context=".screens.trainers.TrainWriteFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_border"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="12dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_border"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="12dp" />
+
     <LinearLayout
         android:id="@+id/flashcard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginHorizontal="24dp"
+        android:layout_marginStart="24dp"
         android:padding="12dp"
-        android:elevation="12dp"
         android:gravity="center"
         android:orientation="vertical"
+        android:elevation="12dp"
+        android:background="@drawable/shape_flashcard_background"
         android:visibility="gone"
         tools:visibility="visible"
-        android:background="@drawable/shape_flashcard_background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_border"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintDimensionRatio = "5:3" >
+        app:layout_constraintEnd_toStartOf="@id/input_word"
+        app:layout_constraintHorizontal_bias="0" >
 
         <TextView
             android:id="@+id/word_writing_ru"
@@ -47,15 +62,16 @@
         android:id="@+id/input_word"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="12dp"
         android:visibility="gone"
         tools:visibility="visible"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintHorizontal_weight="2"
         app:hintAnimationEnabled="false"
-        app:layout_constraintStart_toStartOf="@id/flashcard"
-        app:layout_constraintTop_toBottomOf="@+id/flashcard"
-        app:layout_constraintEnd_toEndOf="@id/flashcard">
+        app:layout_constraintStart_toEndOf="@id/flashcard"
+        app:layout_constraintTop_toTopOf="@id/flashcard"
+        app:layout_constraintEnd_toEndOf="parent">
 
 
         <com.google.android.material.textfield.TextInputEditText
@@ -87,16 +103,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="34dp"
         android:visibility="invisible"
         tools:visibility="visible"
         android:text="@string/default_word"
         android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/title_size"
         android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/input_word"
         app:layout_constraintTop_toBottomOf="@+id/input_word"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="@id/input_word" />
 
     <TextView
         android:id="@+id/text_completed"
@@ -138,8 +153,8 @@
         tools:visibility="visible"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:strokeColor="?attr/colorPrimary"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/to_dictionaries_button"
         app:layout_constraintTop_toBottomOf="@id/text_completed" />
 
     <Button
@@ -152,7 +167,7 @@
         tools:visibility="visible"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:strokeColor="?attr/colorPrimary"
+        app:layout_constraintEnd_toStartOf="@id/repeat_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/repeat_button" />
+        app:layout_constraintTop_toBottomOf="@id/text_completed" />
 </androidx.constraintlayout.widget.ConstraintLayout>
