@@ -144,6 +144,7 @@ class EditWordDefRepositoryImpl(
         translationsDao.deleteRedundantTranslations(wordDefinition.id, wordDefinition.allTranslations)
 
         examplesDao.insert(exampleEntities)
+        examplesDao.update(exampleEntities)
         examplesDao.deleteRedundantExamples(
             wordDefinition.id,
             wordDefinition.examples.map { it.originalText }

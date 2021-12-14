@@ -103,19 +103,16 @@ class MainActivity : AppCompatActivity() {
                 FragmentResult.DictionariesTab.OPEN_NEW_DICTIONARY_KEY,
                 this@MainActivity
             ) { _, bundle ->
+                popBackStack()
                 val dictionaryId = bundle.getLong(AddDictionaryFragment.DICT_ID_KEY)
                 val label = bundle.getString(
                     AddDictionaryFragment.DICT_LABEL_KEY,
                     getString(R.string.app_name)
                 )
-                supportFragmentManager.commit {
-                    replace(
-                        R.id.fragment_container,
-                        DictionaryDetailsFragment.newInstance(dictionaryId, label),
-                        "new_dictionary_fragment"
-                    )
-                    setReorderingAllowed(true)
-                }
+                replaceFragment(
+                    DictionaryDetailsFragment.newInstance(dictionaryId, label),
+                    "new_dictionary_fragment"
+                )
             }
         }
     }

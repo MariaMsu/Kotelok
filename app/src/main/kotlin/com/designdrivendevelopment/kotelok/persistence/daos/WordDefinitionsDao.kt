@@ -56,17 +56,6 @@ interface WordDefinitionsDao {
         WHERE (writing = :writing)
     """
     )
-    suspend fun getDefinitionsByWriting(writing: String): List<WordDefinitionQueryResult>
-
-    @Transaction
-    @Query(
-        """
-        SELECT def_id AS id, writing, part_of_speech, language,
-        transcription, main_translation
-        FROM word_definitions
-        WHERE (writing = :writing)
-    """
-    )
     fun getFlowOfDefinitionsByWriting(writing: String): Flow<List<WordDefinitionQueryResult>>
 
     @Transaction
@@ -114,4 +103,17 @@ interface WordDefinitionsDao {
 
     @Query("DELETE FROM word_definitions WHERE (def_id IN (:wordDefinitionIds))")
     suspend fun deleteWordDefinitionsByIds(wordDefinitionIds: List<Long>)
+
+    @Query(
+        """
+            DELETE
+            FROM word_definitions
+            WHERE def_id IN (
+                SELECT w_d.def_id
+                FROM word_definitions AS w_d LEFT OUTER JOIN dictionary_word_def_cross_refs AS c_r
+                ON (w_d.def_id = c_r.word_def_id) WHERE c_r.dict_id IS NULL
+            )
+        """
+    )
+    suspend fun deleteDefinitionsWithoutDict()
 }

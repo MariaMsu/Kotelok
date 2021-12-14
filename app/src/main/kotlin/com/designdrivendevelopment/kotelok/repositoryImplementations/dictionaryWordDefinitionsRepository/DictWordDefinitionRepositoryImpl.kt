@@ -48,5 +48,6 @@ class DictWordDefinitionRepositoryImpl(
             dictionaryId,
             definitions.map { it.id }
         )
+        wordDefinitionsDao.deleteDefinitionsWithoutDict()
     }
 }

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.ExampleEntity
 
 @Dao
@@ -13,6 +14,9 @@ interface ExamplesDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(exampleEntities: List<ExampleEntity>)
+
+    @Update
+    suspend fun update(exampleEntities: List<ExampleEntity>)
 
     @Query(
         """

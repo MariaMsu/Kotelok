@@ -4,6 +4,7 @@ import com.designdrivendevelopment.kotelok.entities.Dictionary
 import com.designdrivendevelopment.kotelok.entities.WordDefinition
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionariesDao
 import com.designdrivendevelopment.kotelok.persistence.daos.DictionaryWordDefCrossRefDao
+import com.designdrivendevelopment.kotelok.persistence.daos.WordDefinitionsDao
 import com.designdrivendevelopment.kotelok.persistence.roomEntities.DictionaryWordDefCrossRef
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toDictionary
 import com.designdrivendevelopment.kotelok.repositoryImplementations.extensions.toDictionaryEntity
@@ -16,7 +17,8 @@ import kotlinx.coroutines.withContext
 
 class DictionariesRepositoryImpl(
     private val dictionariesDao: DictionariesDao,
-    private val dictionaryWordDefCrossRefDao: DictionaryWordDefCrossRefDao
+    private val dictionaryWordDefCrossRefDao: DictionaryWordDefCrossRefDao,
+    private val wordDefinitionsDao: WordDefinitionsDao
 ) : DictionariesRepository {
     override suspend fun getAllDictionaries(): List<Dictionary> = withContext(Dispatchers.IO) {
         dictionariesDao.getAll().map { dictionaryEntity ->
@@ -73,12 +75,14 @@ class DictionariesRepositoryImpl(
 
     override suspend fun deleteDictionary(dictionary: Dictionary) = withContext(Dispatchers.IO) {
         dictionariesDao.deleteById(dictionary.id)
+        wordDefinitionsDao.deleteDefinitionsWithoutDict()
 //        dictionaryWordDefCrossRefDao.deleteByDictionaryId(dictionary.id)
     }
 
     override suspend fun deleteDictionaries(dictionaries: List<Dictionary>) {
         dictionariesDao.deleteByIds(dictionaries.map { it.id })
         dictionaryWordDefCrossRefDao.deleteCrossRefByDictIds(dictionaries.map { it.id })
+        wordDefinitionsDao.deleteDefinitionsWithoutDict()
     }
 
     override suspend fun deleteWordDefinitionFromDictionary(

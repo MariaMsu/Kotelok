@@ -10,7 +10,9 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -43,6 +45,7 @@ class DictionaryDetailsFragment :
     private var textToSpeech: TextToSpeech? = null
     private var wordDefinitionsList: RecyclerView? = null
     private var addFab: FloatingActionButton? = null
+    private var placeholder: TextView? = null
     private var viewModel: DictDetailsViewModel? = null
     private var dictId: Long? = null
     private var searchQuery = ""
@@ -212,6 +215,7 @@ class DictionaryDetailsFragment :
     ): DictDetailsViewModel {
         return ViewModelProvider(fragment, factory)[DictDetailsViewModel::class.java].apply {
             dictionaryDefinitions.observe(fragment) { definitions ->
+                placeholder?.isVisible = definitions.isEmpty()
                 currentDefinitions.clear()
                 currentDefinitions.addAll(definitions)
                 onDefinitionsChanged(definitions, adapter)
@@ -277,11 +281,14 @@ class DictionaryDetailsFragment :
     private fun initViews(view: View) {
         addFab = view.findViewById(R.id.open_lookup_fragment_btn)
         wordDefinitionsList = view.findViewById(R.id.word_definitions_list)
+        placeholder = view.findViewById(R.id.placeholder)
     }
 
     private fun clearViews() {
         wordDefinitionsList?.clearOnScrollListeners()
+        addFab = null
         wordDefinitionsList = null
+        placeholder = null
     }
 
     companion object {

@@ -89,4 +89,8 @@
     <string name="total_answers">Всего ответов:  %1$d</string>
     <string name="right_answers">Правильных ответов: %1$d</string>
     <string name="statistics_ru">Статистика</string>
+    <string name="chart_label_default">Изначально</string>
+    <string name="text_empty_dictionaries_warning">У Вас еще нет словарей, либо они пусты, добавьте слова, чтобы посмотреть статистику</string>
+    <string name="text_empty_dictionaries_list_placeholder">Пока что здесь пусто. \nЧтобы начать работу, добавьте новый словарь</string>
+    <string name="text_definitions_list_empty_placeholder">Пока что здесь пусто. \nДобавьте новое слово!</string>
 </resources>

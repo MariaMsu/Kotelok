@@ -39,7 +39,8 @@ class AppComponent(applicationContext: Context) {
     val dictionariesRepository by lazy {
         DictionariesRepositoryImpl(
             db.dictionariesDao,
-            db.dictionaryWordDefCrossRefDao
+            db.dictionaryWordDefCrossRefDao,
+            db.wordDefinitionsDao
         )
     }
     val dictDefinitionsRepository by lazy {
