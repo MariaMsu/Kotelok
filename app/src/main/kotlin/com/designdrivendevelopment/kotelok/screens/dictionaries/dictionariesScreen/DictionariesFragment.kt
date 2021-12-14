@@ -6,7 +6,9 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +32,7 @@ class DictionariesFragment :
     LearnButtonListener {
     private var dictionariesList: RecyclerView? = null
     private var addDictionaryFab: FloatingActionButton? = null
+    private var placeholder: TextView? = null
     private var dictionariesViewModel: DictionariesViewModel? = null
     private var adapter: DictionariesAdapter? = null
     private var searchQuery = ""
@@ -145,6 +148,7 @@ class DictionariesFragment :
 
     private fun setupViewModel(viewModel: DictionariesViewModel?, adapter: DictionariesAdapter?) {
         viewModel?.dictionaries?.observe(this) { dictionaries ->
+            placeholder?.isVisible = dictionaries.isEmpty()
             currentDictionaries.clear()
             currentDictionaries.addAll(dictionaries)
             adapter?.submitList(dictionaries)
@@ -194,11 +198,13 @@ class DictionariesFragment :
     private fun initViews(view: View) {
         dictionariesList = view.findViewById(R.id.dictionaries_list)
         addDictionaryFab = view.findViewById(R.id.add_dictionary_button)
+        placeholder = view.findViewById(R.id.placeholder)
     }
 
     private fun clearViews() {
         dictionariesList = null
         addDictionaryFab = null
+        placeholder = null
     }
 
     companion object {
