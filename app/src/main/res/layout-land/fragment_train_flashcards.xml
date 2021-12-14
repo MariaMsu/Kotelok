@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray_background_main"
+    tools:context=".screens.trainers.TrainFlashcardsFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_border"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="12dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_border"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="12dp" />
+
+    <LinearLayout
+        android:id="@+id/flashcardButton_orig"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="24dp"
+        android:padding="12dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:elevation="12dp"
+        android:background="@drawable/shape_flashcard_background"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/answers_buttons_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintDimensionRatio = "5:3">
+
+    <TextView
+            android:id="@+id/word_writing_orig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/default_word"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/word_example_orig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/flashcardButton_ru"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="24dp"
+        android:padding="12dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:elevation="12dp"
+        android:background="@drawable/shape_flashcard_background"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/answers_buttons_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintDimensionRatio = "5:3">
+
+        <TextView
+            android:id="@+id/word_writing_ru"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/default_word"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/word_example_ru"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/flashcard_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="flashcardButton_orig, flashcardButton_ru" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/noButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:layout_marginStart="32dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/ic_close"
+        app:tint="?attr/colorPrimaryBackground"
+        tools:visibility="visible"
+        app:backgroundTint="?attr/donutWrongColor"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_border"
+        app:layout_constraintTop_toBottomOf="@+id/yesButton"
+        app:layout_constraintStart_toEndOf="@+id/flashcard_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/text_negative_answer_button_description" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/yesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginStart="32dp"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:srcCompat="@drawable/ic_accept"
+        app:tint="?attr/colorPrimaryBackground"
+        app:backgroundTint="?attr/donutRightColor"
+        app:layout_constraintTop_toTopOf="@+id/top_border"
+        app:layout_constraintBottom_toTopOf="@id/noButton"
+        app:layout_constraintStart_toStartOf="@+id/flashcard_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/text_positive_answer_button_description" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/answers_buttons_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="noButton, yesButton" />
+
+    <TextView
+        android:id="@+id/text_completed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/dict_completed"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/title_size"
+        android:visibility="invisible"
+        android:textStyle="italic"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/top_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/repeat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:visibility="invisible"
+        android:text="@string/repeat_train"
+        tools:visibility="visible"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:strokeColor="?attr/colorPrimary"
+        app:layout_constraintStart_toEndOf="@id/to_dictionaries_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_completed" />
+
+    <Button
+        android:id="@+id/to_dictionaries_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:visibility="invisible"
+        android:text="@string/text_to_dictionaries_button"
+        tools:visibility="visible"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:strokeColor="?attr/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/repeat_button"
+        app:layout_constraintTop_toBottomOf="@id/text_completed" />
+</androidx.constraintlayout.widget.ConstraintLayout>
