@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.designdrivendevelopment.kotelok.R
@@ -25,10 +26,12 @@ import com.designdrivendevelopment.kotelok.screens.dictionaries.definitionDetail
 import com.designdrivendevelopment.kotelok.screens.screensUtils.FragmentResult
 import com.designdrivendevelopment.kotelok.screens.screensUtils.MarginItemDecoration
 import com.designdrivendevelopment.kotelok.screens.screensUtils.PlaySoundBtnClickListener
+import com.designdrivendevelopment.kotelok.screens.screensUtils.SwipeToDelete
 import com.designdrivendevelopment.kotelok.screens.screensUtils.TtsPrefs
 import com.designdrivendevelopment.kotelok.screens.screensUtils.getScrollPosition
 import com.designdrivendevelopment.kotelok.screens.screensUtils.hideKeyboard
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 @Suppress("TooManyFunctions")
 class DictionaryDetailsFragment :
@@ -43,6 +46,7 @@ class DictionaryDetailsFragment :
     private var viewModel: DictDetailsViewModel? = null
     private var dictId: Long? = null
     private var searchQuery = ""
+    private val currentDefinitions: MutableList<WordDefinition> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,6 +84,12 @@ class DictionaryDetailsFragment :
                 .appComponent.sharedWordDefProvider
         )
         viewModel = setupFragmentViewModel(this, factory, adapter)
+        setupSwipeToDelete()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel?.deleteDictionaries()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -91,6 +101,8 @@ class DictionaryDetailsFragment :
     override fun onDestroyView() {
         super.onDestroyView()
         clearViews()
+        viewModel = null
+        currentDefinitions.clear()
         textToSpeech = null
     }
 
@@ -155,6 +167,25 @@ class DictionaryDetailsFragment :
         setFragmentResult(FragmentResult.DictionariesTab.OPEN_DEF_DETAILS_FRAGMENT_KEY, bundle)
     }
 
+    private fun setupSwipeToDelete() {
+        val onItemSwipedToDelete = { positionForRemove: Int ->
+            val removedDefinition = currentDefinitions[positionForRemove]
+            currentDefinitions.removeAt(positionForRemove)
+            viewModel?.deleteDictionary(positionForRemove)
+            showRestoreItemSnackbar(positionForRemove, removedDefinition)
+        }
+        val swipeToDeleteCallback = SwipeToDelete(onItemSwipedToDelete)
+        ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(wordDefinitionsList)
+    }
+
+    private fun showRestoreItemSnackbar(position: Int, definition: WordDefinition) {
+        Snackbar.make(view!!, "Словарь удален", Snackbar.LENGTH_LONG)
+            .setAction("Отмена") {
+                currentDefinitions.add(position, definition)
+                viewModel?.restoreDictionary(position, definition)
+            }.show()
+    }
+
     private fun setupWordDefinitionsList(
         wordDefinitionsList: RecyclerView?,
         context: Context,
@@ -181,6 +212,8 @@ class DictionaryDetailsFragment :
     ): DictDetailsViewModel {
         return ViewModelProvider(fragment, factory)[DictDetailsViewModel::class.java].apply {
             dictionaryDefinitions.observe(fragment) { definitions ->
+                currentDefinitions.clear()
+                currentDefinitions.addAll(definitions)
                 onDefinitionsChanged(definitions, adapter)
             }
         }
