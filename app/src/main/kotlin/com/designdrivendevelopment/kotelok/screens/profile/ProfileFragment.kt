@@ -56,7 +56,7 @@ class ProfileFragment : Fragment() {
             totalAnswersText?.text = getString(R.string.total_answers, values[2].toInt())
             rightAnswersText?.text = getString(R.string.right_answers, values[1].toInt())
         }
-        viewModel.isChartVisible.observe(this) { isVisible ->
+        viewModel.chartsVisibility.observe(this) { isVisible ->
             statisticGroup?.isVisible = isVisible
         }
     }
@@ -118,13 +118,13 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        const val DEFAULT_DONUT_TOTAL = 2f
-        const val EMPTY_VALUE = 0f
-        const val INDEX_FOR_DEFAULT = 0
-        const val SIZE_TO_SHOW_DEFAULT = 1
-        const val DEFAULT_EF = 2.5f
-        const val DEFAULT_SIZE = 12f
-        const val DONUT_SECTION_NUMBER = 2
+        private const val DEFAULT_DONUT_TOTAL = 2f
+        private const val EMPTY_VALUE = 0f
+        private const val INDEX_FOR_DEFAULT = 0
+        private const val SIZE_TO_SHOW_DEFAULT = 1
+        private const val DEFAULT_EF = 2.5f
+        private const val DEFAULT_SIZE = 12f
+        private const val DONUT_SECTION_NUMBER = 2
         const val OPEN_PROFILE_TAG = "open_profile"
 
         @JvmStatic

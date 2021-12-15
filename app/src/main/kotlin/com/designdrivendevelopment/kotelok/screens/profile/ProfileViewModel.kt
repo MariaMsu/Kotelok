@@ -14,15 +14,15 @@ class ProfileViewModel(
     private val _answersValues: MutableLiveData<List<Float>> = MutableLiveData()
     private val _bestBySkillStat: MutableLiveData<List<Pair<String, Float>>> = MutableLiveData()
     private val _bestBySizeStat: MutableLiveData<List<Pair<String, Float>>> = MutableLiveData()
-    private val _isChartsVisible: MutableLiveData<Boolean> = MutableLiveData()
+    private val _chartsVisibility: MutableLiveData<Boolean> = MutableLiveData()
     val answersValues: LiveData<List<Float>>
         get() = _answersValues
     val bestBySkillStat: LiveData<List<Pair<String, Float>>>
         get() = _bestBySkillStat
     val bestBySizeStat: LiveData<List<Pair<String, Float>>>
         get() = _bestBySizeStat
-    val isChartVisible: LiveData<Boolean>
-        get() = _isChartsVisible
+    val chartsVisibility: LiveData<Boolean>
+        get() = _chartsVisibility
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -38,7 +38,7 @@ class ProfileViewModel(
             }
             launch {
                 statisticsRepository.getStatisticsForAllDict().collect { dictionariesStat ->
-                    _isChartsVisible.postValue(dictionariesStat.any { it.size > SIZE_EMPTY })
+                    _chartsVisibility.postValue(dictionariesStat.any { it.size > SIZE_EMPTY })
                     val bestBySize = dictionariesStat
                         .filter { it.size > SIZE_EMPTY }
                         .sortedBy { it.size }
