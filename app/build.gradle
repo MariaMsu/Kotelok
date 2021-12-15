@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.core:core-splashscreen:1.0.0-alpha02'
     implementation 'com.diogobernardino:williamchart:3.10.1'
 //    implementation 'com.diogobernardino.williamchart:tooltip-slider:3.10.1'
 //    implementation 'com.diogobernardino.williamchart:tooltip-points:3.10.1'
