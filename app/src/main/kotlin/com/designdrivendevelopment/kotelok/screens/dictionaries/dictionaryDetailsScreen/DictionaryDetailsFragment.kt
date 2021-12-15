@@ -86,7 +86,8 @@ class DictionaryDetailsFragment :
             (activity.application as KotelokApplication)
                 .appComponent.sharedWordDefProvider
         )
-        viewModel = setupFragmentViewModel(this, factory, adapter)
+        viewModel = ViewModelProvider(this, factory)[DictDetailsViewModel::class.java]
+        setupFragmentViewModel(adapter)
         setupSwipeToDelete()
     }
 
@@ -208,18 +209,12 @@ class DictionaryDetailsFragment :
         wordDefinitionsList?.addItemDecoration(marginItemDecoration)
     }
 
-    private fun setupFragmentViewModel(
-        fragment: Fragment,
-        factory: DictDetailsViewModelFactory,
-        adapter: WordDefinitionsAdapter
-    ): DictDetailsViewModel {
-        return ViewModelProvider(fragment, factory)[DictDetailsViewModel::class.java].apply {
-            dictionaryDefinitions.observe(fragment) { definitions ->
-                placeholder?.isVisible = definitions.isEmpty()
-                currentDefinitions.clear()
-                currentDefinitions.addAll(definitions)
-                onDefinitionsChanged(definitions, adapter)
-            }
+    private fun setupFragmentViewModel(adapter: WordDefinitionsAdapter) {
+        viewModel?.dictionaryDefinitions?.observe(this) { definitions ->
+            placeholder?.isVisible = definitions.isEmpty()
+            currentDefinitions.clear()
+            currentDefinitions.addAll(definitions)
+            onDefinitionsChanged(definitions, adapter)
         }
     }
 

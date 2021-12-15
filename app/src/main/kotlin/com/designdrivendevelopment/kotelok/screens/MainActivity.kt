@@ -189,7 +189,11 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity
             ) { _, bundle ->
                 val text = bundle.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, "")
-                replaceFragment(RecognizedWordsFragment.newInstance(text), "recognized_words_fragment")
+                replaceFragment(
+                    RecognizedWordsFragment.newInstance(text),
+                    "recognized_words_fragment",
+                    isNeedAnimate = false
+                )
             }
         }
     }
@@ -231,9 +235,18 @@ class MainActivity : AppCompatActivity() {
     private fun addFragment(
         fragment: Fragment,
         tag: String? = null,
-        transactionName: String? = null
+        transactionName: String? = null,
+        isNeedAnimate: Boolean = true
     ) {
         supportFragmentManager.commit {
+            if (isNeedAnimate) {
+                setCustomAnimations(
+                    R.anim.fragments_slide_in,
+                    R.anim.fragments_fade_out,
+                    R.anim.fragments_fade_in,
+                    R.anim.fragments_slide_out
+                )
+            }
             add(R.id.fragment_container, fragment, tag)
             addToBackStack(transactionName)
             setReorderingAllowed(true)
@@ -243,9 +256,18 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(
         fragment: Fragment,
         tag: String? = null,
-        transactionName: String? = null
+        transactionName: String? = null,
+        isNeedAnimate: Boolean = true
     ) {
         supportFragmentManager.commit {
+            if (isNeedAnimate) {
+                setCustomAnimations(
+                    R.anim.fragments_slide_in,
+                    R.anim.fragments_fade_out,
+                    R.anim.fragments_fade_in,
+                    R.anim.fragments_slide_out
+                )
+            }
             replace(R.id.fragment_container, fragment, tag)
             addToBackStack(transactionName)
             setReorderingAllowed(true)
