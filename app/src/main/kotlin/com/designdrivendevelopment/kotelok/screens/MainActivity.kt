@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.designdrivendevelopment.kotelok.R
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val splashScreen = installSplashScreen()
         setContentView(R.layout.activity_main)
         initViews()
         bottomNavigator.subscribe(supportFragmentManager)
@@ -189,7 +191,11 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity
             ) { _, bundle ->
                 val text = bundle.getString(FragmentResult.RecognizeTab.RESULT_TEXT_KEY, "")
-                replaceFragment(RecognizedWordsFragment.newInstance(text), "recognized_words_fragment")
+                replaceFragment(
+                    RecognizedWordsFragment.newInstance(text),
+                    "recognized_words_fragment",
+                    isNeedAnimate = false
+                )
             }
         }
     }
@@ -231,9 +237,18 @@ class MainActivity : AppCompatActivity() {
     private fun addFragment(
         fragment: Fragment,
         tag: String? = null,
-        transactionName: String? = null
+        transactionName: String? = null,
+        isNeedAnimate: Boolean = true
     ) {
         supportFragmentManager.commit {
+            if (isNeedAnimate) {
+                setCustomAnimations(
+                    R.anim.fragments_slide_in,
+                    R.anim.fragments_fade_out,
+                    R.anim.fragments_fade_in,
+                    R.anim.fragments_slide_out
+                )
+            }
             add(R.id.fragment_container, fragment, tag)
             addToBackStack(transactionName)
             setReorderingAllowed(true)
@@ -243,9 +258,18 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(
         fragment: Fragment,
         tag: String? = null,
-        transactionName: String? = null
+        transactionName: String? = null,
+        isNeedAnimate: Boolean = true
     ) {
         supportFragmentManager.commit {
+            if (isNeedAnimate) {
+                setCustomAnimations(
+                    R.anim.fragments_slide_in,
+                    R.anim.fragments_fade_out,
+                    R.anim.fragments_fade_in,
+                    R.anim.fragments_slide_out
+                )
+            }
             replace(R.id.fragment_container, fragment, tag)
             addToBackStack(transactionName)
             setReorderingAllowed(true)
