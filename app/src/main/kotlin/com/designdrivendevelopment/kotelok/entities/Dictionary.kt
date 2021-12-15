@@ -8,7 +8,7 @@ data class Dictionary(
 ) {
     companion object {
         const val NEW_DICTIONARY_ID = 0L
-        const val DEFAULT_DICT_ID = 1L
+        const val DEFAULT_DICT_ID = -1L
         const val SIZE_EMPTY = 0
     }
 }
