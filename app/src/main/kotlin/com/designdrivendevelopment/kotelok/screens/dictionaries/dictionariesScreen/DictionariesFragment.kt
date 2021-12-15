@@ -1,5 +1,6 @@
 package com.designdrivendevelopment.kotelok.screens.dictionaries.dictionariesScreen
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -37,6 +37,7 @@ class DictionariesFragment :
     private var adapter: DictionariesAdapter? = null
     private var searchQuery = ""
     private val currentDictionaries: MutableList<Dictionary> = mutableListOf()
+    private val animations: MutableList<ObjectAnimator> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,6 +92,7 @@ class DictionariesFragment :
         currentDictionaries.clear()
         dictionariesViewModel = null
         adapter = null
+        animations.clear()
         clearViews()
     }
 
@@ -148,7 +150,19 @@ class DictionariesFragment :
 
     private fun setupViewModel(viewModel: DictionariesViewModel?, adapter: DictionariesAdapter?) {
         viewModel?.dictionaries?.observe(this) { dictionaries ->
-            placeholder?.isVisible = dictionaries.isEmpty()
+            if (dictionaries.isEmpty()) {
+                val placeholderFade = ObjectAnimator
+                    .ofFloat(placeholder, View.ALPHA, START_ALPHA, END_ALPHA).apply {
+                        duration = FADE_DURATION
+                        startDelay = START_DELAY
+                        start()
+                    }
+                animations.add(placeholderFade)
+            } else {
+                animations.forEach { it.cancel() }
+                placeholder?.alpha = START_ALPHA
+            }
+
             currentDictionaries.clear()
             currentDictionaries.addAll(dictionaries)
             adapter?.submitList(dictionaries)
@@ -208,6 +222,10 @@ class DictionariesFragment :
     }
 
     companion object {
+        private const val FADE_DURATION = 400L
+        private const val START_DELAY = 100L
+        private const val START_ALPHA = 0f
+        private const val END_ALPHA = 1f
         private const val SEARCH_QUERY_KEY = "search_query_key"
         private const val SIZE_EMPTY = 0
         private const val SCROLL_START_POSITION = 0

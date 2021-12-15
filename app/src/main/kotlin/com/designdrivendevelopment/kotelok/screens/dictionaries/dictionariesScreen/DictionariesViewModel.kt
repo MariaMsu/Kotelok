@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class DictionariesViewModel(
     private val dictionariesRepository: DictionariesRepository
 ) : ViewModel() {
-    private val _dictionaries = MutableLiveData<List<Dictionary>>(emptyList())
+    private val _dictionaries = MutableLiveData<List<Dictionary>>()
     private var unfilteredDictionaries: List<Dictionary> = emptyList()
     private var filteredDictionaries: List<Dictionary> = emptyList()
     private val deletedDictionaries: MutableList<Dictionary> = mutableListOf()
