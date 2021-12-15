@@ -9,6 +9,5 @@
 
 - [Андрей Гуденков](https://github.com/andreyhoco)
 - [Мария Черепнина](https://github.com/MariaMsu)
-- Александра Первушина
-- Климент Богданов
-- Андраник Мамиконян
+- [Александра Первушина](https://github.com/queenofpigeons)
+
