@@ -55,7 +55,7 @@ fun TranslationResponse.toWordDefinition(
         transcription = transcription,
         synonyms = reducedSynonyms,
         mainTranslation = translation,
-        allTranslations = reducedTranslations,
+        otherTranslations = reducedTranslations,
         examples = reducedExamples
     )
 }

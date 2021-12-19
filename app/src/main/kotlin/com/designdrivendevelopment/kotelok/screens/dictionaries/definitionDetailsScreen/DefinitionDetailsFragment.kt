@@ -21,7 +21,6 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -151,7 +150,7 @@ class DefinitionDetailsFragment :
 
     override fun onDeleteTranslation(position: Int) {
         val definition = readDefinitionFromFields()
-        trAdapter?.translations = definition.allTranslations
+        trAdapter?.translations = definition.otherTranslations
         viewModel?.deleteTranslation(position, definition)
     }
 
@@ -182,7 +181,7 @@ class DefinitionDetailsFragment :
         viewModel?.displayedDefinition?.observe(this) { wordDefinition ->
             if (wordDefinition != null) {
                 showDefinitions(wordDefinition)
-                onTranslationsChanged(wordDefinition.allTranslations, translationsAdapter)
+                onTranslationsChanged(wordDefinition.otherTranslations, translationsAdapter)
                 onSynonymsChanged(wordDefinition.synonyms, synonymsAdapter)
                 onExamplesChanged(wordDefinition.examples, examplesAdapter)
             }
@@ -414,7 +413,7 @@ class DefinitionDetailsFragment :
     ) {
         addTranslationBtn?.setOnClickListener {
             val definition = readDefinitionFromFields()
-            translationsAdapter.translations = definition.allTranslations
+            translationsAdapter.translations = definition.otherTranslations
             viewModel?.addTranslationField(definition)
         }
         addSynonymBtn?.setOnClickListener {
@@ -577,7 +576,7 @@ class DefinitionDetailsFragment :
             partOfSpeech = partOfSpeechField?.editText?.text?.toString().toNullIfEmpty(),
             transcription = transcriptionField?.editText?.text?.toString().toNullIfEmpty(),
             mainTranslation = translationField?.editText?.text?.toString().orEmpty(),
-            allTranslations = readTranslationsFromFields(),
+            otherTranslations = readTranslationsFromFields(),
             synonyms = readSynonymsFromFields(),
             examples = readExamplesFromFields()
         )

@@ -96,7 +96,7 @@ class EditWordDefRepositoryImpl(
         val synonymEntities = wordDefinition.synonyms.map { synonym ->
             synonym.toSynonymEntity(definitionId)
         }
-        val translationEntities = wordDefinition.allTranslations.map { translation ->
+        val translationEntities = wordDefinition.otherTranslations.map { translation ->
             translation.toTranslationEntity(definitionId)
         }
         val exampleEntities = wordDefinition.examples.map { exampleOfDefinitionUse ->
@@ -130,7 +130,7 @@ class EditWordDefRepositoryImpl(
         val synonymEntities = wordDefinition.synonyms.map { synonym ->
             synonym.toSynonymEntity(definitionId)
         }
-        val translationEntities = wordDefinition.allTranslations.map { translation ->
+        val translationEntities = wordDefinition.otherTranslations.map { translation ->
             translation.toTranslationEntity(definitionId)
         }
         val exampleEntities = wordDefinition.examples.map { exampleOfDefinitionUse ->
@@ -141,7 +141,7 @@ class EditWordDefRepositoryImpl(
         synonymsDao.deleteRedundantSynonyms(wordDefinition.id, wordDefinition.synonyms)
 
         translationsDao.insert(translationEntities)
-        translationsDao.deleteRedundantTranslations(wordDefinition.id, wordDefinition.allTranslations)
+        translationsDao.deleteRedundantTranslations(wordDefinition.id, wordDefinition.otherTranslations)
 
         examplesDao.insert(exampleEntities)
         examplesDao.update(exampleEntities)

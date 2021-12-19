@@ -98,7 +98,7 @@ class DefDetailsViewModel(
 
     fun saveChanges(definition: WordDefinition) {
         val addedDefinition = definition.copy(
-            allTranslations = definition.allTranslations.filter { it.isNotEmpty() },
+            otherTranslations = definition.otherTranslations.filter { it.isNotEmpty() },
             synonyms = definition.synonyms.filter { it.isNotEmpty() },
             examples = definition.examples.filter { it.originalText.isNotEmpty() }
         )
@@ -146,7 +146,7 @@ class DefDetailsViewModel(
 
     fun addTranslationField(definition: WordDefinition) {
         val extendedDefinition = definition.copy(
-            allTranslations = definition.allTranslations.toMutableList().apply {
+            otherTranslations = definition.otherTranslations.toMutableList().apply {
                 add(INDEX_AT_INSERT, "")
             }
         )
@@ -177,7 +177,7 @@ class DefDetailsViewModel(
 
     fun deleteTranslation(position: Int, definition: WordDefinition) {
         val extendedDefinition = definition.copy(
-            allTranslations = definition.allTranslations.toMutableList().apply { removeAt(position) }
+            otherTranslations = definition.otherTranslations.toMutableList().apply { removeAt(position) }
         )
         _displayedDefinition.value = extendedDefinition
         updateAddTrButtonVisibility()
@@ -205,7 +205,7 @@ class DefDetailsViewModel(
     private fun updateAddTrButtonVisibility() {
         val prevState = _isAddTrButtonVisible.value ?: false
 
-        val size = _displayedDefinition.value?.allTranslations?.size ?: SIZE_EMPTY
+        val size = _displayedDefinition.value?.otherTranslations?.size ?: SIZE_EMPTY
         val newState = (_isEditable.value == true) && (size < WordDefinition.MAX_TRANSLATIONS_SIZE)
         if (newState != prevState) {
             _isAddTrButtonVisible.value = newState
@@ -235,7 +235,7 @@ class DefDetailsViewModel(
     private fun updateDeleteTrButtonVisibility() {
         val prevState = _isDeleteTrButtonVisible.value ?: false
 
-        val size = _displayedDefinition.value?.allTranslations?.size ?: SIZE_EMPTY
+        val size = _displayedDefinition.value?.otherTranslations?.size ?: SIZE_EMPTY
         val newState = (_isEditable.value == true) && (size > MIN_LIST_SIZE)
         if (newState != prevState) {
             _isDeleteTrButtonVisible.value = newState
@@ -282,7 +282,7 @@ class DefDetailsViewModel(
             transcription = null,
             synonyms = emptyList(),
             mainTranslation = "",
-            allTranslations = emptyList(),
+            otherTranslations = emptyList(),
             examples = emptyList()
         )
     }
@@ -290,10 +290,10 @@ class DefDetailsViewModel(
     private fun prepareDefinitionToShowing(wordDefinition: WordDefinition?): WordDefinition {
         val definition = wordDefinition ?: createDefinitionStub()
         return definition.copy(
-            allTranslations = if (definition.allTranslations.isEmpty()) {
+            otherTranslations = if (definition.otherTranslations.isEmpty()) {
                 listOf("")
             } else {
-                definition.allTranslations
+                definition.otherTranslations
             },
             synonyms = if (definition.synonyms.isEmpty()) {
                 listOf("")
