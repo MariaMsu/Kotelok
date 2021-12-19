@@ -20,6 +20,6 @@
     android:clickable="true"
     android:textSize="@dimen/title_size"
     android:textAllCaps="false"
-    android:textColor="?attr/colorPrimaryBackground"
+    android:textColor="?attr/colorPrimary"
     tools:text="Spread" />
 
