@@ -17,7 +17,7 @@ fun WordDefinitionQueryResult.toWordDefinition(): WordDefinition {
         transcription = this.transcription,
         synonyms = this.synonyms.map { synonymEntity -> synonymEntity.writing },
         mainTranslation = this.mainTranslation,
-        allTranslations = this.translations
+        otherTranslations = this.translations
             .map { translationEntity -> translationEntity.translation },
         examples = this.exampleEntities
             .map { exampleEntity -> exampleEntity.toExampleOfDefinitionUse() }

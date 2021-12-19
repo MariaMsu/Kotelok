@@ -8,7 +8,7 @@ data class WordDefinition(
     val transcription: String?,
     val synonyms: List<String>,
     val mainTranslation: String,
-    val allTranslations: List<String>,
+    val otherTranslations: List<String>,
     val examples: List<ExampleOfDefinitionUse>
 ) {
     companion object {
