@@ -13,10 +13,14 @@ user statistics and the user's achievements.
 
 Для получения информации о словах используется сервис [«API «Яндекс.Словарь»](http://api.yandex.ru/dictionary).
 
-To build a project locally, set `yandex_api_key` in the file `/Kotelok/local.properties` 
+To build the project locally, set `yandex_api_key` in the file `/Kotelok/local.properties` 
 ## Команда авторов
 
 - [Андрей Гуденков](https://github.com/andreyhoco)
 - [Мария Черепнина](https://github.com/MariaMsu)
 - [Александра Первушина](https://github.com/queenofpigeons)
 
+![logo](./readme_images/Screenshot_1.png)
+![logo](./readme_images/Screenshot_2.png)
+![logo](./readme_images/Screenshot_3.png)
+![logo](./readme_images/Screenshot_4.png)
